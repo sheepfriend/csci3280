@@ -1,0 +1,19 @@
+﻿<Window x:Class="P2PVideoPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <MediaElement HorizontalAlignment="Left" Height="100" Margin="77,79,0,0" VerticalAlignment="Top" Width="192"/>
+        <Button Content="Play" HorizontalAlignment="Left" Margin="31,230,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Stop" HorizontalAlignment="Left" Margin="155,230,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Add" HorizontalAlignment="Left" Margin="262,230,0,0" VerticalAlignment="Top" Width="75"/>
+        <ListView HorizontalAlignment="Left" Height="182" Margin="349,51,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="ListView_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
