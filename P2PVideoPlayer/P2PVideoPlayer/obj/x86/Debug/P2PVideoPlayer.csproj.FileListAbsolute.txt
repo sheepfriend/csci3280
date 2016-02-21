@@ -1,0 +1,2 @@
+N:\yxing2.V2\Downloads\WpfApplication1\csci3280\WpfApplication1\obj\x86\Debug\WpfApplication1.exe
+N:\yxing2.V2\Downloads\WpfApplication1\csci3280\WpfApplication1\obj\x86\Debug\WpfApplication1.pdb
