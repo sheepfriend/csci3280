@@ -29,7 +29,7 @@ namespace WpfApplication1
                 currentNum = 0;
                 currentPlay = "";
             }
-            else if (currentNum == totalNum)
+            else if (currentNum == totalNum-1)
             {
                 currentNum = 0;
                 currentPlay = playList[currentNum].path;
