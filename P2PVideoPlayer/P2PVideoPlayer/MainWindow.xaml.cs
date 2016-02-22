@@ -23,7 +23,7 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            mediaInfo = new media_info("N:/yxing2.V2/Downloads/WpfApplication1/csci3280/WpfApplication1/list.txt");
+            mediaInfo = new media_info("resources/list.txt");
             textBlock.Text = mediaInfo.print();
         }
 

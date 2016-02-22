@@ -8,7 +8,7 @@ namespace WpfApplication1
     class media_info
     {
         private String inputList;
-        public String currentPlay;
+        public String currentPlay { get; set;}
         private List<video_info> playList;
         private int currentNum;
         private int totalNum;
