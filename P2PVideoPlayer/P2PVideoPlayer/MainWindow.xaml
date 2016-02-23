@@ -1,17 +1,20 @@
 ﻿<Window x:Class="WpfApplication1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid Height="272">
-        <MediaElement Height="198" HorizontalAlignment="Left" Margin="17,12,0,0" Name="media" VerticalAlignment="Top" Width="265" />
-        <Button Content="pre" Height="43" HorizontalAlignment="Left" Margin="46,217,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" />
-        <Button Content="next" Height="43" HorizontalAlignment="Left" Margin="222,217,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" />
-        <Button Content="play" Height="43" HorizontalAlignment="Left" Margin="134,217,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" />
-        <Button Content="pause" Height="43" HorizontalAlignment="Left" Margin="90,217,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" />
-        <Button Content="stop" Height="43" HorizontalAlignment="Left" Margin="178,217,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" />
-        <Button Content="Add" Height="28" HorizontalAlignment="Left" Margin="443,12,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click"/>
-        <TextBlock Height="216" HorizontalAlignment="Left" Margin="288,43,0,0" Name="textBlock" Text="" VerticalAlignment="Top" Width="203" />
-        <Label Content="Video List" Height="29" HorizontalAlignment="Left" Margin="288,12,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
-        <Button x:Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="443,78,0,0" Height="57" Click="button_Click"/>
+        Title="MainWindow" Height="444" Width="682">
+    <Grid Margin="0,0,0,0">
+        <MediaElement Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="media" VerticalAlignment="Top" Width="439"  />
+        <Grid Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="curtain" VerticalAlignment="Top" Width="439"  />
+        <Button Content="pre" Height="43" HorizontalAlignment="Left" Margin="128,303,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" />
+        <Button Content="next" Height="43" HorizontalAlignment="Left" Margin="304,303,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" />
+        <Button Content="play" Height="43" HorizontalAlignment="Left" Margin="216,303,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" />
+        <Button Content="pause" Height="43" HorizontalAlignment="Left" Margin="172,303,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" />
+        <Button Content="stop" Height="43" HorizontalAlignment="Left" Margin="260,303,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" />
+        <Button Content="Add" Height="28" HorizontalAlignment="Left" Margin="616,13,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="461,52,0,10" Name="textBlock" Text="" Width="203" />
+        <Label Content="Video List" Height="29" HorizontalAlignment="Left" Margin="461,14,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
+        <Button Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="616,64,0,0" Height="57" Click="button_Click"/>
+        <TextBox Name="message" HorizontalAlignment="Left" Height="30" Margin="36,365,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371"/>
+        <Button Name="send" Content="Send" HorizontalAlignment="Left" Margin="422,365,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click"/>
     </Grid>
 </Window>

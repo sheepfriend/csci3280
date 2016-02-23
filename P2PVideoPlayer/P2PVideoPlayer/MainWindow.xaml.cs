@@ -13,6 +13,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
+using System.Windows.Threading;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace WpfApplication1
 {
@@ -22,10 +28,12 @@ namespace WpfApplication1
     public partial class MainWindow : Window
     {
         private media_info mediaInfo;
+        public DanmakuCurtain dmkCurt;
+
         public MainWindow()
         {
             InitializeComponent();
-            
+            dmkCurt = new DanmakuCurtain();
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
@@ -68,7 +76,7 @@ namespace WpfApplication1
             string path;
             var dlg = new OpenFileDialog();
             dlg.Multiselect = false;
-            dlg.Filter = "AVI File|*.avi";
+            dlg.Filter = "VIDEO File|*";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
@@ -92,10 +100,15 @@ namespace WpfApplication1
                     textBlock.Text = mediaInfo.print();
                     Button bt = (Button)sender;
                     bt.Visibility = Visibility.Hidden;
-               
+                    
             }
-            
-            
         }
+        private void send_Click(object sender, RoutedEventArgs e)
+         {
+             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+             {
+                 dmkCurt.Shoot(curtain,message.Text);
+             }));
+         }
     }
 }
