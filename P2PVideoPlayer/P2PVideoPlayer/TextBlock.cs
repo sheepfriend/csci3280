@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.ComponentModel;
@@ -254,5 +254,4 @@ namespace WpfApplication1
                                                                                                          TextWrapping.Wrap,
                                                                                                          OnFormattedTextUpdated));
     }
-
 }

@@ -27,6 +27,7 @@ namespace WpfApplication1
     {
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -73,7 +74,8 @@ namespace WpfApplication1
             string path;
             var dlg = new OpenFileDialog();
             dlg.Multiselect = false;
-            dlg.Filter = "*|*";// "AVI File|*.avi";
+
+            dlg.Filter = "VIDEO File|*";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
@@ -97,20 +99,16 @@ namespace WpfApplication1
                     textBlock.Text = mediaInfo.print();
                     Button bt = (Button)sender;
                     bt.Visibility = Visibility.Hidden;
-               
+                    
             }
-            
-            
         }
-
         private void send_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-            {
-                dmkCurt.Shoot(curtain,message.Text);
-            }));
-        }
-       
+         {
+             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+             {
+                 dmkCurt.Shoot(curtain,message.Text);
+             }));
+         }
     }
     
 }
