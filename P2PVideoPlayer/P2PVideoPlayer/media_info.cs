@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace WpfApplication1
 {
@@ -9,7 +10,7 @@ namespace WpfApplication1
     {
         private String inputList;
         public String currentPlay { get; set;}
-        public List<video_info> playList;
+        public List<video_info> playList { get; }
         private int currentNum;
         private int totalNum;
 
@@ -19,7 +20,7 @@ namespace WpfApplication1
             totalNum = 0;
             inputList = listaddr;
             playList = new List<video_info>();
-           // load();
+            load();
         }
 
         //load next video
@@ -68,20 +69,28 @@ namespace WpfApplication1
             tmp.readFromAddr(path);
             playList.Add(tmp);
             totalNum += 1;
-            currentPlay = path;
         }
 
-        //load the initial input vedio list...
+        //load the initial input video list...
         public void load() {
-            String line;
-            System.IO.StreamReader file = new System.IO.StreamReader(inputList);
-            while ((line = file.ReadLine()) != null)
+            //String line;
+            //System.IO.StreamReader file = new System.IO.StreamReader(inputList);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(inputList);
+            XmlNamespaceManager man = new XmlNamespaceManager(doc.NameTable);
+            man.AddNamespace("kara", "list");
+            XmlElement root = doc.DocumentElement;
+            XmlNodeList videos = root.SelectNodes("/Karaoke/video", man);
+
+            foreach (XmlNode video in videos)
             {
+
                 video_info tmp = new video_info();
-                tmp.load(line);
+                tmp.load(video);
                 playList.Add(tmp);
                 totalNum += 1;
             }
+            
             if(totalNum>0)
             {
                 currentNum = 0;

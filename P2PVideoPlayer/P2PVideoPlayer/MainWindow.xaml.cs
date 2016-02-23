@@ -22,7 +22,9 @@ using System.Runtime.InteropServices;
 
 namespace WpfApplication1
 {
-
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
         private media_info mediaInfo;
@@ -66,21 +68,19 @@ namespace WpfApplication1
         }
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
-           /* if (mediaInfo == null)
-            {
+            // if (mediaInfo == null)
+            // {
                 MessageBox.Show("Please load the list first");
-                return;
-            }*/
+                // return;
+            // }
             string path;
             var dlg = new OpenFileDialog();
             dlg.Multiselect = false;
-
             dlg.Filter = "VIDEO File|*";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
                 path = dlg.FileName;
-                mediaInfo = new media_info(path);
                 mediaInfo.add(path);
             }
             textBlock.Text = mediaInfo.print();
@@ -90,6 +90,7 @@ namespace WpfApplication1
         {
             string path;
             OpenFileDialog file = new OpenFileDialog();
+            file.Filter = "Database File |*.xml";
             Nullable<bool> result = file.ShowDialog();
             if (result==true)
             {
@@ -110,5 +111,4 @@ namespace WpfApplication1
              }));
          }
     }
-    
 }
