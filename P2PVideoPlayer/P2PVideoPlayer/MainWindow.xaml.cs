@@ -13,19 +13,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
+using System.Windows.Threading;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace WpfApplication1
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         private media_info mediaInfo;
+        public DanmakuCurtain dmkCurt;
         public MainWindow()
         {
             InitializeComponent();
-            
+            dmkCurt = new DanmakuCurtain();
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
@@ -60,19 +65,20 @@ namespace WpfApplication1
         }
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
-            if (mediaInfo == null)
+           /* if (mediaInfo == null)
             {
                 MessageBox.Show("Please load the list first");
                 return;
-            }
+            }*/
             string path;
             var dlg = new OpenFileDialog();
             dlg.Multiselect = false;
-            dlg.Filter = "AVI File|*.avi";
+            dlg.Filter = "*|*";// "AVI File|*.avi";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
                 path = dlg.FileName;
+                mediaInfo = new media_info(path);
                 mediaInfo.add(path);
             }
             textBlock.Text = mediaInfo.print();
@@ -82,7 +88,6 @@ namespace WpfApplication1
         {
             string path;
             OpenFileDialog file = new OpenFileDialog();
-            file.Filter = "Database File |*.xml";
             Nullable<bool> result = file.ShowDialog();
             if (result==true)
             {
@@ -97,5 +102,15 @@ namespace WpfApplication1
             
             
         }
+
+        private void send_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+            {
+                dmkCurt.Shoot(curtain,message.Text);
+            }));
+        }
+       
     }
+    
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 namespace WpfApplication1
 {
@@ -13,44 +12,32 @@ namespace WpfApplication1
         public String author { get; set; }
         public String album { get; set; }
         public String path { get; set; }
-        
+
         //initialize a video object
-        public video_info()
-        {
-            fileName = "N/A";
-            title = "N/A";
-            author = "N/A";
-            album = "N/A";
-            path = "N/A";
+        public video_info() {
+            fileName = "";
+            title = "";
+            author = "";
+            album = "";
         }
-                    
-              
+
         //load a line of input
-        //Filename:'1.wav' 'title' 'author' 'album'
-        public void load(XmlNode video) {
-            foreach (XmlNode entry in video.ChildNodes)
+        //'1.wav' 'title' 'author' 'album'
+        public void load(String text) {
+            char[] separatingChars = {'\''};
+            char[] separatingChars1 = { '\\','/' };
+            string[] words = text.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length == 7)
             {
-                string cont = entry.InnerText;
-                switch (entry.Name)
-                {
-                    case "path":
-                        path = cont;
-                        char[] separatingChars1 = { '\\', '/' };
-                        string[] Names = path.Split(separatingChars1, StringSplitOptions.RemoveEmptyEntries);
-                        fileName = Names[Names.Length - 1];
-                        break;
-                    case "title":
-                        title = cont;
-                        break;
-                    case "author":
-                        author = cont;
-                        break;
-                    case "album":
-                        album = cont;
-                        break;
-                    default:
-                        break;
-                }
+                path = words[0];
+                string[] name = words[0].Split(separatingChars1, System.StringSplitOptions.RemoveEmptyEntries);
+                fileName = name[name.Length-1];
+                title = words[2];
+                author = words[4];
+                album = words[6];
+            }
+            else {
+                return;
             }
         }
 
