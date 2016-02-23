@@ -60,9 +60,9 @@ namespace WpfApplication1
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
             string path;
-            var dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".avi";
+            var dlg = new OpenFileDialog();
             dlg.Multiselect = false;
+            dlg.Filter = "AVI File|*.avi";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
 
             if (result == true)

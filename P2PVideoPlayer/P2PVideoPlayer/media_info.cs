@@ -9,7 +9,7 @@ namespace WpfApplication1
     {
         private String inputList;
         public String currentPlay { get; set;}
-        private List<video_info> playList;
+        public List<video_info> playList { get; }
         private int currentNum;
         private int totalNum;
 
