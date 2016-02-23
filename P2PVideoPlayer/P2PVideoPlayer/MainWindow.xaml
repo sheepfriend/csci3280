@@ -12,5 +12,6 @@
         <Button Content="Add" Height="28" HorizontalAlignment="Left" Margin="443,12,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click"/>
         <TextBlock Height="216" HorizontalAlignment="Left" Margin="288,43,0,0" Name="textBlock" Text="" VerticalAlignment="Top" Width="203" />
         <Label Content="Video List" Height="29" HorizontalAlignment="Left" Margin="288,12,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
+        <Button x:Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="443,78,0,0" Height="57" Click="button_Click"/>
     </Grid>
 </Window>

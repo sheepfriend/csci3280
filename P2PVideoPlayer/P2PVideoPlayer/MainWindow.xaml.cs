@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,8 +25,7 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            mediaInfo = new media_info("resources/list.txt");
-            textBlock.Text = mediaInfo.print();
+            
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
@@ -70,6 +71,25 @@ namespace WpfApplication1
                 mediaInfo.add(path);
             }
             textBlock.Text = mediaInfo.print();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            string path;
+            OpenFileDialog file = new OpenFileDialog();
+            Nullable<bool> result = file.ShowDialog();
+            if (result==true)
+            {
+
+                    path = file.FileName;
+                    mediaInfo = new media_info(path);
+                    textBlock.Text = mediaInfo.print();
+                    Button bt = (Button)sender;
+                    bt.Visibility = Visibility.Hidden;
+               
+            }
+            
+            
         }
     }
 }
