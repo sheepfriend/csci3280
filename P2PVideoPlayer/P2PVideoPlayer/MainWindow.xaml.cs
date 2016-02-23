@@ -31,6 +31,7 @@ namespace WpfApplication1
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
             media.LoadedBehavior = MediaState.Manual;
+          
             media.Source = new Uri(mediaInfo.currentPlay, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
             media.Play();
@@ -59,12 +60,16 @@ namespace WpfApplication1
         }
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
+            if (mediaInfo == null)
+            {
+                MessageBox.Show("Please load the list first");
+                return;
+            }
             string path;
             var dlg = new OpenFileDialog();
             dlg.Multiselect = false;
             dlg.Filter = "AVI File|*.avi";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
-
             if (result == true)
             {
                 path = dlg.FileName;

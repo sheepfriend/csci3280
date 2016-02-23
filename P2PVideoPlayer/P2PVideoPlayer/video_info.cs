@@ -7,22 +7,22 @@ namespace WpfApplication1
 {
     class video_info
     {
-        public String fileName;
-        public String title;
-        public String author;
-        public String what;
-        public String path;
-        
+        public String fileName {get; set; }
+        public String title { get; set; }
+        public String author { get; set; }
+        public String album { get; set; }
+        public String path { get; set; }
+
         //initialize a video object
         public video_info() {
             fileName = "";
             title = "";
             author = "";
-            what = "";
+            album = "";
         }
 
         //load a line of input
-        //'1.wav' 'title' 'author' 'what'
+        //'1.wav' 'title' 'author' 'album'
         public void load(String text) {
             char[] separatingChars = {'\''};
             char[] separatingChars1 = { '\\','/' };
@@ -34,7 +34,7 @@ namespace WpfApplication1
                 fileName = name[name.Length-1];
                 title = words[2];
                 author = words[4];
-                what = words[6];
+                album = words[6];
             }
             else {
                 return;
