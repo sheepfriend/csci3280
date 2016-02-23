@@ -82,6 +82,7 @@ namespace WpfApplication1
         {
             string path;
             OpenFileDialog file = new OpenFileDialog();
+            file.Filter = "Database File |*.xml";
             Nullable<bool> result = file.ShowDialog();
             if (result==true)
             {

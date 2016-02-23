@@ -13,7 +13,7 @@ namespace WpfApplication1
         public String author { get; set; }
         public String album { get; set; }
         public String path { get; set; }
-
+        
         //initialize a video object
         public video_info()
         {
@@ -24,45 +24,34 @@ namespace WpfApplication1
             path = "N/A";
         }
                     
-        
+              
         //load a line of input
         //Filename:'1.wav' 'title' 'author' 'album'
         public void load(XmlNode video) {
-            if (video["path"] != null)
+            foreach (XmlNode entry in video.ChildNodes)
             {
-                path = video["path"].InnerText;
-                char[] separatingChars1 = { '\\', '/' };
-                string[] Names = path.Split(separatingChars1, System.StringSplitOptions.RemoveEmptyEntries);
-                fileName = Names[Names.Length - 1];
+                string cont = entry.InnerText;
+                switch (entry.Name)
+                {
+                    case "path":
+                        path = cont;
+                        char[] separatingChars1 = { '\\', '/' };
+                        string[] Names = path.Split(separatingChars1, StringSplitOptions.RemoveEmptyEntries);
+                        fileName = Names[Names.Length - 1];
+                        break;
+                    case "title":
+                        title = cont;
+                        break;
+                    case "author":
+                        author = cont;
+                        break;
+                    case "album":
+                        album = cont;
+                        break;
+                    default:
+                        break;
+                }
             }
-            if (video["title"] != null)
-            {
-                path = video["title"].InnerText;
-            }
-            if (video["author"] != null)
-            {
-                path = video["author"].InnerText;
-            }
-            if (video["album"] != null)
-            {
-                path = video["album"].InnerText;
-            }
-            //char[] separatingChars = {'\''};
-            //char[] separatingChars1 = { '\\','/' };
-            //string[] words = text.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-            //if (words.Length == 7)
-            //{
-            //    path = words[0];
-            //    string[] name = words[0].Split(separatingChars1, System.StringSplitOptions.RemoveEmptyEntries);
-            //    fileName = name[name.Length-1];
-            //    title = words[2];
-            //    author = words[4];
-            //    album = words[6];
-            //}
-            //else {
-            //    return;
-            //}
-
         }
 
         public void readFromAddr(String text)
