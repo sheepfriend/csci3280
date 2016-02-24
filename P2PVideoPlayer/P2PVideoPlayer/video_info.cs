@@ -69,12 +69,20 @@ namespace WpfApplication1
             album = InputBox("What is the album of the music?", fileName + ": Album", "N/A");
             XmlNodeList l = doc.SelectNodes("/Karaoke/video", media_info.man);
             XmlNode last = l[l.Count - 1];
-           
-            int lastid = Int32.Parse(last.Attributes["id"].Value);
-            int newid = lastid + 1;
             XmlElement newdata = doc.CreateElement("video");
-            newdata.SetAttribute("id", newid.ToString());
-            doc.DocumentElement.InsertAfter(newdata, last);
+            if (last != null)
+            {
+                int lastid = Int32.Parse(last.Attributes["id"].Value);
+                int newid = lastid + 1;
+                newdata.SetAttribute("id", newid.ToString());
+                doc.DocumentElement.InsertAfter(newdata, last);
+            }
+            else
+            {
+                int newid = 1;
+                newdata.SetAttribute("id", newid.ToString());
+                doc.DocumentElement.SelectSingleNode("/Karaoke").AppendChild(newdata);
+            }
             //path
             XmlElement elem = doc.CreateElement("path");
             elem.InnerText = text;
