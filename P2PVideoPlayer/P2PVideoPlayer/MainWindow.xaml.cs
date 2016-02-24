@@ -106,11 +106,14 @@ namespace WpfApplication1
                     path = file.FileName;
                     mediaInfo = new media_info(path);
                     textBlock.Text = mediaInfo.print();
+
+                    MessageBox.Show(textBlock.Text,"textBlock should be");
                     Button bt = (Button)sender;
                     bt.Visibility = Visibility.Hidden;
                     
             }
         }
+
         private void send_Click(object sender, RoutedEventArgs e)
          {
              Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>

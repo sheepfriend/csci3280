@@ -10,7 +10,7 @@ namespace WpfApplication1
     {
         private String inputList;
         public String currentPlay { get; set;}
-        public List<video_info> playList { get; set;}
+        public List<video_info> playList { get; set; }
         private int currentNum;
         private int totalNum;
         public static XmlDocument doc { set; get; }
@@ -78,8 +78,6 @@ namespace WpfApplication1
 
         //load the initial input video list...
         public void load() {
-            //String line;
-            //System.IO.StreamReader file = new System.IO.StreamReader(inputList);
             doc = new XmlDocument();
             doc.Load(inputList);
             man = new XmlNamespaceManager(doc.NameTable);
@@ -95,7 +93,6 @@ namespace WpfApplication1
                 playList.Add(tmp);
                 totalNum += 1;
             }
-            
             if(totalNum>0)
             {
                 currentNum = 0;
