@@ -13,7 +13,8 @@ namespace WpfApplication1
         public List<video_info> playList { get; }
         private int currentNum;
         private int totalNum;
-
+        public static XmlDocument doc { set; get; }
+        public static XmlNamespaceManager man { set; get; }
         //initialize object
         public media_info(String listaddr) {
             currentPlay = "";
@@ -22,7 +23,11 @@ namespace WpfApplication1
             playList = new List<video_info>();
             load();
         }
-
+        ~media_info()
+        {
+            doc.Save(inputList);
+            
+        }
         //load next video
         //then mediaElement use .currentPlay to load the URI
         public void next() {
@@ -75,9 +80,9 @@ namespace WpfApplication1
         public void load() {
             //String line;
             //System.IO.StreamReader file = new System.IO.StreamReader(inputList);
-            XmlDocument doc = new XmlDocument();
+            doc = new XmlDocument();
             doc.Load(inputList);
-            XmlNamespaceManager man = new XmlNamespaceManager(doc.NameTable);
+            man = new XmlNamespaceManager(doc.NameTable);
             man.AddNamespace("kara", "list");
             XmlElement root = doc.DocumentElement;
             XmlNodeList videos = root.SelectNodes("/Karaoke/video", man);

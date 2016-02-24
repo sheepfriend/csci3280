@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using static Microsoft.VisualBasic.Interaction;
 
 namespace WpfApplication1
@@ -57,7 +59,8 @@ namespace WpfApplication1
 
         public void readFromAddr(String text)
         {
-            path = text;
+            XmlDocument doc = media_info.doc;
+
             char[] separatingChars1 = { '\\', '/' };
             string[] name = text.Split(separatingChars1, System.StringSplitOptions.RemoveEmptyEntries);
             fileName = name[name.Length - 1];
@@ -65,7 +68,25 @@ namespace WpfApplication1
             title = InputBox("What is the title of the music?",fileName+": Title","N/A");
             author = InputBox("Who is the author of the music?", fileName + ": Author", "N/A");
             album = InputBox("What is the album of the music?", fileName + ": Album", "N/A");
-
+            //XElement last = myroot.Descendants("video").Last();
+            XmlNodeList l = doc.SelectNodes("/Karaoke/video", media_info.man);
+            XmlNode last = l[l.Count - 1];
+           
+            int lastid = Int32.Parse(last.Attributes["id"].Value);
+            int newid = lastid + 1;
+            XmlElement newdata = doc.CreateElement("video");
+            newdata.SetAttribute("id", newid.ToString());
+            doc.DocumentElement.InsertAfter(newdata, last);
+             
+            //XDocument temp;
+            //string content = "<video id=\"" + newid + "\">" +
+            //                   "<path>"+text+"</path>"+
+            //                  "<title>" +title+"</title>"+
+            //                  "<author>" + author + "</author>"+ 
+            //                  "<album>" + album + "</album>" +
+            //                   "</video>";
+            //temp = XDocument.Parse(content);
+            //last.AddAfterSelf(new XElement(temp.ToString()));
         }
 
     }

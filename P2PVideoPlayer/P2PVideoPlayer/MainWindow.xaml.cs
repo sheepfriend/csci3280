@@ -34,6 +34,7 @@ namespace WpfApplication1
         {
             InitializeComponent();
             dmkCurt = new DanmakuCurtain();
+
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
@@ -80,6 +81,7 @@ namespace WpfApplication1
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
+
                 //first add file and its name
                 foreach (String filename in dlg.FileNames)
                 {

@@ -22,3 +22,4 @@ C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\
 C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\csci3280\P2PVideoPlayer\P2PVideoPlayer\obj\x86\Debug\WpfApplication1.g.resources
 C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\csci3280\P2PVideoPlayer\P2PVideoPlayer\obj\x86\Debug\WpfApplication1.Properties.Resources.resources
 C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\csci3280\P2PVideoPlayer\P2PVideoPlayer\obj\x86\Debug\P2PVideoPlayer.csproj.GenerateResource.Cache
+C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\csci3280\P2PVideoPlayer\P2PVideoPlayer\obj\x86\Debug\App.baml
