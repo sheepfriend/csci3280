@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="444" Width="682">
     <Grid Margin="0,0,0,0">
-        <TextBlock HorizontalAlignment="Left" Margin="461,52,0,10" Name="textBlock" Text="" Width="203" />
         <MediaElement Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="media" VerticalAlignment="Top" Width="439"  />
         <Grid Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="curtain" VerticalAlignment="Top" Width="439"  />
         <Grid HorizontalAlignment="Left" Height="284" Margin="461,14,0,0" VerticalAlignment="Top" Width="213" Background="White"/>
+        <TextBlock HorizontalAlignment="Left" Margin="461,52,0,10" Name="textBlock" Text="" Width="203" />
         <Button Content="pre" Height="43" HorizontalAlignment="Left" Margin="128,303,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" />
         <Button Content="next" Height="43" HorizontalAlignment="Left" Margin="304,303,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" />
         <Button Content="play" Height="43" HorizontalAlignment="Left" Margin="216,303,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" />
