@@ -68,21 +68,27 @@ namespace WpfApplication1
         }
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
-            // if (mediaInfo == null)
-            // {
-                MessageBox.Show("Please load the list first");
-                // return;
-            // }
+             if (mediaInfo == null)
+             {
+                 MessageBox.Show("Please load the list first");
+                 return;
+             }
             string path;
             var dlg = new OpenFileDialog();
-            dlg.Multiselect = false;
+            dlg.Multiselect = true;
             dlg.Filter = "VIDEO File|*";
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
-                path = dlg.FileName;
-                mediaInfo.add(path);
+                //first add file and its name
+                foreach (String filename in dlg.FileNames)
+                {
+                    path = dlg.FileName;
+                    mediaInfo.add(path);
+                    
+                }
             }
+
             textBlock.Text = mediaInfo.print();
         }
 

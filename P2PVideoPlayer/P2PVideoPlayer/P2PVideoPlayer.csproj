@@ -39,6 +39,7 @@
     <Reference Include="DirectShowLib-2005">
       <HintPath>C:\Users\yxing2\Downloads\lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

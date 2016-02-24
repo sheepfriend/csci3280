@@ -1,3 +1,6 @@
 *.exe
 *.suo
 *.cache
+*.exe
+P2PVideoPlayer/P2PVideoPlayer/bin/Debug/WpfApplication1.exe
+*.exe

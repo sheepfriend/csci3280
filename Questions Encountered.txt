@@ -17,8 +17,3 @@ play frames. Then load the audio invisibly.
             Problems: Painful.
             
             
-
-II.
-Would it be better to store list in xml form?
-
-More easy to organize and standardized.
