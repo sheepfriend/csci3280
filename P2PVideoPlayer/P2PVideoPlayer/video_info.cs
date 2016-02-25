@@ -67,6 +67,7 @@ namespace WpfApplication1
             title = InputBox("What is the title of the music?",fileName+": Title","N/A");
             author = InputBox("Who is the author of the music?", fileName + ": Author", "N/A");
             album = InputBox("What is the album of the music?", fileName + ": Album", "N/A");
+            path = text;
             XmlNodeList l = doc.SelectNodes("/Karaoke/video", media_info.man);
             XmlNode last = l[l.Count - 1];
             XmlElement newdata = doc.CreateElement("video");
