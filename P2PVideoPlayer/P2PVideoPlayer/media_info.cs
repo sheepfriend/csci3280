@@ -74,6 +74,9 @@ namespace WpfApplication1
             tmp.readFromAddr(path);
             playList.Add(tmp);
             totalNum += 1;
+            if (totalNum == 1) {
+                currentPlay = path;
+            }
         }
 
         //load the initial input video list...
