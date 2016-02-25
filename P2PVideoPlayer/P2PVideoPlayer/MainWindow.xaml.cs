@@ -19,6 +19,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace WpfApplication1
 {
@@ -118,5 +119,30 @@ namespace WpfApplication1
                  dmkCurt.Shoot(curtain,message.Text);
              }));
          }
+
+        
+        private void button1_Click_1(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "XML Database File|*.xml";
+            sfd.Title = "Create database file";
+            sfd.FileName = "mylist";
+            sfd.DefaultExt = ".xml";
+            
+            if(sfd.ShowDialog() == true)
+            {
+                String xmltext = "<?xml version=\"1.0\"?>\n"
+                            + "<Karaoke xmlns:kara=\"list\">\n"
+                            + "</Karaoke>";
+                using (Stream output = sfd.OpenFile())
+                {
+                    if(output != null)
+                    {
+                        output.Write(Encoding.ASCII.GetBytes(xmltext), 0, xmltext.Length);
+                    }
+                }
+            }
+
+        }
     }
 }

@@ -5,15 +5,17 @@
     <Grid Margin="0,0,0,0">
         <MediaElement Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="media" VerticalAlignment="Top" Width="439"  />
         <Grid Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="curtain" VerticalAlignment="Top" Width="439"  />
-        <Grid HorizontalAlignment="Left" Height="284" Margin="461,14,0,0" VerticalAlignment="Top" Width="213" Background="White"/>
-        <TextBlock HorizontalAlignment="Left" Margin="461,52,0,10" Name="textBlock" Text="" Width="203" />
+        <Grid HorizontalAlignment="Left" Height="131" Margin="595,135,0,0" VerticalAlignment="Top" Width="79" Background="White">
+            <Button x:Name="button1" Content="&#xD;&#xA;Create&#xD;&#xA;List&#xD;&#xA;" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="48" Height="73" Click="button1_Click_1"/>
+        </Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="484,46,0,211" x:Name="textBlock" Width="88" />
         <Button Content="pre" Height="43" HorizontalAlignment="Left" Margin="128,303,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" />
         <Button Content="next" Height="43" HorizontalAlignment="Left" Margin="304,303,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" />
         <Button Content="play" Height="43" HorizontalAlignment="Left" Margin="216,303,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" />
         <Button Content="pause" Height="43" HorizontalAlignment="Left" Margin="172,303,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" />
         <Button Content="stop" Height="43" HorizontalAlignment="Left" Margin="260,303,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" />
         <Button Content="Add" Height="28" HorizontalAlignment="Left" Margin="616,13,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click"/>
-        <Label Content="Video List" Height="29" HorizontalAlignment="Left" Margin="461,14,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
+        <Label Content="Video List" Height="29" HorizontalAlignment="Left" Margin="484,12,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
         <Button Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="616,64,0,0" Height="57" Click="button_Click"/>
         <TextBox Name="message" HorizontalAlignment="Left" Height="30" Margin="36,365,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371"/>
         <Button Name="send" Content="Send" HorizontalAlignment="Left" Margin="422,365,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click"/>
