@@ -26,7 +26,7 @@ namespace WpfApplication1
             path = "N/A";
         }
                     
-              
+         
         //load a line of input
         //Filename:'1.wav' 'title' 'author' 'album'
         public void load(XmlNode video) {
@@ -109,5 +109,15 @@ namespace WpfApplication1
             }
         }
 
+        public String print()
+        {
+            StringBuilder result = new StringBuilder(40);
+            result.Append("File Name: ").Append(fileName).Append("\n")
+                 .Append("Title: ").Append(title).Append("\n")
+                 .Append("Author: ").Append(author).Append("\n")
+                 .Append("Album: ").Append(album).Append("\n");
+            
+            return result.ToString(); 
+        }
     }
 }

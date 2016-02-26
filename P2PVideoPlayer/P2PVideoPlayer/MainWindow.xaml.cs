@@ -172,5 +172,21 @@ namespace WpfApplication1
             media.ScrubbingEnabled = true;
             media.Play();
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem here = (MenuItem)sender;
+            int current = mediaInfo.currentNum;
+            switch ( here.Header.ToString())
+            {
+                case "Delete":
+
+                    break;
+                case "Property":
+                    MessageBox.Show(mediaInfo.playList[current].print());
+                    break;
+            }
+            
+        }
     }
 }
