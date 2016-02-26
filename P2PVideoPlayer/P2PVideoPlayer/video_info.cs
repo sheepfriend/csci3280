@@ -72,19 +72,21 @@ namespace WpfApplication1
             XmlNodeList l = doc.SelectNodes("/Karaoke/video", media_info.man);
             XmlNode last = l[l.Count - 1];
             XmlElement newdata = doc.CreateElement("video");
+            int newid;
             if (last != null)
             {
                 int lastid = Int32.Parse(last.Attributes["id"].Value);
-                int newid = lastid + 1;
+                newid = lastid + 1;
                 newdata.SetAttribute("id", newid.ToString());
                 doc.DocumentElement.InsertAfter(newdata, last);
             }
             else
             {
-                int newid = 1;
+                newid = 1;
                 newdata.SetAttribute("id", newid.ToString());
                 doc.DocumentElement.SelectSingleNode("/Karaoke").AppendChild(newdata);
             }
+            id = newid.ToString(); 
             //path
             XmlElement elem = doc.CreateElement("path");
             elem.InnerText = text;

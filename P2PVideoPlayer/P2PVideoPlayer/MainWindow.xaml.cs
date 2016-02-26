@@ -85,7 +85,6 @@ namespace WpfApplication1
             Nullable<bool> result = dlg.ShowDialog(Window.GetWindow(this));
             if (result == true)
             {
-
                 //first add file and its name
                 foreach (String filename in dlg.FileNames)
                 {

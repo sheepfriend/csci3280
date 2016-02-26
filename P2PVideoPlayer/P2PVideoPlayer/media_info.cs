@@ -88,10 +88,6 @@ namespace WpfApplication1
             tmp.readFromAddr(path);
             playList.Add(tmp);
             totalNum += 1;
-
-            if (totalNum == 1) {
-                currentPlay = path;
-            }
         }
 
         //load the initial input video list...
@@ -136,7 +132,7 @@ namespace WpfApplication1
             to_delete.ParentNode.RemoveChild(to_delete);
             //remove from list
             playList.Remove(to_delete_vid);
-
+            totalNum--;
         }
     }
 }
