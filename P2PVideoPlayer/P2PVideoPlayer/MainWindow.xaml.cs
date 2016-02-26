@@ -91,7 +91,14 @@ namespace WpfApplication1
                 }
             }
 
-            textBlock.Text = mediaInfo.print();
+            
+            List<String> plat_list = mediaInfo.print();
+            selector.Items.Clear();
+            for (int i = 0; i < plat_list.Count; i++)
+            {
+                selector.Items.Add(plat_list[i]);
+            }
+            selector.Items.MoveCurrentTo(mediaInfo.currentNum);
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -105,7 +112,14 @@ namespace WpfApplication1
 
                     path = file.FileName;
                     mediaInfo = new media_info(path);
-                    textBlock.Text = mediaInfo.print();
+                    
+            List<String> plat_list = mediaInfo.print();
+            selector.Items.Clear();
+            for (int i = 0; i < plat_list.Count; i++)
+            {
+                selector.Items.Add(plat_list[i]);
+            }
+            selector.Items.MoveCurrentTo(mediaInfo.currentNum);
                     Button bt = (Button)sender;
                     bt.Visibility = Visibility.Hidden;
                     
