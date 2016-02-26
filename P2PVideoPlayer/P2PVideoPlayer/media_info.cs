@@ -9,85 +9,38 @@ namespace WpfApplication1
     class media_info
     {
         private String inputList;
-        public String currentPlay { get; set;}
-        public List<video_info> playList { get; set; }
-        public int currentNum {get; set; }
-        private int totalNum;
+        public video_info currentPlay { get; set;}
         public static XmlDocument doc { set; get; }
         public static XmlNamespaceManager man { set; get; }
+        private Dictionary<String, video_info> _name_to_list;
+        public Dictionary<String,video_info> name_to_list { get { return _name_to_list; } } 
         //initialize object
         public media_info(String listaddr) {
-            currentPlay = "";
-            totalNum = 0;
+            currentPlay = null;
+            _name_to_list = new Dictionary<string, video_info>();
             inputList = listaddr;
-            playList = new List<video_info>();
             load();
         }
+
         ~media_info()
         {
             doc.Save(inputList);
-            
-        }
-        public void select_play(String item)
-        {
-            int index = -1;
-            for (int i = 0; i < playList.Count; i++)
-            {
-                if (item == playList[i].fileName) { index= i; }
-            }
-            if (index < 0 || index >= totalNum) { return; }
-            else
-            {
-                currentNum = index;
-                currentPlay = playList[currentNum].path;
-            }
-        }
-        //load next video
-        //then mediaElement use .currentPlay to load the URI
-        public void next() {
-            if (totalNum == 0) {
-                currentNum = 0;
-                currentPlay = "";
-            }
-            else if (currentNum == totalNum-1)
-            {
-                currentNum = 0;
-                currentPlay = playList[currentNum].path;
-            }
-            else {
-                currentNum += 1;
-                currentPlay = playList[currentNum].path;
-            }
         }
 
-        //load next video
-        //then mediaElement use .currentPlay to load the URI
-        public void pre()
+        public void select_play(String item)
         {
-            if (totalNum == 0)
-            {
-                currentNum = 0;
-                currentPlay = "";
-            }
-            else if (currentNum == 0)
-            {
-                currentNum = totalNum - 1;
-                currentPlay = playList[currentNum].path;
-            }
-            else
-            {
-                currentNum -= 1;
-                currentPlay = playList[currentNum].path;
-            }
+            
+            currentPlay = name_to_list[item];
         }
+      
 
         //add a new vedio into the list
         //may need deduplication?
         public void add(String path) {
             video_info tmp = new video_info();
             tmp.readFromAddr(path);
-            playList.Add(tmp);
-            totalNum += 1;
+            name_to_list.Add(tmp.fileName, tmp);
+            
         }
 
         //load the initial input video list...
@@ -101,38 +54,32 @@ namespace WpfApplication1
 
             foreach (XmlNode video in videos)
             {
-
                 video_info tmp = new video_info();
                 tmp.load(video);
-                playList.Add(tmp);
-                totalNum += 1;
+                name_to_list.Add(tmp.fileName, tmp);
             }
-            if(totalNum>0)
-            {
-                currentNum = 0;
-                currentPlay = playList[currentNum].path;
-            }
+            
         }
 
         //return a string of info
          public List<String> print() {
             List<String> result = new List<String>();
-            int i;
-            for (i = 0; i < totalNum; i++) {
-                result.Add(playList[i].fileName);
+            
+            foreach(video_info item in name_to_list.Values) { 
+                result.Add(item.fileName);
             }
             return result;
         }
 
-        public void delete(int currentnum)
+        public void delete()
         {
-            video_info to_delete_vid = playList[currentnum];
+            video_info to_delete_vid = currentPlay;
             //remove from document
             XmlNode to_delete = doc.SelectSingleNode(String.Format("/Karaoke/video[@id='{0}']",to_delete_vid.id), man);
             to_delete.ParentNode.RemoveChild(to_delete);
             //remove from list
-            playList.Remove(to_delete_vid);
-            totalNum--;
+            name_to_list.Remove(to_delete_vid.fileName);
+            
         }
     }
 }

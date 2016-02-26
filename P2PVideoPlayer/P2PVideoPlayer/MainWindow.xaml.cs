@@ -35,14 +35,14 @@ namespace WpfApplication1
         {
             InitializeComponent();
             dmkCurt = new DanmakuCurtain();
-
+            media.LoadedBehavior = MediaState.Manual;
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
             media.LoadedBehavior = MediaState.Manual;
           
-            media.Source = new Uri(mediaInfo.currentPlay, UriKind.RelativeOrAbsolute);
+            media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
             media.Play();
         }
@@ -54,21 +54,22 @@ namespace WpfApplication1
 
         private void btn_stop_Click(object sender, RoutedEventArgs e)
         {
+            
             media.Stop();
         }
 
         private void btn_pre_Click(object sender, RoutedEventArgs e)
         {
             media.Stop();
-            mediaInfo.pre();
-            selector.SelectedIndex = mediaInfo.currentNum;
+            if(selector.SelectedIndex-1 >= 0)
+                selector.SelectedIndex -= 1;
         }
 
         private void btn_next_Click(object sender, RoutedEventArgs e)
         {
             media.Stop();
-            mediaInfo.next();
-            selector.SelectedIndex = mediaInfo.currentNum;
+            if(selector.SelectedIndex + 1 < selector.Items.Count)
+                selector.SelectedIndex += 1;
         }
 
         private void btn_add_Click(object sender, RoutedEventArgs e)
@@ -100,7 +101,6 @@ namespace WpfApplication1
             {
                 selector.Items.Add(plat_list[i]);
             }
-            selector.Items.MoveCurrentTo(mediaInfo.currentNum);
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -119,7 +119,7 @@ namespace WpfApplication1
                 {
                     selector.Items.Add(plat_list[i]);
                 }
-                selector.SelectedIndex = (mediaInfo.currentNum);
+                selector.SelectedIndex = -1;
                
                 ((Button)sender).Visibility = Visibility.Hidden;
                     
@@ -164,10 +164,7 @@ namespace WpfApplication1
         {
             if (selector.SelectedItem == null) return;
             mediaInfo.select_play(selector.SelectedItem.ToString());
-            
-            media.LoadedBehavior = MediaState.Manual;
-
-            media.Source = new Uri(mediaInfo.currentPlay, UriKind.RelativeOrAbsolute);
+            media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
             media.Play();
         }
@@ -176,15 +173,17 @@ namespace WpfApplication1
         {
             MenuItem here = (MenuItem)sender;
             
-            int current = mediaInfo.currentNum;
+            int current = selector.SelectedIndex;
             switch ( here.Header.ToString())
             {
                 case "Delete":
-                    mediaInfo.delete(current);
+                    media.Close();
+                    mediaInfo.delete();
                     selector.Items.Remove(selector.SelectedItem);
+
                     break;
                 case "Property":
-                    MessageBox.Show(mediaInfo.playList[current].print());
+                    MessageBox.Show(mediaInfo.currentPlay.print());
                     break;
             }
             
