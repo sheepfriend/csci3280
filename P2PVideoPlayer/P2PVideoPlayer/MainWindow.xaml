@@ -26,7 +26,7 @@
         <Button Content="stop" Height="43" HorizontalAlignment="Left" Margin="260,303,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" />
         <Button Content="Add" Height="28" HorizontalAlignment="Left" Margin="616,13,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click"/>
         <Label Content="Video List" Height="29" HorizontalAlignment="Left" Margin="484,12,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
-        <Button Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="616,64,0,0" Height="57" Click="button_Click"/>
+        <Button Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="616,64,0,0" Height="57" Click="Load_Click"/>
         <TextBox Name="message" HorizontalAlignment="Left" Height="30" Margin="36,365,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371"/>
         <Button Name="send" Content="Send" HorizontalAlignment="Left" Margin="422,365,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click"/>
 

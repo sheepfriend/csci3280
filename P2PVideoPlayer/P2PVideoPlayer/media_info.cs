@@ -35,12 +35,12 @@ namespace WpfApplication1
             {
                 if (item == playList[i].fileName) { index= i; }
             }
-                if (index < 0 || index >= totalNum) { return; }
-                else
-                {
-                    currentNum = index;
-                    currentPlay = playList[currentNum].path;
-                }
+            if (index < 0 || index >= totalNum) { return; }
+            else
+            {
+                currentNum = index;
+                currentPlay = playList[currentNum].path;
+            }
         }
         //load next video
         //then mediaElement use .currentPlay to load the URI
@@ -126,6 +126,17 @@ namespace WpfApplication1
                 result.Add(playList[i].fileName);
             }
             return result;
+        }
+
+        public void delete(int currentnum)
+        {
+            video_info to_delete_vid = playList[currentnum];
+            //remove from document
+            XmlNode to_delete = doc.SelectSingleNode(String.Format("/Karaoke/video[@id='{0}']",to_delete_vid.id), man);
+            to_delete.ParentNode.RemoveChild(to_delete);
+            //remove from list
+            playList.Remove(to_delete_vid);
+
         }
     }
 }

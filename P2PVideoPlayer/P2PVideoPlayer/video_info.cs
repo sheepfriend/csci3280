@@ -15,7 +15,7 @@ namespace WpfApplication1
         public String author { get; set; }
         public String album { get; set; }
         public String path { get; set; }
-        
+        public String id { get; set; }
         //initialize a video object
         public video_info()
         {
@@ -30,8 +30,9 @@ namespace WpfApplication1
         //load a line of input
         //Filename:'1.wav' 'title' 'author' 'album'
         public void load(XmlNode video) {
+            id = video.Attributes["id"].Value;
             foreach (XmlNode entry in video.ChildNodes)
-            {
+            {   
                 string cont = entry.InnerText;
                 switch (entry.Name)
                 {

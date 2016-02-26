@@ -70,6 +70,7 @@ namespace WpfApplication1
             mediaInfo.next();
             selector.SelectedIndex = mediaInfo.currentNum;
         }
+
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
              if (mediaInfo == null)
@@ -103,7 +104,7 @@ namespace WpfApplication1
             selector.Items.MoveCurrentTo(mediaInfo.currentNum);
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void Load_Click(object sender, RoutedEventArgs e)
         {
             string path;
             OpenFileDialog file = new OpenFileDialog();
@@ -111,19 +112,17 @@ namespace WpfApplication1
             Nullable<bool> result = file.ShowDialog();
             if (result==true)
             {
-
-                    path = file.FileName;
-                    mediaInfo = new media_info(path);
-                    
-            List<String> plat_list = mediaInfo.print();
-            selector.Items.Clear();
-            for (int i = 0; i < plat_list.Count; i++)
-            {
-                selector.Items.Add(plat_list[i]);
-            }
-            selector.Items.MoveCurrentTo(mediaInfo.currentNum);
-                    Button bt = (Button)sender;
-                    bt.Visibility = Visibility.Hidden;
+                path = file.FileName;
+                mediaInfo = new media_info(path);
+                List<String> plat_list = mediaInfo.print();
+                selector.Items.Clear();
+                for (int i = 0; i < plat_list.Count; i++)
+                {
+                    selector.Items.Add(plat_list[i]);
+                }
+                selector.SelectedIndex = (mediaInfo.currentNum);
+               
+                ((Button)sender).Visibility = Visibility.Hidden;
                     
             }
         }
@@ -164,8 +163,9 @@ namespace WpfApplication1
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            mediaInfo.select_play((String)selector.Items.CurrentItem);
-
+            if (selector.SelectedItem == null) return;
+            mediaInfo.select_play(selector.SelectedItem.ToString());
+            
             media.LoadedBehavior = MediaState.Manual;
 
             media.Source = new Uri(mediaInfo.currentPlay, UriKind.RelativeOrAbsolute);
@@ -176,11 +176,13 @@ namespace WpfApplication1
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem here = (MenuItem)sender;
+            
             int current = mediaInfo.currentNum;
             switch ( here.Header.ToString())
             {
                 case "Delete":
-
+                    mediaInfo.delete(current);
+                    selector.Items.Remove(selector.SelectedItem);
                     break;
                 case "Property":
                     MessageBox.Show(mediaInfo.playList[current].print());
