@@ -61,12 +61,14 @@ namespace WpfApplication1
         {
             media.Stop();
             mediaInfo.pre();
+            selector.Items.MoveCurrentTo(mediaInfo.currentNum);
         }
 
         private void btn_next_Click(object sender, RoutedEventArgs e)
         {
             media.Stop();
             mediaInfo.next();
+            selector.Items.MoveCurrentTo(mediaInfo.currentNum);
         }
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
