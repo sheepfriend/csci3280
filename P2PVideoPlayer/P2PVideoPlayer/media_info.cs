@@ -28,6 +28,20 @@ namespace WpfApplication1
             doc.Save(inputList);
             
         }
+        public void select_play(String item)
+        {
+            int index = -1;
+            for (int i = 0; i < playList.Count; i++)
+            {
+                if (item == playList[i].fileName) { index= i; }
+            }
+                if (index < 0 || index >= totalNum) { return; }
+                else
+                {
+                    currentNum = index;
+                    currentPlay = playList[currentNum].path;
+                }
+        }
         //load next video
         //then mediaElement use .currentPlay to load the URI
         public void next() {
@@ -105,11 +119,11 @@ namespace WpfApplication1
         }
 
         //return a string of info
-        public String print() {
-            String result = "";
+         public List<String> print() {
+            List<String> result = new List<String>();
             int i;
             for (i = 0; i < totalNum; i++) {
-                result += playList[i].fileName + "\n";
+                result.Add(playList[i].fileName);
             }
             return result;
         }
