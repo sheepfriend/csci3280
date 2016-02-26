@@ -6,6 +6,9 @@
         <MediaElement Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="media" VerticalAlignment="Top" Width="439"  />
         <Grid Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="curtain" VerticalAlignment="Top" Width="439"  />
         <Grid HorizontalAlignment="Left" Height="284" Margin="461,14,0,0" VerticalAlignment="Top" Width="213" Background="White"/>
+        <TextBlock HorizontalAlignment="Left" Margin="461,52,0,10" x:Name="textBlock" Width="203" ><InlineUIContainer>
+        		<ListBox x:Name="selector" Height="279" Width="154" SelectionChanged="ListBox_SelectionChanged"/>
+        	</InlineUIContainer></TextBlock>
         <Grid HorizontalAlignment="Left" Height="131" Margin="595,135,0,0" VerticalAlignment="Top" Width="79">
             <Button x:Name="button1" Content="&#xD;&#xA;Create&#xD;&#xA;List&#xD;&#xA;" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="48" Height="73" Click="button1_Click_1"/>
         </Grid>
