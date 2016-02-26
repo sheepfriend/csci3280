@@ -144,5 +144,17 @@ namespace WpfApplication1
             }
 
         }
+        
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            mediaInfo.select_play((String)selector.Items.CurrentItem);
+
+            media.LoadedBehavior = MediaState.Manual;
+
+            media.Source = new Uri(mediaInfo.currentPlay, UriKind.RelativeOrAbsolute);
+            media.ScrubbingEnabled = true;
+            media.Play();
+        }
     }
 }
