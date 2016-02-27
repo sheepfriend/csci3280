@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml;
 
 namespace WpfApplication1
@@ -29,7 +30,6 @@ namespace WpfApplication1
 
         public void select_play(String item)
         {
-            
             currentPlay = name_to_list[item];
         }
       
@@ -37,6 +37,15 @@ namespace WpfApplication1
         //add a new vedio into the list
         //may need deduplication?
         public void add(String path) {
+            //deduplication goes first
+            foreach(video_info myvideo in name_to_list.Values)
+            {
+                if(myvideo.path == path)
+                {
+                    MessageBox.Show("Duplication detected.", "Error");
+                    return;
+                }
+            }
             video_info tmp = new video_info();
             tmp.readFromAddr(path);
             name_to_list.Add(tmp.fileName, tmp);

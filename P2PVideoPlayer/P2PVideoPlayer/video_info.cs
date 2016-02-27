@@ -114,11 +114,12 @@ namespace WpfApplication1
 
         public String print()
         {
-            StringBuilder result = new StringBuilder(40);
-            result.Append("File Name: ").Append(fileName).Append("\n")
-                 .Append("Title: ").Append(title).Append("\n")
-                 .Append("Author: ").Append(author).Append("\n")
-                 .Append("Album: ").Append(album).Append("\n");
+            StringBuilder result = new StringBuilder(60);
+            result.Append("Path: ").Append(path)
+                  .Append("File Name: ").Append(fileName).Append("\n")
+                  .Append("Title: ").Append(title).Append("\n")
+                  .Append("Author: ").Append(author).Append("\n")
+                  .Append("Album: ").Append(album).Append("\n");
             
             return result.ToString(); 
         }
