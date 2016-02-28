@@ -21,8 +21,11 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
 
+
+
 namespace WpfApplication1
 {
+   
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -30,6 +33,7 @@ namespace WpfApplication1
     {
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
+        public int isPlaying = 0; // 0: no pause 1: pause
 
         public MainWindow()
         {
@@ -40,16 +44,27 @@ namespace WpfApplication1
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
-            media.LoadedBehavior = MediaState.Manual;
-          
-            media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
-            media.ScrubbingEnabled = true;
-            media.Play();
+            if (selector.SelectedItem != null)
+            {
+                if (isPlaying == 0)
+                {
+                    media.LoadedBehavior = MediaState.Manual;
+
+                    media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
+                    media.ScrubbingEnabled = true;
+                    media.Play();
+                }
+                else if (isPlaying == 2)
+                {
+                    media.Play();
+                }
+            }
         }
 
         private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
             media.Pause();
+            isPlaying = 1; // paused
         }
 
         private void btn_stop_Click(object sender, RoutedEventArgs e)
@@ -167,6 +182,7 @@ namespace WpfApplication1
             media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
             media.Play();
+            //isPlaying = 1;
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
