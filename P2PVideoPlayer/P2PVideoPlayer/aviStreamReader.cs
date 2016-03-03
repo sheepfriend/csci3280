@@ -36,15 +36,23 @@ namespace WpfApplication1
             reader.Close();
         }
 
-        public void readStream(String name)
+        public int readStream(String name)
         {
             writer.Open(name, width, height, fps);
-            for (int i = 0; i < fps; i++)
+            long frameNum = reader.FrameCount;
+            int reachEnd = 0;
+            int currentFrame = 0;
+            for (int i = currentFrame; i < currentFrame + fps && i < frameNum; i++)
             {
                 writer.WriteVideoFrame(reader.ReadVideoFrame());
+                if (frameNum == i + 1)
+                {
+                    reachEnd = 1;
+                }
             }
+            
             writer.Close();
-
+            return reachEnd;
         }
 
     }

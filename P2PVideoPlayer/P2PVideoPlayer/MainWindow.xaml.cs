@@ -34,6 +34,7 @@ namespace WpfApplication1
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
         public int isPlaying = 0; // 0: no pause 1: pause
+        public int reachEnd = 0; // 0: video stream not reach its end; 1: stream reach its end
 
         public MainWindow()
         {
