@@ -52,9 +52,12 @@ namespace WpfApplication1
 
                     media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
                     media.ScrubbingEnabled = true;
+                    AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
+                    test.readStream("./temp.avi");
+                    media.Source = new Uri("./temp.avi", UriKind.RelativeOrAbsolute);
                     media.Play();
                 }
-                else if (isPlaying == 2)
+                else if (isPlaying == 1)
                 {
                     media.Play();
                 }
@@ -181,6 +184,9 @@ namespace WpfApplication1
             mediaInfo.select_play(selector.SelectedItem.ToString());
             media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
+            AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
+            test.readStream("./temp.avi");
+            media.Source = new Uri("./temp.avi", UriKind.RelativeOrAbsolute);
             media.Play();
             //isPlaying = 1;
         }

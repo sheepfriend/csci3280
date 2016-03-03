@@ -36,12 +36,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Video">
+      <HintPath>lib\AForge.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video.FFMPEG">
+      <HintPath>lib\AForge.Video.FFMPEG.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video.VFW">
+      <HintPath>lib\AForge.Video.VFW.dll</HintPath>
+    </Reference>
     <Reference Include="DirectShowLib-2005">
       <HintPath>C:\Users\yxing2\Downloads\lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,7 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="aviStreamReader.cs" />
     <Compile Include="danmu.cs" />
+    <Compile Include="LrcReader.cs" />
     <Compile Include="TextBlock.cs" />
     <Compile Include="video_info.cs" />
     <Page Include="MainWindow.xaml">
