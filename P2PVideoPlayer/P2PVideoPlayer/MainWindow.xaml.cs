@@ -54,9 +54,54 @@ namespace WpfApplication1
                     media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
                     media.ScrubbingEnabled = true;
                     AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-                    test.readStream("./temp.avi");
-                    media.Source = new Uri("./temp.avi", UriKind.RelativeOrAbsolute);
+                    reachEnd = test.readStream("./temp1.avi");
+                    if (reachEnd == 1)
+                    {
+                        media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                        media.Play();
+                        return;
+                    }
+                    reachEnd = test.readStream("./temp2.avi");
+                    if (reachEnd == 1)
+                    {
+                        media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                        media.Play();
+                        media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
+                        media.Play();
+                        return;
+                    }
+                    media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
                     media.Play();
+                    int flag = 2;
+                    while (reachEnd == 0)
+                    {
+                        if (flag == 2)
+                        {
+                            reachEnd = test.readStream("./temp1.avi");
+                            media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
+                            media.Play();
+                            flag = 1;
+                        }
+                        if (reachEnd == 1)
+                        {
+                            media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                            media.Play();
+                            break;
+                        }
+                        if (flag == 1)
+                        {
+                            reachEnd = test.readStream("./temp2.avi");
+                            media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                            media.Play();
+                            flag = 2;
+                        }
+                        if (reachEnd == 1)
+                        {
+                            media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
+                            media.Play();
+                            break;
+                        }
+                    }
                 }
                 else if (isPlaying == 1)
                 {

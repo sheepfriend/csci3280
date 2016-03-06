@@ -19,6 +19,8 @@ namespace WpfApplication1
         private int height;
         private int width;
         private int fps;
+        private long totalFrameNum;
+        private long currentFrame;
 
         public AVIStreamReader(String path)
         {
@@ -29,6 +31,8 @@ namespace WpfApplication1
             height = reader.Height;
             width = reader.Width;
             fps = reader.FrameRate;
+            totalFrameNum = reader.FrameCount;
+            currentFrame = 0;
         }
 
         ~AVIStreamReader()
@@ -39,21 +43,19 @@ namespace WpfApplication1
         public int readStream(String name)
         {
             writer.Open(name, width, height, fps);
-            long frameNum = reader.FrameCount;
             int reachEnd = 0;
-            int currentFrame = 0;
-            for (int i = currentFrame; i < currentFrame + fps && i < frameNum; i++)
+            for (long i = currentFrame; i < currentFrame + fps && i < totalFrameNum; i++, currentFrame++)
             {
                 writer.WriteVideoFrame(reader.ReadVideoFrame());
-                if (frameNum == i + 1)
+                if (totalFrameNum == i + 1)
                 {
                     reachEnd = 1;
                 }
             }
-            
             writer.Close();
             return reachEnd;
         }
+
 
     }
 }
