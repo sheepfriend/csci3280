@@ -33,6 +33,8 @@ namespace WpfApplication1
             fps = reader.FrameRate;
             totalFrameNum = reader.FrameCount;
             currentFrame = 0;
+            //Console.WriteLine("width: {0}\nheight: {1}\nfps: {2}\ntotalFrameNum: {3}\ncurrentFrame: {4}\n", width, height, fps, totalFrameNum, currentFrame);
+            //Console.ReadKey();
         }
 
         ~AVIStreamReader()
@@ -42,17 +44,24 @@ namespace WpfApplication1
 
         public int readStream(String name)
         {
+            //Console.WriteLine("begin: {0} \ntotalFrameNum: {1}\ncurrentFrame: {2}\n", name, totalFrameNum, currentFrame);
+            //Console.ReadKey();
             writer.Open(name, width, height, fps);
             int reachEnd = 0;
-            for (long i = currentFrame; i < currentFrame + fps && i < totalFrameNum; i++, currentFrame++)
+            for (long i = currentFrame; i < currentFrame + fps && i < totalFrameNum; i++)
             {
                 writer.WriteVideoFrame(reader.ReadVideoFrame());
                 if (totalFrameNum == i + 1)
                 {
                     reachEnd = 1;
+                    currentFrame = i;
+                    return reachEnd;
                 }
             }
+            currentFrame = currentFrame + fps;
             writer.Close();
+            //Console.WriteLine("after: {0} \ntotalFrameNum: {1}\ncurrentFrame: {2}\n", name, totalFrameNum, currentFrame);
+            //Console.ReadKey();
             return reachEnd;
         }
 

@@ -231,9 +231,90 @@ namespace WpfApplication1
             media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
             AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-            test.readStream("./temp.avi");
-            media.Source = new Uri("./temp.avi", UriKind.RelativeOrAbsolute);
+            reachEnd = test.readStream("./temp1.avi");
+            if (reachEnd == 1)
+            {
+                media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                media.ScrubbingEnabled = true;
+                media.Play();
+                if (File.Exists("./temp1.avi"))
+                {
+                    File.Delete("./temp1.avi");
+                }
+                return;
+            }
+            reachEnd = test.readStream("./temp2.avi");
+            if (reachEnd == 1)
+            {
+                media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                media.ScrubbingEnabled = true;
+                media.Play();
+                media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
+                media.ScrubbingEnabled = true;
+                media.Play();
+                if (File.Exists("./temp1.avi"))
+                {
+                    File.Delete("./temp1.avi");
+                }
+                if (File.Exists("./temp2.avi"))
+                {
+                    File.Delete("./temp2.avi");
+                }
+                return;
+            }
+            media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+            media.ScrubbingEnabled = true;
             media.Play();
+            int flag = 2; //control which buffer to be updated 
+            while (reachEnd == 0)
+            {
+                if (flag == 2)
+                {
+                    if (File.Exists("./temp1.avi"))
+                    {
+                        File.Delete("./temp1.avi");
+                    }
+                    reachEnd = test.readStream("./temp1.avi");
+                    media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
+                    media.ScrubbingEnabled = true;
+                    media.Play();
+                    flag = 1;
+                }
+                if (reachEnd == 1)
+                {
+                    media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                    media.ScrubbingEnabled = true;
+                    media.Play();
+                    if (File.Exists("./temp1.avi"))
+                    {
+                        File.Delete("./temp1.avi");
+                    }
+                    break;
+                }
+                if (flag == 1)
+                {
+                    if (File.Exists("./temp2.avi"))
+                    {
+                        File.Delete("./temp2.avi");
+                    }
+                    reachEnd = test.readStream("./temp2.avi");
+                    media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
+                    media.ScrubbingEnabled = true;
+                    media.Play();
+                    flag = 2;
+                }
+                if (reachEnd == 1)
+                {
+                    media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
+                    media.ScrubbingEnabled = true;
+                    media.Play();
+                    if (File.Exists("./temp2.avi"))
+                    {
+                        File.Delete("./temp2.avi");
+                    }
+                    break;
+                }
+            }
             //isPlaying = 1;
         }
 
