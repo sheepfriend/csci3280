@@ -58,6 +58,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -78,6 +79,7 @@
     <Compile Include="aviStreamReader.cs" />
     <Compile Include="danmu.cs" />
     <Compile Include="LrcReader.cs" />
+    <Compile Include="Package.cs" />
     <Compile Include="TextBlock.cs" />
     <Compile Include="video_info.cs" />
     <Page Include="MainWindow.xaml">
