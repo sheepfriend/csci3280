@@ -16,21 +16,21 @@ namespace WpfApplication1
         public String from;
         public String to;
         public String type;
-        public List<Tuple<String,int>> connectList;
-        public String video;
-        public String audio;
-        public String danmu;
-        public List<Tuple<String, int>> header;
+        public List<String> connectList;
+        public byte[] video;
+        public byte[] audio;
+        public byte[] danmu;
+        public List<Tuple<String, String> > header;
 
         public Package(String type_){
             from = "";
             to = "";
             type = type_;
-            connectList = new List<Tuple<String, int>>();
-            header = new List<Tuple<String, int>>();
-            video = "";
-            audio = "";
-            danmu = "";
+            connectList = new List<String>();
+            header = new List<Tuple<String, String>>();
+            video = new byte[0];
+            audio = new byte[0];
+            danmu = new byte[0];
         }
 
         public Package(SerializationInfo info, StreamingContext ctxt)
@@ -38,11 +38,11 @@ namespace WpfApplication1
           from = (String)info.GetValue("from", typeof(String));
           to = (String)info.GetValue("to", typeof(String));
           type = (String)info.GetValue("type", typeof(String));
-          video = (String)info.GetValue("video", typeof(String));
-          audio = (String)info.GetValue("audio", typeof(String));
-          danmu = (String)info.GetValue("danmu", typeof(String));
-          connectList = (List<Tuple<String, int>>)info.GetValue("connectList", typeof(List<Tuple<String, int>>));
-          header = (List<Tuple<String, int>>)info.GetValue("header", typeof(List<Tuple<String, int>>));
+          video = (byte[])info.GetValue("video", typeof(String));
+          audio = (byte[])info.GetValue("audio", typeof(String));
+          danmu = (byte[])info.GetValue("danmu", typeof(String));
+          connectList = (List<String>)info.GetValue("connectList", typeof(List<String>));
+          header = (List<Tuple<String, String>>)info.GetValue("header", typeof(List<Tuple<String, String> >));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
