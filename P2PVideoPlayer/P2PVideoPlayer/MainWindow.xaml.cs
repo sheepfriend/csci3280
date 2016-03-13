@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Drawing;
 
 
 
@@ -230,91 +231,64 @@ namespace WpfApplication1
             mediaInfo.select_play(selector.SelectedItem.ToString());
             media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
-            AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-            reachEnd = test.readStream("./temp1.avi");
-            if (reachEnd == 1)
-            {
-                media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                media.ScrubbingEnabled = true;
-                media.Play();
-                if (File.Exists("./temp1.avi"))
-                {
-                    File.Delete("./temp1.avi");
-                }
-                return;
-            }
-            reachEnd = test.readStream("./temp2.avi");
-            if (reachEnd == 1)
-            {
-                media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                media.ScrubbingEnabled = true;
-                media.Play();
-                media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
-                media.ScrubbingEnabled = true;
-                media.Play();
-                if (File.Exists("./temp1.avi"))
-                {
-                    File.Delete("./temp1.avi");
-                }
-                if (File.Exists("./temp2.avi"))
-                {
-                    File.Delete("./temp2.avi");
-                }
-                return;
-            }
-            media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-            media.ScrubbingEnabled = true;
-            media.Play();
-            int flag = 2; //control which buffer to be updated 
-            while (reachEnd == 0)
-            {
-                if (flag == 2)
-                {
-                    if (File.Exists("./temp1.avi"))
-                    {
-                        File.Delete("./temp1.avi");
-                    }
-                    reachEnd = test.readStream("./temp1.avi");
-                    media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
-                    media.ScrubbingEnabled = true;
-                    media.Play();
-                    flag = 1;
-                }
-                if (reachEnd == 1)
-                {
-                    media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                    media.ScrubbingEnabled = true;
-                    media.Play();
-                    if (File.Exists("./temp1.avi"))
-                    {
-                        File.Delete("./temp1.avi");
-                    }
-                    break;
-                }
-                if (flag == 1)
-                {
-                    if (File.Exists("./temp2.avi"))
-                    {
-                        File.Delete("./temp2.avi");
-                    }
-                    reachEnd = test.readStream("./temp2.avi");
-                    media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                    media.ScrubbingEnabled = true;
-                    media.Play();
-                    flag = 2;
-                }
-                if (reachEnd == 1)
-                {
-                    media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
-                    media.ScrubbingEnabled = true;
-                    media.Play();
-                    if (File.Exists("./temp2.avi"))
-                    {
-                        File.Delete("./temp2.avi");
-                    }
-                    break;
-                }
-            }
+
+            //AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
+            //int totalClips = (int)(test.totalFrameNum / test.fps + 1);
+            //string temp1 = "./videoClips/";
+            //string temp3 = ".avi";
+            //string temp2;
+            //string clipName;
+            //for (int i = 0; i < totalClips; i++)
+            //{
+            //    temp2 = i.ToString();
+            //    clipName = temp1 + temp2 + temp3;
+            //    reachEnd = test.readStream(clipName);
+            //}
+
+            //Avi文件读取
+            AviManager aviManager = new AviManager(mediaInfo.currentPlay.path, true);
+            VideoStream aviStream = aviManager.GetVideoStream();
+
+            //获取和保存音频流到文件
+            AudioStream audioStream = aviManager.GetWaveStream();
+            audioStream.ExportStream("./audio.wav");
+
+            aviStream.GetFrameOpen();
+
+            //获取视频总帧数
+            int framecount = aviStream.CountFrames;
+            //获取第5帧的图片
+            //Bitmap bmp = aviStream.GetBitmap(5);
+            //视频速度
+            double fps = aviStream.FrameRate;
+            //直接保存帧图片到文件
+            //aviStream.ExportBitmap(26, "./videoClips/26.jpg");
+            //aviStream.ExportBitmap(27, "./videoClips/27.jpg");
+            //aviStream.ExportBitmap(28, "./videoClips/28.jpg");
+            //aviStream.ExportBitmap(29, "./videoClips/29.jpg");
+
+            //int totalClips = (int)(framecount / fps + 1);
+            //string temp1 = "./videoClips/";
+            //string temp3 = ".avi";
+            //string temp2 = "0";
+            //string clipName;
+            ////temp2 = i.ToString();
+            //clipName = temp1 + temp2 + temp3;
+            ////write a clip
+            //AviManager aviManagerWriter = new AviManager(clipName, false);
+            //Bitmap bmp = aviStream.GetBitmap(0);
+            //VideoStream aviStreamWriter = aviManagerWriter.AddVideoStream(true, fps, bmp);
+            //for (int i = 1; i < fps; i++)
+            //{
+            //    bmp = aviStream.GetBitmap(i);
+            //    aviStreamWriter.AddFrame(bmp);
+            //}
+            //aviManagerWriter.Close();
+
+            aviStream.GetFrameClose();
+            aviManager.Close();
+
+
             //isPlaying = 1;
         }
 

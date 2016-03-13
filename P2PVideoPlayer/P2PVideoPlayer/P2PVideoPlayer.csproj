@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{559DB614-4DB4-4EB2-BE4E-4B0156123D80}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WpfApplication1</RootNamespace>
     <AssemblyName>WpfApplication1</AssemblyName>
@@ -76,11 +76,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AudioStream.cs" />
+    <Compile Include="Avi.cs" />
+    <Compile Include="AviManager.cs" />
+    <Compile Include="AviStream.cs" />
     <Compile Include="aviStreamReader.cs" />
     <Compile Include="danmu.cs" />
+    <Compile Include="EditableVideoStream.cs" />
     <Compile Include="LrcReader.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="TextBlock.cs" />
+    <Compile Include="VideoStream.cs" />
     <Compile Include="video_info.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
