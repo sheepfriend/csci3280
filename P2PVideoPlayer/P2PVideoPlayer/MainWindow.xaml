@@ -33,7 +33,9 @@
         <Grid HorizontalAlignment="Left" Height="131" Margin="595,135,0,0" VerticalAlignment="Top" Width="79">
             <Button x:Name="button1" Content="&#xD;&#xA;Create&#xD;&#xA;List&#xD;&#xA;" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="48" Height="73" Click="button1_Click_1"/>
         </Grid>
-        <Button Content="pre" Height="43" HorizontalAlignment="Left" Margin="128,303,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" />
+        <Button  Height="43" HorizontalAlignment="Left" Margin="128,303,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click">
+            <Image Height="16" Width="30" Source="Resources/previous.png"/>
+        </Button>
         <Button Content="next" Height="43" HorizontalAlignment="Left" Margin="304,303,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" />
         <Button Content="play" Height="43" HorizontalAlignment="Left" Margin="216,303,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" />
         <Button Content="pause" Height="43" HorizontalAlignment="Left" Margin="172,303,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" />
