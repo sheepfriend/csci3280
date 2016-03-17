@@ -126,9 +126,31 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Resource Include="Resources\add.png" />
+    <Resource Include="Resources\artwork_gray.png" />
+    <Resource Include="Resources\artwork_white.png" />
+    <Resource Include="Resources\chipmunk_off.png" />
+    <Resource Include="Resources\chipmunk_on.png" />
+    <Resource Include="Resources\default.jpg" />
+    <Resource Include="Resources\delete.png" />
+    <Resource Include="Resources\edit.png" />
+    <Resource Include="Resources\icon-play.png" />
+    <Resource Include="Resources\information_gray.png" />
+    <Resource Include="Resources\information_white.png" />
+    <Resource Include="Resources\lyrics_gray.png" />
+    <Resource Include="Resources\lyrics_white.png" />
+    <Resource Include="Resources\next.png" />
+    <Resource Include="Resources\pause.png" />
+    <Resource Include="Resources\play.png" />
+    <Resource Include="Resources\previous.png" />
+    <Resource Include="Resources\search.png" />
+    <Resource Include="Resources\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\playlist.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
