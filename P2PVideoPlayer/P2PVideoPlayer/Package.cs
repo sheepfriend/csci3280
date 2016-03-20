@@ -38,9 +38,9 @@ namespace WpfApplication1
           from = (String)info.GetValue("from", typeof(String));
           to = (String)info.GetValue("to", typeof(String));
           type = (String)info.GetValue("type", typeof(String));
-          video = (byte[])info.GetValue("video", typeof(String));
-          audio = (byte[])info.GetValue("audio", typeof(String));
-          danmu = (byte[])info.GetValue("danmu", typeof(String));
+          video = (byte[])info.GetValue("video", typeof(byte[]));
+          audio = (byte[])info.GetValue("audio", typeof(byte[]));
+          danmu = (byte[])info.GetValue("danmu", typeof(byte[]));
           connectList = (List<String>)info.GetValue("connectList", typeof(List<String>));
           header = (List<Tuple<String, String>>)info.GetValue("header", typeof(List<Tuple<String, String> >));
         }
