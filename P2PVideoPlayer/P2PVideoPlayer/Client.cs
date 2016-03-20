@@ -52,11 +52,11 @@ namespace WpfApplication1
         }
 
         public void run()
-        {
-            Thread thread10004 = new Thread(10004);
-            Thread thread10001 = new Thread(10001);
-            Thread thread10002 = new Thread(10002);
-            Thread thread10000 = new Thread(10000);
+        {            
+            Thread thread10004 = new Thread(listen_main);
+            Thread thread10001 = new Thread(listen_video);
+            Thread thread10002 = new Thread(listen_audio);
+            Thread thread10000 = new Thread(listen_ask);
             thread10000.Start();
             thread10001.Start();
             thread10002.Start();
