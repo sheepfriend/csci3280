@@ -7,6 +7,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Drawing;
 using AForge.Video.FFMPEG;
+using AForge.Video.VFW;
 
 
 namespace WpfApplication1
@@ -19,22 +20,19 @@ namespace WpfApplication1
         private int height;
         private int width;
         public int fps;
-        public long totalFrameNum;
-        private long currentFrame;
+        public int totalFrameNum;
+        private int currentFrame;
 
         public AVIStreamReader(String path)
         {
             this.path = path;
             reader = new VideoFileReader();
             reader.Open(path);
-            writer = new VideoFileWriter();
             height = reader.Height;
             width = reader.Width;
             fps = reader.FrameRate;
-            totalFrameNum = reader.FrameCount;
+            totalFrameNum = (int)reader.FrameCount;
             currentFrame = 0;
-            //Console.WriteLine("width: {0}\nheight: {1}\nfps: {2}\ntotalFrameNum: {3}\ncurrentFrame: {4}\n", width, height, fps, totalFrameNum, currentFrame);
-            //Console.ReadKey();
         }
 
         ~AVIStreamReader()
@@ -46,17 +44,22 @@ namespace WpfApplication1
         {
             //Console.WriteLine("begin: {0} \ntotalFrameNum: {1}\ncurrentFrame: {2}\n fps: {3}\n", name, totalFrameNum, currentFrame, fps);
             //Console.ReadKey();
+            writer = new VideoFileWriter();
             writer.Open(name, width, height, fps);
             int reachEnd = 0;
-            for (long i = currentFrame; i < currentFrame + fps && i < totalFrameNum; i++)
+            Bitmap temp;
+            for (int i = currentFrame; i < currentFrame + fps && i < totalFrameNum; i++)
             {
+                temp = reader.ReadVideoFrame();
+                writer.WriteVideoFrame(temp);
+                temp.Dispose();
                 if (totalFrameNum == i + 1)
                 {
                     reachEnd = 1;
                     currentFrame = i;
+                    writer.Close();
                     return reachEnd;
                 }
-                writer.WriteVideoFrame(reader.ReadVideoFrame());
             }
             currentFrame = currentFrame + fps;
             writer.Close();

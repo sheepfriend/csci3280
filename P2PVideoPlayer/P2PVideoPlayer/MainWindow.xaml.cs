@@ -21,6 +21,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing;
+using System.Threading;
 
 
 
@@ -35,13 +36,19 @@ namespace WpfApplication1
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
         public int isPlaying = 0; // 0: no pause 1: pause
-        public int reachEnd = 0; // 0: video stream not reach its end; 1: stream reach its end
+        private int totalClip = 0;
+        private int endOneClip = 0;
 
         public MainWindow()
         {
             InitializeComponent();
             dmkCurt = new DanmakuCurtain();
             media.LoadedBehavior = MediaState.Manual;
+        }
+
+        private void Media_Ended(object sender, RoutedEventArgs e)
+        {
+            this.endOneClip = 1;
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
@@ -54,55 +61,50 @@ namespace WpfApplication1
 
                     media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
                     media.ScrubbingEnabled = true;
-                    AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-                    reachEnd = test.readStream("./temp1.avi");
-                    if (reachEnd == 1)
-                    {
-                        media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                        media.Play();
-                        return;
-                    }
-                    reachEnd = test.readStream("./temp2.avi");
-                    if (reachEnd == 1)
-                    {
-                        media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                        media.Play();
-                        media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
-                        media.Play();
-                        return;
-                    }
-                    media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                    media.Play();
-                    int flag = 2;
-                    while (reachEnd == 0)
-                    {
-                        if (flag == 2)
-                        {
-                            reachEnd = test.readStream("./temp1.avi");
-                            media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
-                            media.Play();
-                            flag = 1;
-                        }
-                        if (reachEnd == 1)
-                        {
-                            media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                            media.Play();
-                            break;
-                        }
-                        if (flag == 1)
-                        {
-                            reachEnd = test.readStream("./temp2.avi");
-                            media.Source = new Uri("./temp1.avi", UriKind.RelativeOrAbsolute);
-                            media.Play();
-                            flag = 2;
-                        }
-                        if (reachEnd == 1)
-                        {
-                            media.Source = new Uri("./temp2.avi", UriKind.RelativeOrAbsolute);
-                            media.Play();
-                            break;
-                        }
-                    }
+
+                    string temp1 = "./videoClips/";
+                    string temp3 = ".avi";
+                    string temp2;
+                    string clipName;
+                    //for (int i = 0; i < 3; i++)
+                    //{
+                    //    temp2 = i.ToString();
+                    //    clipName = temp1 + temp2 + temp3;
+                    //    media.Source = new Uri(clipName, UriKind.RelativeOrAbsolute);
+                    //    media.Play();
+                    //    while (true)
+                    //    {
+                    //        if (this.endOneClip == 1)
+                    //            break;
+                    //    }
+                    //    this.endOneClip = 0;
+                    //}
+
+                    ////the following code is still under testing..
+                    //media.Source = new Uri("./videoClips/" + "0" + ".avi", UriKind.RelativeOrAbsolute);
+                    //media.Play();
+                    //Console.WriteLine("haha111\n");
+                    //while (true)
+                    //{
+                    //    if (this.endOneClip == 1)
+                    //        break;
+                    //}
+                    //this.endOneClip = 0;
+                    ////System.Threading.Thread.Sleep(1000); //1 second
+                    //media.Source = new Uri("./videoClips/" + "1" + ".avi", UriKind.RelativeOrAbsolute);
+                    //media.Play();
+                    //Console.WriteLine("haha2222\n");
+                    ////System.Threading.Thread.Sleep(1000); //1 second
+                    //while (true)
+                    //{
+                    //    if (this.endOneClip == 1)
+                    //        break;
+                    //}
+                    //this.endOneClip = 0;
+                    //media.Source = new Uri("./videoClips/" + "100" + ".avi", UriKind.RelativeOrAbsolute);
+                    //media.Play();
+
+
                 }
                 else if (isPlaying == 1)
                 {
@@ -232,62 +234,30 @@ namespace WpfApplication1
             media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
 
+            ////cut the avi file into small clips
             //AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-            //int totalClips = (int)(test.totalFrameNum / test.fps + 1);
             //string temp1 = "./videoClips/";
             //string temp3 = ".avi";
             //string temp2;
             //string clipName;
-            //for (int i = 0; i < totalClips; i++)
+            //int reachEnd = 0;
+            //totalClip = 0;
+            //for (int i = 0; reachEnd != 1; i++)
             //{
             //    temp2 = i.ToString();
             //    clipName = temp1 + temp2 + temp3;
             //    reachEnd = test.readStream(clipName);
+            //    totalClip++;
             //}
+            
 
-            //Avi文件读取
-            AviManager aviManager = new AviManager(mediaInfo.currentPlay.path, true);
-            VideoStream aviStream = aviManager.GetVideoStream();
-
-            //获取和保存音频流到文件
-            AudioStream audioStream = aviManager.GetWaveStream();
-            audioStream.ExportStream("./audio.wav");
-
-            aviStream.GetFrameOpen();
-
-            //获取视频总帧数
-            int framecount = aviStream.CountFrames;
-            //获取第5帧的图片
-            //Bitmap bmp = aviStream.GetBitmap(5);
-            //视频速度
-            double fps = aviStream.FrameRate;
-            //直接保存帧图片到文件
-            //aviStream.ExportBitmap(26, "./videoClips/26.jpg");
-            //aviStream.ExportBitmap(27, "./videoClips/27.jpg");
-            //aviStream.ExportBitmap(28, "./videoClips/28.jpg");
-            //aviStream.ExportBitmap(29, "./videoClips/29.jpg");
-
-            //int totalClips = (int)(framecount / fps + 1);
-            //string temp1 = "./videoClips/";
-            //string temp3 = ".avi";
-            //string temp2 = "0";
-            //string clipName;
-            ////temp2 = i.ToString();
-            //clipName = temp1 + temp2 + temp3;
-            ////write a clip
-            //AviManager aviManagerWriter = new AviManager(clipName, false);
-            //Bitmap bmp = aviStream.GetBitmap(0);
-            //VideoStream aviStreamWriter = aviManagerWriter.AddVideoStream(true, fps, bmp);
-            //for (int i = 1; i < fps; i++)
-            //{
-            //    bmp = aviStream.GetBitmap(i);
-            //    aviStreamWriter.AddFrame(bmp);
-            //}
-            //aviManagerWriter.Close();
-
-            aviStream.GetFrameClose();
-            aviManager.Close();
-
+            ////the following code can safely extract audio file
+            ////Avi文件读取
+            //AviManager aviManager = new AviManager(mediaInfo.currentPlay.path, true);
+            ////获取和保存音频流到文件
+            //AudioStream audioStream = aviManager.GetWaveStream();
+            //audioStream.ExportStream("./audio.wav");
+            //aviManager.Close();
 
             //isPlaying = 1;
         }

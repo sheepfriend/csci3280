@@ -1,21 +1,17 @@
 <?xml version="1.0"?>
 <Karaoke xmlns:kara="list">
-
   <video id="1">
-  <!-- filename is inferable  from path-->
+    <!-- filename is inferable  from path-->
     <path>C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\music\hehe.avi</path>
     <title>I'm god</title>
     <author>Alpha</author>
     <album>Beta test</album>
   </video>
-  
-  
   <video id="1">
-  <!-- filename is inferable  from path-->
+    <!-- filename is inferable  from path-->
     <path>C:\Users\yzz\Desktop\Learning\Course Source\2015-2016\Second\3280\Tu_As\project\music\lalala.avi</path>
     <title>I'm god</title>
     <author>Alpha</author>
     <album>Beta test</album>
   </video>
-  
 </Karaoke>
