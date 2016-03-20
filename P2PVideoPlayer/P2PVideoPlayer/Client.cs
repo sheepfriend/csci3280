@@ -52,7 +52,7 @@ namespace WpfApplication1
         }
 
         public void run()
-        {
+        {            
             Thread thread10004 = new Thread(listen_main);
             Thread thread10001 = new Thread(listen_video);
             Thread thread10002 = new Thread(listen_audio);
@@ -322,7 +322,7 @@ namespace WpfApplication1
             Package pack = new Package("ip_list");
             pack.from = self_ip;
             pack.to = server_ip;
-            conn.send(pack.to, 10000, pack);
+            conn.send(pack.to, 10010, pack);
         }
 
         //send a request to ask a video chunk

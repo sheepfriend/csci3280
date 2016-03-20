@@ -29,7 +29,7 @@ namespace WpfApplication1
                 pack_res.connectList = clients;
                 pack_res.from = pack.to;
                 pack_res.to = clients[i];
-                conn.send(clients[i], 10000, pack_res);
+                conn.send(clients[i], 10004, pack_res);
             }
         }
         public void search_video(Package pack)
@@ -47,9 +47,7 @@ namespace WpfApplication1
         }
         public void listen()
         {
-            while (true)
-            {
-                Package pack = conn.recv(10000);
+                Package pack = conn.recv(10010);
                 switch (pack.type)
                 {
                     case "ip_list":
@@ -66,7 +64,6 @@ namespace WpfApplication1
                     default:
                         break;
                 }
-            }
         }
     }
 }
