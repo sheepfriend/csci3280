@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing;
 using System.Threading;
+using AForge.Video.VFW;
 
 
 
@@ -80,29 +81,29 @@ namespace WpfApplication1
                     //    this.endOneClip = 0;
                     //}
 
-                    ////the following code is still under testing..
-                    //media.Source = new Uri("./videoClips/" + "0" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-                    //Console.WriteLine("haha111\n");
+                    //the following code is still under testing..
+                    media.Source = new Uri("./videoClips/" + "0" + ".avi", UriKind.RelativeOrAbsolute);
+                    media.Play();
+                    Console.WriteLine("haha111\n");
                     //while (true)
                     //{
                     //    if (this.endOneClip == 1)
                     //        break;
                     //}
                     //this.endOneClip = 0;
-                    ////System.Threading.Thread.Sleep(1000); //1 second
-                    //media.Source = new Uri("./videoClips/" + "1" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-                    //Console.WriteLine("haha2222\n");
-                    ////System.Threading.Thread.Sleep(1000); //1 second
+                    System.Threading.Thread.Sleep(1000*10); //1 second
+                    media.Source = new Uri("./videoClips/" + "1" + ".avi", UriKind.RelativeOrAbsolute);
+                    media.Play();
+                    Console.WriteLine("haha2222\n");
+                    System.Threading.Thread.Sleep(1000 * 10); //1 second
                     //while (true)
                     //{
                     //    if (this.endOneClip == 1)
                     //        break;
                     //}
                     //this.endOneClip = 0;
-                    //media.Source = new Uri("./videoClips/" + "100" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
+                    media.Source = new Uri("./videoClips/" + "2" + ".avi", UriKind.RelativeOrAbsolute);
+                    media.Play();
 
 
                 }
@@ -234,21 +235,38 @@ namespace WpfApplication1
             media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
             media.ScrubbingEnabled = true;
 
-            ////cut the avi file into small clips
-            //AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-            //string temp1 = "./videoClips/";
-            //string temp3 = ".avi";
-            //string temp2;
-            //string clipName;
-            //int reachEnd = 0;
-            //totalClip = 0;
-            //for (int i = 0; reachEnd != 1; i++)
+            //// instantiate AVI reader
+            //AVIReader reader = new AVIReader();
+            //// open video file
+            //Console.WriteLine("path: {0} \n", mediaInfo.currentPlay.path);
+            //reader.Open(mediaInfo.currentPlay.path);
+            //// read the video file
+            //Bitmap image;
+            //while (reader.Position - reader.Start < reader.Length)
             //{
-            //    temp2 = i.ToString();
-            //    clipName = temp1 + temp2 + temp3;
-            //    reachEnd = test.readStream(clipName);
-            //    totalClip++;
+            //    // get next frame
+            //    image = reader.GetNextFrame();
+            //    // .. process the frame somehow or display it
+            //    image.Dispose();
             //}
+            //reader.Close();
+
+            //cut the avi file into small clips
+            AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
+            string temp1 = "./videoClips/";
+            string temp3 = ".avi";
+            string temp2;
+            string clipName;
+            int reachEnd = 0;
+            totalClip = 0;
+            for (int i = 0; reachEnd != 1; i++)
+            {
+                temp2 = i.ToString();
+                clipName = temp1 + temp2 + temp3;
+                reachEnd = test.readStream(clipName);
+                totalClip++;
+                //System.Threading.Thread.Sleep(500); //0.5 second
+            }
             
 
             ////the following code can safely extract audio file

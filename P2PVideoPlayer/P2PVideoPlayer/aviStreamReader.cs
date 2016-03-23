@@ -48,9 +48,17 @@ namespace WpfApplication1
             writer.Open(name, width, height, fps);
             int reachEnd = 0;
             Bitmap temp;
-            for (int i = currentFrame; i < currentFrame + fps && i < totalFrameNum; i++)
+            int i;
+            for (i = currentFrame; i < currentFrame + 10*fps && i < totalFrameNum; i++)
             {
                 temp = reader.ReadVideoFrame();
+                if (temp == null)
+                {
+                    reachEnd = 1;
+                    currentFrame = i - 1;
+                    writer.Close();
+                    return reachEnd;
+                }
                 writer.WriteVideoFrame(temp);
                 temp.Dispose();
                 if (totalFrameNum == i + 1)
@@ -60,6 +68,13 @@ namespace WpfApplication1
                     writer.Close();
                     return reachEnd;
                 }
+            }
+            if (totalFrameNum == i)
+            {
+                reachEnd = 1;
+                currentFrame = i;
+                writer.Close();
+                return reachEnd;
             }
             currentFrame = currentFrame + fps;
             writer.Close();
