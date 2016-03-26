@@ -1,8 +1,7 @@
 <Window x:Class="WpfApplication1.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="P2P Player" Height="444" Width="682">
-
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Title="P2P Player" Height="500" Width="796.143">
     <Window.Resources>
         <JournalEntryListConverter x:Key="JournalEntryListConverter"/>
         <Image x:Key="Play" Height="46" Width="40" Source="Resources/play.png" />
@@ -16,64 +15,75 @@
         <Image x:Key="Default" Source="Resources/default.jpg" />
     </Window.Resources>
 
-    <Grid Margin="0,0,0,0" Background="#FF202028">
-        <MediaElement Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="media" VerticalAlignment="Top" Width="439"  />
+    <Grid Margin="0,0,-8,0" Background="#FF202028">
+
+        <MediaElement Height="301" HorizontalAlignment="Left" Margin="22,30,0,0" Name="media" VerticalAlignment="Top" Width="439"  />
         <Grid Height="286" HorizontalAlignment="Left" Margin="17,12,0,0" Name="curtain" VerticalAlignment="Top" Width="439"  />
-        <Grid HorizontalAlignment="Left" Height="284" Margin="461,14,0,0" VerticalAlignment="Top" Width="213" Background="#FF202028"/>
-        <TextBlock HorizontalAlignment="Left" Margin="461,52,0,10" x:Name="textBlock" Width="203"><InlineUIContainer>
-        		<ListBox x:Name="selector" Height="279" Width="154" SelectionChanged="ListBox_SelectionChanged">
-                    <ListBox.ContextMenu>
+        <Grid HorizontalAlignment="Left" Height="284" Margin="491,15,0,0" VerticalAlignment="Top" Width="213" Background="#FF202028"/>
+        <TextBlock HorizontalAlignment="Left" Margin="483,64,0,155.6" x:Name="textBlock" Width="141"><InlineUIContainer>
+            <ListBox x:Name="selector" Height="279" Width="154" SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Delete" Click="MenuItem_Click"/>
-                        <MenuItem Header="Property" Click="MenuItem_Click"/>
-                    </ContextMenu>    
-                    </ListBox.ContextMenu>
-                </ListBox>
-        	</InlineUIContainer></TextBlock>
+                    <MenuItem Header="Delete" Click="MenuItem_Click"/>
+                    <MenuItem Header="Property" Click="MenuItem_Click"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+            </InlineUIContainer></TextBlock>
         <Grid HorizontalAlignment="Left" Height="131" Margin="595,135,0,0" VerticalAlignment="Top" Width="79">
-            <Button x:Name="button1" Content="&#xD;&#xA;Create&#xD;&#xA;List&#xD;&#xA;" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="48" Height="73" Click="button1_Click_1"/>
+            <Button x:Name="button1" Content="&#xD;&#xA;Create&#xD;&#xA;List&#xD;&#xA;" HorizontalAlignment="Left" Margin="43,22,-31,0" VerticalAlignment="Top" Width="67" Height="49" Click="button1_Click_1"/>
         </Grid>
-        
-        <Button  Height="43" HorizontalAlignment="Left" Margin="128,303,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-            
+
+        <Button  Height="43" HorizontalAlignment="Left" Margin="213,350,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+
             <StackPanel>
                 <Image Height="16" Width="30" Source="Resources/previous.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button  Height="43" HorizontalAlignment="Left" Margin="304,303,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-             <StackPanel>
+        <Button  Height="43" HorizontalAlignment="Left" Margin="389,350,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <StackPanel>
                 <Image Height="16" Width="30" Source="Resources/next.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button Height="43" HorizontalAlignment="Left" Margin="216,303,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Button Height="43" HorizontalAlignment="Left" Margin="301,350,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
             <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/play.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button Height="43" HorizontalAlignment="Left" Margin="172,303,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Button Height="43" HorizontalAlignment="Left" Margin="257,350,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
             <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/pause.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button  Height="43" HorizontalAlignment="Left" Margin="260,303,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-             <StackPanel>
+        <Button  Height="43" HorizontalAlignment="Left" Margin="345,350,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/stop.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button  Height="28" HorizontalAlignment="Left" Margin="616,13,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
+        <Button  Height="28" HorizontalAlignment="Left" Margin="646,14,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
             <Image Width="40" Height="20" Source="Resources/add.png" />
         </Button>
-        <Label  Height="29" HorizontalAlignment="Left" Margin="484,12,0,0" Name="label1" VerticalAlignment="Top" Width="75">
+        <Label  Height="29" HorizontalAlignment="Left" Margin="467,25,0,0" Name="label1" VerticalAlignment="Top" Width="75">
             <Image Width="150" Height="30" Source="Resources/playlist.png" />
         </Label>
-        <Button Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Margin="616,64,0,0" Height="57" Click="Load_Click"/>
-        <TextBox Name="message" HorizontalAlignment="Left" Height="30" Margin="36,365,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371"/>
-        <Button Name="send" Content="Send" HorizontalAlignment="Left" Margin="422,365,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click"/>
+        <Button Name="button" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="639,64,0,0" Height="49" Click="Load_Click"/>
+        <TextBox Name="message" HorizontalAlignment="Left" Height="30" Margin="25,423,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="382"/>
+        <Button Name="send" Content="Send" HorizontalAlignment="Left" Margin="422,423,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click"/>
+
+        <!--<Slider x:Name="progressSlider" HorizontalAlignment="Center" Margin="36,0,298,59" VerticalAlignment="Bottom" Width="425" PreviewMouseLeftButtonUp="progressSlider_PreviewMouseLeftButtonUp" PreviewMouseLeftButtonDown="progressSlider_PreviewMouseLeftButtonDown" ValueChanged="progressSlider_ValueChanged"/>-->
+        <Label x:Name="TotalTimeLabel" Content="00:00" HorizontalAlignment="Center" Margin="417,0,338,53" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Foreground="White" ForceCursor="True"/>
+        <Label x:Name="CurrentTimeLabel" Content="00:00" HorizontalAlignment="Center" Margin="27,0,728,54" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Foreground="White" ForceCursor="True"/>
+        <Slider x:Name="progressSlider" HorizontalAlignment="Center" Margin="79,0,389,57" VerticalAlignment="Bottom" Width="328"/>
+        <!--<Slider x:Name="volumeSlider" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="79,359,617,0" Width="100" Maximum="100" ValueChanged="AdjustVolume" Value="100" RenderTransformOrigin="0.37,5.298"/>-->
+        <Label Content="Volume" HorizontalAlignment="Center" Margin="25,356,717,0" VerticalAlignment="Top" Foreground="White" HorizontalContentAlignment="Right"/>
+        <Slider x:Name="volumeSlider" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="81,361,615,0" Width="100" Maximum="100"  Value="100" RenderTransformOrigin="0.37,5.298"/>
+
+
 
     </Grid>
 </Window>
