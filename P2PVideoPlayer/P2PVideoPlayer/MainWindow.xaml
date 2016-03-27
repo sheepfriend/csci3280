@@ -40,7 +40,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800">
         <Label  Height="29" Grid.Row="0" HorizontalAlignment="Left" Margin="607,16,0,0" Name="label1" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2">
             <Image Width="150" Height="30" Source="Resources/playlist.png" />
         </Label>
-        <Grid Height="399" HorizontalAlignment="Left" Margin="4,87,-4,0" Name="curtain" VerticalAlignment="Top" Width="200" Grid.Column="1"  />
+        <Grid Height="456" HorizontalAlignment="Left" Margin="0,70,0,0" Name="curtain" VerticalAlignment="Top" Width="607"  />
         <ListBox x:Name="selector" SelectionChanged="ListBox_SelectionChanged"  Background="#7F3A3C46" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FFD7D7D7" Grid.Column="1" Margin="0,102,0,0">
             <ListBox.ContextMenu>
                 <ContextMenu>
