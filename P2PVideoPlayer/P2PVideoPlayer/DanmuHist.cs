@@ -2,6 +2,10 @@ using System;
 using System.Text;
 using System.IO;
 using System.Timers;
+using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace WpfApplication1{
   class DanmuHist
@@ -13,12 +17,13 @@ namespace WpfApplication1{
 	}
 	
 	public void addDanmu(String content, double time_interval){
-		hist.Add(Tuple <String, double>(content, interval));
+
+		hist.Add(new Tuple <String, double>(content, time_interval));
 	}
 	
 	public void play(Grid curtain, DanmakuCurtain dmkCurt){
-		for(Tuple <String, double> item in hist){
-			timer = new System.Timers.Timer(item.Item2);
+		foreach(Tuple <String, double> item in hist){
+			Timer timer = new Timer(item.Item2);
 			timer.Elapsed += new ElapsedEventHandler(
 				delegate(object source, ElapsedEventArgs e){
 					Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>

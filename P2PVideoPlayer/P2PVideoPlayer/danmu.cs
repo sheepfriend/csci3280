@@ -15,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Collections.Generic;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 

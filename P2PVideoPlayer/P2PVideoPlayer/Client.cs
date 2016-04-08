@@ -2,432 +2,206 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Net;
+using System.Net.Sockets;
 
 namespace WpfApplication1
 {
-    /*
-     * To use this class, please call:
-     * 
-     * at the beginning: run()
-     * when a new video is needed: new_video(name)
-     * 
-     * Default port number:
-     * 10000: main program
-     * 10001: listener for video
-     * 10002: listener for audio
-     * 10003: listener for danmu
-     * 10004: listener for creating new connection
-     * 
-     * cannot deal with danmu currently....
-     * potential conflict on List<String> clients?
-     * global variable for server ip?
-     * 
-     * server port: 10000+
-     * 
-     * I don't want to maintain a table for port number, thus upd is used...
-     * As long as the request has sent, close the connection.
-     * 
-     */
-    class Client
+    abstract class Client
     {
+        public abstract BitmapStream askBitmapStream(int num);
+        public abstract List<String> askVideoHeader(String name);
+        
+        public abstract void run();
+        /* init之后不跑，run()才分配线程什么的 */
+
         public static String self_ip;
         public static String server_ip;
-        public static List<String> clients;
-        public Connector conn;
+        /* 每台机器固定的ip嘛。。。*/
 
-        public static int video;
-        public static int audio;
-        public static int video_no;
-        public static int audio_no;
-        public static int ask;
-        public static String name;
 
-        public Client()
+        public static int video_has, video_no, video_end, video;
+        public static int audio_has, audio_no, audio_end, audio;
+        /*
+         * 立的一大堆flag
+         * 作为client，正在播放的视频只能有一个
+         * 这些flag是给这个视频接收用的，发给别人的时候就不用管了
+         * 
+         */
+
+
+        public static BitmapStream video_stream;
+        public static List<String> video_header;
+        public static List<String> video_client;
+        /* 
+         * 正在播放的视频的
+         * video_stream: 新来的buffer
+         * video_header: header
+         * video_client: 有这个视频的client的list
+         * 
+         */
+
+
+        public static List<String> ip_list;
+        public static List<int> ip_port;
+        /* 
+         * 为了方便查询每个ip的被占用端口的最大值+1（可用端口最小值）
+         * 建立了ip_list和ip_port两个list
+         * 单独的client：向所有人询问视频的时候会调用ip_list
+         *              刚加入的时候是向server请求的所以这个用不到
+         *              根据下面的clients表来更新ip_list
+         *              ip_port就不管了
+         * client和server：向所有人询问视频的时候会调用ip_list
+         *                 刚加入新的client的时候同步更新clients,ip_list,ip_port
+         */
+
+        public static List<List<String>> clients;
+        /* 
+         * 这个东西每个传送的package都有一个，不用的时候默认是空的
+         * 只在有新的client的时候package里的这项不为空，本地的会被更新
+         * 
+         * 每新来一个client，server会对每一组新出现的pair分配端口，
+         * sender和receiver是有向的
+         * 所以是每个pair每种功能分配两个端口
+         * 
+         * stucture of List<List<String>> clients:
+         * 
+         * [0] sender ip
+         * [1] receiver ip
+         * [2] sender port
+         * [3] receiver port
+         * [4] type（线程监听接口的用途）
+         * 
+         * 下面这个function是给定sender和receiver的ip以及type
+         * 查找它们俩的端口
+         * 
+         */
+        public static int[] find_port(String from, String to, String type)
         {
-            clients = new List<string>();
-            conn = new Connector();
-            self_ip = "";
-            server_ip = "";
+            for (int i = 0; i < Client.clients.Count; i++)
+            {
+                if (from == Client.clients[i][0] && to == Client.clients[i][1] && type == Client.clients[i][4])
+                {
+                    int[] result = {Int32.Parse(Client.clients[i][2]),
+                                   Int32.Parse(Client.clients[i][3])};
+                    return result;
+                }
+            }
+            int[] result_null = { -1, -1 };
+            return result_null;
         }
 
-        public void run()
-        {            
-            Thread thread10004 = new Thread(listen_main);
-            Thread thread10001 = new Thread(listen_video);
-            Thread thread10002 = new Thread(listen_audio);
-            Thread thread10000 = new Thread(listen_ask);
-            thread10000.Start();
-            thread10001.Start();
-            thread10002.Start();
-            thread10004.Start();
-        }
 
-        public void new_video(String name_)
+        public bool Enabled;
+        /* Enabled默认false，当client第一次更新连接表的时候会变成true */
+
+
+        public static List<Connector> conn_video_data;
+        public static List<Connector> conn_audio_data;
+        public static List<Connector> conn_video_header;
+        public static List<Connector> conn_audio_header;
+        /*
+         * 用了tcp以后连接要一直保持，所以每个Connector实例只能管理一个连接
+         * 监听的connector放在ThreadWithPort里面自己管理
+         * 发送的当然要统一管理咯
+         * 
+         */
+        public static Connector find_conn(List<Connector> list, String to)
         {
-            name = name_;
-            Thread thread_ask_all = new Thread(ask_all);
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].ip_send == to)
+                {
+                    return list[i];
+                }
+            }
+            return null;
         }
+
+        /*
+         * 更新本地列表，
+         * 发现有自己是接收者的条目，拿出来创建监听线程
+         * 以前监听过的创建会失败（connector在创建的时候会先连接，端口已占用）
+         * 运行起来是ok的
+         * 虽然原理上很粗暴
+         * 
+         */
+
+        
+        public void update_client_list()
+        {
+            if(thread_check.Count<clients.Count){
+                for(int i=0;i<clients.Count;i++){
+                    thread_check.Add(false);
+                }
+            }
+
+            int new_conn = 0;
+            for (int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i][1] == self_ip && thread_check[i]==false)
+                {
+                    try
+                    {
+                        ThreadWithPort a = new ThreadWithPort(clients[i][0], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3]), clients[i][4]);
+                        a.Start();
+                        thread_check[i] = true;
+                    }
+                    catch { }
+                }
+                else if (clients[i][0] == self_ip && ip_list.IndexOf(clients[i][1])==-1)
+                {
+                    switch (clients[i][4])
+                    {
+                        case "video_header":
+                            conn_video_header.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        case "video_data":
+                            conn_video_data.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        case "audio_data":
+                            conn_audio_data.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        case "audio_header":
+                            conn_audio_header.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        default:
+                            break;
+                    }
+                    new_conn++;
+                    if (new_conn == 4)
+                    {
+                        new_conn = 0;
+                        ip_list.Add(clients[i][1]);
+                    }
+                }
+                Console.Out.WriteLine("\tFrom: {0}\tTo: {1}\tPort: {2}\tType: {3}", clients[i][0], clients[i][1], clients[i][2], clients[i][3]);
+            }
+        }
+
 
         public void update_client_list(Package pack)
         {
-            //udpate client list and connect to other clients
-            clients = new List<String>(pack.connectList);
+            clients = new List<List<String>>(pack.connectList);
+            update_client_list();
         }
+        
 
-        public void listen_main()
+        public static List<bool> thread_check;
+
+        //get the local ip
+        public static string GetLocalIPAddress()
         {
-            while (true)
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
             {
-                Package pack = conn.recv(10004);
-                if (pack == null) { continue; }
-                if(pack.type=="ip_list_info"){
-                    update_client_list(pack);
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
                 }
             }
+            throw new Exception("Local IP Address Not Found!");
         }
-
-        public void listen_video()
-        {
-            while (true)
-            {
-                Package pack = conn.recv(10001);
-                if (pack == null) { continue; }
-                if(pack.type=="video_resp"){
-                    /*
-                     * header for video:
-                     * Name: video name
-                     * Number: the number of the chunk
-                     * Type: .*
-                     */
-                    List<Tuple<String, String> > header = new List<Tuple<String, String> >(pack.header);
-                    /*
-                     * target path:
-                     * ./src/Name/Number
-                     */
-                    //check if src exists
-                    if (!System.IO.Directory.Exists("src"))
-                    {
-                        try
-                        {
-                            System.IO.Directory.CreateDirectory("src");
-                            System.IO.Directory.CreateDirectory("src/"+header[0].Item2);
-                        }
-                        catch(Exception e)
-                        {
-                            Console.Write(e);
-                            return;
-                        }
-                    }
-                    //check whether the directory for this video exists
-                    if (!System.IO.Directory.Exists("src/" + header[0].Item2))
-                    {
-                        try
-                        {
-                            System.IO.Directory.CreateDirectory("src/" + header[0].Item2);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.Write(e);
-                            return;
-                        }
-                    }
-                    //write the video chunk
-                    try
-                    {
-                        System.IO.File.WriteAllBytes("src/"+header[0].Item2+"/"+header[1].Item2+"."+header[2].Item2, pack.video);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write(e);
-                        return;
-                    }
-                }
-                else if (pack.type == "ask_video")
-                {
-                    /*
-                     * header for request:
-                     * [1] Name
-                     * [2] Number: check whether this number exists
-                     * [3] Type: .*
-                     * 
-                     * if the chunk exists, return a has_audio package
-                     * if not, return a no_audio package
-                     */
-                    List<Tuple<String, String> > header = new List<Tuple<String, String> >(pack.header);
-                    if (System.IO.File.Exists("src/" + header[0].Item2 + "/" + header[1].Item2 + "." + header[2].Item2))
-                    {
-                        //has_audio is listened by the main thread not this thread
-                        Package pack_res = new Package("has_video");
-                        pack_res.header = new List<Tuple<string, string> >(pack.header);
-                        pack_res.from = pack.to;
-                        pack_res.to = pack.from;
-                        conn.send(pack.from, 10000, pack_res);
-                    }
-                    else
-                    {
-                        //no_audio is listened by the main thread not this thread
-                        Package pack_res = new Package("no_video");
-                        pack_res.header = new List<Tuple<string, string> >(pack.header);
-                        pack_res.from = pack.to;
-                        pack_res.to = pack.from;
-                        conn.send(pack.from, 10000, pack_res);
-                    }
-                }
-                else if (pack.type == "request_video")
-                {
-                    /*
-                     * header for request:
-                     * [1] Name
-                     * [2] Number: check whether this number exists
-                     * [3] Type: .*
-                     * 
-                     * send the audio chunk to the dest addr
-                     */
-                    Package pack_res = new Package("video_resp");
-                    pack_res.header = new List<Tuple<string, string> >(pack.header);
-                    pack_res.from = pack.to;
-                    pack_res.to = pack.from;
-                    List<Tuple<String, String> > header = new List<Tuple<String, String> >(pack.header);
-                    try
-                    {
-                        byte[] data = System.IO.File.ReadAllBytes("src/" + header[0].Item2 + "/" + header[1].Item2 + "." + header[2].Item2);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write(e);
-                    }
-                    conn.send(pack.from, 10001, pack_res);
-                }
-            }
-        }
-
-        public void listen_audio()
-        {
-            while (true)
-            {
-                Package pack = conn.recv(10002);
-                if (pack == null) { continue; }
-                if (pack.type == "audio_resp")
-                {
-                    /*
-                     * header for video:
-                     * Name: video name
-                     * Number: the number of the chunk
-                     * Type: .*
-                     */
-                    List<Tuple<String, String> > header = new List<Tuple<String, String> >(pack.header);
-                    /*
-                     * target path:
-                     * ./src/Name/Number
-                     */
-                    //check if src exists
-                    if (!System.IO.Directory.Exists("src"))
-                    {
-                        try
-                        {
-                            System.IO.Directory.CreateDirectory("src");
-                            System.IO.Directory.CreateDirectory("src/" + header[0].Item2);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.Write(e);
-                            return;
-                        }
-                    }
-                    //check whether the directory for this audio exists
-                    if (!System.IO.Directory.Exists("src/" + header[0].Item2))
-                    {
-                        try
-                        {
-                            System.IO.Directory.CreateDirectory("src/" + header[0].Item2);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.Write(e);
-                            return;
-                        }
-                    }
-                    //write the audio chunk
-                    try
-                    {
-                        System.IO.File.WriteAllBytes("src/" + header[0].Item2 + "/" + header[1].Item2 + "." + header[2].Item2, pack.audio);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write(e);
-                    }
-                }
-                else if (pack.type == "ask_audio")
-                {
-                    /*
-                     * header for request:
-                     * [1] Name
-                     * [2] Number: check whether this number exists
-                     * [3] Type: .*
-                     * 
-                     * if the chunk exists, return a has_audio package
-                     * if not, return a no_audio package
-                     */
-                    List<Tuple<String, String> > header = new List<Tuple<String, String> >(pack.header);
-                    if (System.IO.File.Exists("src/" + header[0].Item2 + "/" + header[1].Item2 + "." + header[2].Item2))
-                    {
-                        //has_audio is listened by the main thread not this thread
-                        Package pack_res = new Package("has_audio");
-                        pack_res.header = new List<Tuple<string, string> >(pack.header);
-                        pack_res.from = pack.to;
-                        pack_res.to = pack.from;
-                        conn.send(pack.from, 10000, pack_res);
-                    }
-                    else
-                    {
-                        //no_audio is listened by the main thread not this thread
-                        Package pack_res = new Package("no_audio");
-                        pack_res.header = new List<Tuple<string, string> >(pack.header);
-                        pack_res.from = pack.to;
-                        pack_res.to = pack.from;
-                        conn.send(pack.from, 10000, pack_res);
-                    }
-                }
-                else if (pack.type == "request_audio")
-                {
-                    /*
-                     * header for request:
-                     * [1] Name
-                     * [2] Number: check whether this number exists
-                     * [3] Type: .*
-                     * 
-                     * send the audio chunk to the dest addr
-                     */
-                    Package pack_res = new Package("audio_resp");
-                    pack_res.header = new List<Tuple<string, string> >(pack.header);
-                    pack_res.from = pack.to;
-                    pack_res.to = pack.from;
-                    List<Tuple<String, String> > header = new List<Tuple<String, String> >(pack.header);
-                    try
-                    {
-                        byte[] data = System.IO.File.ReadAllBytes("src/" + header[0].Item2 + "/" + header[1].Item2 + "." + header[2].Item2);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write(e);
-                    }
-                    conn.send(pack.from, 10002, pack_res);
-                }
-            }
-        }
-
-        public void ask_client()
-        {
-            Package pack = new Package("ip_list");
-            pack.from = self_ip;
-            pack.to = server_ip;
-            conn.send(pack.to, 10010, pack);
-        }
-
-        //send a request to ask a video chunk
-        public void ask_one(int num)
-        {
-            video = 0;
-            audio = 0;
-            video_no = 0;
-            audio_no = 0;
-            /*
-             * Procedure to ask for a video:
-             * [1] send ask request to all clients in the client list
-             * [2] waiting for replies of other clients(set time out)
-             * [3] check the response of other clients
-             * [4] repeat the request for all chunks of the video(if all other clients does not have this chunk => no more chunks, return)
-             */
-            for (int i = 0; i < clients.Count; i++)
-            {
-                if(clients[i]!=self_ip){
-                    //send video ask
-                    Package pack = new Package("ask_video");
-                    pack.from = self_ip;
-                    pack.to = clients[i];
-                    Tuple<String, String> name_info = new Tuple<string, string>("Name", name);
-                    Tuple<String, String> number_info = new Tuple<string, string>("Number", ""+num);
-                    Tuple<String, String> type_info = new Tuple<string, string>("Type", "avi");
-                    pack.header.Add(name_info);
-                    pack.header.Add(number_info);
-                    pack.header.Add(type_info);
-                    conn.send(pack.to, 10001, pack);
-
-                    //send audio ask
-                    Package pack1 = new Package("ask_audio");
-                    pack1.from = self_ip;
-                    pack1.to = clients[i];
-                    Tuple<String, String> name_info1 = new Tuple<string, string>("Name", name);
-                    Tuple<String, String> number_info1 = new Tuple<string, string>("Number", "" + num);
-                    Tuple<String, String> type_info1 = new Tuple<string, string>("Type", "mp3");
-                    pack1.header.Add(name_info1);
-                    pack1.header.Add(number_info1);
-                    pack1.header.Add(type_info1);
-                    conn.send(pack1.to, 10002, pack1);
-                }
-            }
-        }
-
-
-        public void listen_ask(){
-            Package pack_res;
-            Package pack_response;
-            while (true)
-            {
-                pack_res = conn.recv(10000);
-                if (pack_res == null) { continue; }
-                switch (pack_res.type)
-                {
-                    case "has_audio":
-                        if (audio > 0 || pack_res.header[1].Item2!=ask+"") { break; }
-                        else{
-                            pack_response = new Package("request_audio");
-                            pack_response.from = pack_res.to;
-                            pack_response.to = pack_res.from;
-                            pack_response.header = new List<Tuple<string, string> >(pack_res.header);
-                            conn.send(pack_response.to, 10002, pack_response);
-                            audio = 1;
-                        }
-                        break;
-                    case "no_audio":
-                        audio_no++;
-                        break;
-                    case "has_video":
-                        if (video > 0 || pack_res.header[1].Item2 != ask + "") { break; }
-                        else
-                        {
-                            pack_response = new Package("request_video");
-                            pack_response.from = pack_res.to;
-                            pack_response.to = pack_res.from;
-                            pack_response.header = new List<Tuple<string, string> >(pack_res.header);
-                            conn.send(pack_response.to, 10001, pack_response);
-                            video = 1;
-                        }
-                        break;
-                    case "no_video":
-                        video_no++;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        public void ask_all()
-        {
-            ask = 0;
-            while (true)
-            {
-                ask_one( ask);
-                //wait for all response
-                //potential bug: what if a connection is dead?
-                while(!((video==1 && audio ==1) || (video_no != clients.Count-1) || (audio_no!=clients.Count-1))){}
-                ask++;
-                if ((video_no != clients.Count - 1) || (audio_no != clients.Count - 1)) { return; }
-            }
-        }
-
 
     }
 }

@@ -21,8 +21,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing;
-using System.Threading;
-
+using static Microsoft.VisualBasic.Interaction;
 
 
 namespace WpfApplication1
@@ -36,105 +35,72 @@ namespace WpfApplication1
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
         public int isPlaying = 0; // 0: no pause 1: pause
-        private int totalClip = 0;
-        private int endOneClip = 0;
+      
+
+        public System.Windows.Forms.PictureBox image_control;
+        BitmapPlayer player;
+        Client client;
 
         public MainWindow()
         {
             InitializeComponent();
             dmkCurt = new DanmakuCurtain();
-            media.LoadedBehavior = MediaState.Manual;
         }
 
-        private void Media_Ended(object sender, RoutedEventArgs e)
-        {
-            this.endOneClip = 1;
-        }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
+            if (player != null) { }
+            else { player = new BitmapPlayer(ref image_control, ref form_container, ref client); }
             if (selector.SelectedItem != null)
             {
-                if (isPlaying == 0)
+                if (image_control != null) { }
+                else
                 {
-                    media.LoadedBehavior = MediaState.Manual;
-
-                    media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
-                    media.ScrubbingEnabled = true;
-
-                    string temp1 = "./videoClips/";
-                    string temp3 = ".avi";
-                    string temp2;
-                    string clipName;
-                    //for (int i = 0; i < 3; i++)
-                    //{
-                    //    temp2 = i.ToString();
-                    //    clipName = temp1 + temp2 + temp3;
-                    //    media.Source = new Uri(clipName, UriKind.RelativeOrAbsolute);
-                    //    media.Play();
-                    //    while (true)
-                    //    {
-                    //        if (this.endOneClip == 1)
-                    //            break;
-                    //    }
-                    //    this.endOneClip = 0;
-                    //}
-
-                    ////the following code is still under testing..
-                    //media.Source = new Uri("./videoClips/" + "0" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-                    //Console.WriteLine("haha111\n");
-                    //while (true)
-                    //{
-                    //    if (this.endOneClip == 1)
-                    //        break;
-                    //}
-                    //this.endOneClip = 0;
-                    ////System.Threading.Thread.Sleep(1000); //1 second
-                    //media.Source = new Uri("./videoClips/" + "1" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-                    //Console.WriteLine("haha2222\n");
-                    ////System.Threading.Thread.Sleep(1000); //1 second
-                    //while (true)
-                    //{
-                    //    if (this.endOneClip == 1)
-                    //        break;
-                    //}
-                    //this.endOneClip = 0;
-                    //media.Source = new Uri("./videoClips/" + "100" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-
+                    image_control = new System.Windows.Forms.PictureBox();
+                    form_container.Child = image_control;
 
                 }
-                else if (isPlaying == 1)
-                {
-                    media.Play();
-                }
+
+                if (player != null) { }
+                else { player = new BitmapPlayer(ref image_control, ref form_container, ref client); }
+
+                //AviManager aviManager = new AviManager(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", true);
+                //AudioStream audioStream = aviManager.GetWaveStream();
+                //audioStream.ExportStream("./audio.wav");
+                //aviManager.Close();
+
+                player.setLocalInfo(selector.SelectedItem.ToString(), "wmv");
+
+                //player.setLocalInfo(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", "wmv");
+
+                //player.setLocalInfo(@"C:\Users\Public\Videos\Sample Videos\Wildlife.wmv", "wmv");
+                player.play();
             }
         }
 
         private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
-            media.Pause();
+            player.pause();
             isPlaying = 1; // paused
         }
 
         private void btn_stop_Click(object sender, RoutedEventArgs e)
         {
-            
-            media.Stop();
+
+            player.stop();
         }
 
         private void btn_pre_Click(object sender, RoutedEventArgs e)
         {
-            media.Stop();
+            player.stop();
             if(selector.SelectedIndex-1 >= 0)
                 selector.SelectedIndex -= 1;
         }
 
         private void btn_next_Click(object sender, RoutedEventArgs e)
         {
-            media.Stop();
+            player.stop();
             if(selector.SelectedIndex + 1 < selector.Items.Count)
                 selector.SelectedIndex += 1;
         }
@@ -226,13 +192,13 @@ namespace WpfApplication1
 
         }
         
-
+        //add new play source
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selector.SelectedItem == null) return;
             mediaInfo.select_play(selector.SelectedItem.ToString());
-            media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
-            media.ScrubbingEnabled = true;
+            //media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
+            //media.ScrubbingEnabled = true;
 
             ////cut the avi file into small clips
             //AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
@@ -270,7 +236,7 @@ namespace WpfApplication1
             switch ( here.Header.ToString())
             {
                 case "Delete":
-                    media.Close();
+                    player.stop();
                     mediaInfo.delete();
                     selector.Items.Remove(selector.SelectedItem);
 
@@ -280,6 +246,20 @@ namespace WpfApplication1
                     break;
             }
             
+        }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            client = new ClientServer();
+            client.run();
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            //title = InputBox("What is the title of the music?",fileName+": Title","N/A");
+            string ser_ip = InputBox("Input Server IP Address:","IP Address:","N/A");
+            client = new ClientOnly(ser_ip);
+            client.run();
         }
     }
 }
