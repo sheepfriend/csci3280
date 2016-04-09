@@ -29,6 +29,22 @@ namespace WpfApplication1
         public PictureBox image_control;
         public WindowsFormsHost form_container;
 
+        public static BitmapReader reader;
+        public static List<BitmapStream> bitmap_stream;
+        public Bitmap bitmap;
+        public System.Timers.Timer timer;
+        public int bmpPerStream;
+        public static String current_type;
+        public Thread loadStream;
+        public static String address;
+        public static bool isLocal;
+        public int isPaused;
+        public static List<String> header;
+        public static int countBitmap;
+        public static int countFrame;
+        public Client client;
+        public static int finish;
+        public static int start;
         //需要改三个部件的大小
         public BitmapPlayer(ref PictureBox input, ref WindowsFormsHost form, ref Client client_)
         {
@@ -47,22 +63,6 @@ namespace WpfApplication1
             //client.run();
         }
 
-        public static BitmapReader reader;
-        public static List<BitmapStream> bitmap_stream;
-        public Bitmap bitmap;
-        public System.Timers.Timer timer;
-        public int bmpPerStream;
-        public static String current_type;
-        public Thread loadStream;
-        public static String address;
-        public static bool isLocal;
-        public int isPaused;
-        public static List<String> header;
-        public static int countBitmap;
-        public static int countFrame;
-        public Client client;
-        public static int finish;
-        public static int start;
 
 
         public void setLocalInfo(String addr, String type)

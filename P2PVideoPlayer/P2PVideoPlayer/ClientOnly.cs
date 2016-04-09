@@ -53,8 +53,6 @@ namespace WpfApplication1
             thread_check_record = new List<ThreadWithPort>();
             video_stream_fractions = new List<byte[]>(NUM_FRACTION);
             clients = new List<List<String>>();
-            conn_server = new Connector(server_ip, 9999, 10000);
-            conn_server_listen = new Connector(self_ip, -1, 9999);
             conn_audio_data = new List<Connector>();
             conn_audio_header = new List<Connector>();
             conn_video_data = new List<Connector>();
@@ -70,6 +68,9 @@ namespace WpfApplication1
             thread_check = new List<bool>();
 
             self_ip = "";
+
+            conn_server = new Connector(server_ip, 9999, 10000);
+            conn_server_listen = new Connector(self_ip, -1, 9999);
 
             foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
             {
