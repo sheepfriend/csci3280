@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WpfApplication1</RootNamespace>
     <AssemblyName>WpfApplication1</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -89,18 +89,28 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientOnly.cs" />
     <Compile Include="ClientServer.cs" />
+    <Compile Include="Compress.cs" />
+    <Compile Include="CompressedBitmapStream.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="danmu.cs" />
-    <Compile Include="DanmuHist.cs" />
+    <Compile Include="DanmuList.cs" />
+    <Compile Include="DanmuPlayer.cs" />
     <Compile Include="EditableVideoStream.cs" />
     <Compile Include="InvokeHelper.cs" />
     <Compile Include="Local.cs" />
     <Compile Include="LrcReader.cs" />
+    <Compile Include="Native.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="TextBlock.cs" />
     <Compile Include="ThreadWithPort.cs" />
     <Compile Include="VideoStream.cs" />
     <Compile Include="video_info.cs" />
+    <Compile Include="WaveOutBuffer.cs" />
+    <Compile Include="WaveOutPlayer.cs" />
+    <Compile Include="WaveOutReader.cs" />
+    <Compile Include="WaveOutStream.cs" />
+    <Compile Include="WavFormat.cs" />
+    <Compile Include="WavStream.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

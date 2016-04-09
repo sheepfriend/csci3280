@@ -30,7 +30,7 @@ namespace WpfApplication1
         public WindowsFormsHost form_container;
 
         //需要改三个部件的大小
-        public BitmapPlayer(ref PictureBox input, ref WindowsFormsHost form,ref Client client_)
+        public BitmapPlayer(ref PictureBox input, ref WindowsFormsHost form, ref Client client_)
         {
             image_control = input;
             form_container = form;
@@ -52,19 +52,25 @@ namespace WpfApplication1
         public Bitmap bitmap;
         public System.Timers.Timer timer;
         public int bmpPerStream;
-        public String current_type;
+        public static String current_type;
         public Thread loadStream;
-        public String address;
+        public static String address;
         public static bool isLocal;
         public int isPaused;
         public static List<String> header;
         public static int countBitmap;
+        public static int countFrame;
         public Client client;
+        public static int finish;
+        public static int start;
+
 
         public void setLocalInfo(String addr, String type)
         {
             address = addr;
             current_type = type;
+            if (Local.exist(addr)) { isLocal = true; }
+            else { isLocal = false; }
         }
 
         /*
@@ -102,14 +108,15 @@ namespace WpfApplication1
                     // window.Height = form_container.Height + 50;
                     // window.Width = form_container.Width + 50;
 
-                    //给第一个留时间缓冲
+                    //给第一个留时间缓冲,等待缓存
+                    start = 0;
                     while (bitmap_stream.Count < 1) { }
-
+                    start = 1;
                     //header (List<String>): 
                     // [0] frameRate
                     // [1] Height
                     // [2] Width
-                    timer = new System.Timers.Timer(1000 / Int32.Parse(header[0]));
+                    timer = new System.Timers.Timer(820 / Int32.Parse(header[0]));
                     timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                     timer.Enabled = true;
                 }
@@ -119,11 +126,14 @@ namespace WpfApplication1
                     isLocal = false;
                     header = client.askVideoHeader(address);
 
-                    
+
                     //header非空：有这个视频
                     //这个function有延迟，要等所有人回复
                     if (header != null)
                     {
+                        //设置同步
+                        //reader.bmpPerStream = Int32.Parse(header[0]);
+
                         loadStream = new Thread(loadBitmapStreamP2P);
                         loadStream.Start();
 
@@ -132,13 +142,15 @@ namespace WpfApplication1
                         form_container.Width = Int32.Parse(header[2]);
 
                         //给第一个留时间缓冲
-                        while (bitmap_stream.Count == 0) { }
+                        start = 0;
+                        while (bitmap_stream.Count < 2) { }
+                        start = 1;
 
                         //header (List<String>): 
                         // [0] frameRate
                         // [1] Height
                         // [2] Width
-                        timer = new System.Timers.Timer(1000 / Int32.Parse(header[0]));
+                        timer = new System.Timers.Timer(820 / Int32.Parse(header[0]));
                         timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                         timer.Enabled = true;
 
@@ -151,7 +163,7 @@ namespace WpfApplication1
                 isPaused = 0;
 
                 //while (bitmap_stream.Count == 0) { }
-                timer = new System.Timers.Timer(1000 / Int32.Parse(header[0]));
+                timer = new System.Timers.Timer(820 / Int32.Parse(header[0]));
                 timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                 timer.Enabled = true;
             }
@@ -169,7 +181,7 @@ namespace WpfApplication1
                 bitmap = bitmap_stream[0].read();
 
                 //播完了
-                if (bitmap != null){}
+                if (bitmap != null) { }
                 else if (reader.finish == 1 && bitmap_stream.Count == 1)
                 {
                     Console.Out.WriteLine("over");
@@ -188,6 +200,7 @@ namespace WpfApplication1
                     bitmap = bitmap_stream[0].read();
                 }
                 InvokeHelper.Set(image_control, "Image", bitmap);
+                countFrame++;
             }
             catch
             {
@@ -201,7 +214,7 @@ namespace WpfApplication1
             //两个BitmapStream的时候这个function就卡住了
             while (true)
             {
-                while (bitmap_stream.Count > 3)
+                while (bitmap_stream.Count > 2)
                 {
                     if (reader.finish == 1) { return; }
                 }
@@ -211,6 +224,7 @@ namespace WpfApplication1
                 //本地不用考虑异步、大家read的不对齐的情况，参数直接设-1
                 stream_tmp = reader.loadBitmapStream_count(-1);
                 bitmap_stream.Add(stream_tmp);
+                countBitmap++;
             }
         }
 
@@ -218,7 +232,7 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (bitmap_stream.Count > 3)
+                while (bitmap_stream.Count > 50)
                 {
                     if (reader.finish == 1) { return; }
                 }
@@ -240,6 +254,8 @@ namespace WpfApplication1
             bitmap = null;
             current_type = "";
             countBitmap = 0;
+            countFrame = 0;
+            start = 0;
         }
 
         public void pause()

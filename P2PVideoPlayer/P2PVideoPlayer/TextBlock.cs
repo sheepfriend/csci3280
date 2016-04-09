@@ -174,8 +174,7 @@ namespace WpfApplication1
 
             _formattedText = new FormattedText(Text, CultureInfo.CurrentUICulture, FlowDirection,
                                                new Typeface(FontFamily, FontStyle, FontWeight, FontStretches.Normal), FontSize, Brushes.Black,
-                                               null, TextFormattingMode.Display);
-
+                                               null);
             UpdateFormattedText();
         }
 

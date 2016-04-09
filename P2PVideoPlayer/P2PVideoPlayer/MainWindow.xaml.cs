@@ -21,7 +21,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing;
-using static Microsoft.VisualBasic.Interaction;
+using Microsoft.VisualBasic;
 
 
 namespace WpfApplication1
@@ -257,7 +257,7 @@ namespace WpfApplication1
         private void button3_Click(object sender, RoutedEventArgs e)
         {
             //title = InputBox("What is the title of the music?",fileName+": Title","N/A");
-            string ser_ip = InputBox("Input Server IP Address:","IP Address:","N/A");
+            string ser_ip = Interaction.InputBox("Input Server IP Address:","IP Address:","N/A");
             client = new ClientOnly(ser_ip);
             client.run();
         }

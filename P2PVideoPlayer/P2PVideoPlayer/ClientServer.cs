@@ -11,37 +11,61 @@ namespace WpfApplication1
     {
         public List< List<String>> playList;
 
+        public Connector conn_server;
+
+        public List<Connector> conn_ip_list;
+        public int client_ip_list_port;
+
+        public override DanmuList askDanmuList(string name)
+        {
+            //server直接读本地就行
+            DanmuList danmu = new DanmuList();
+            danmu.readFromFile(name);
+            danmuList = danmu;
+            return danmu;
+        }
+
+        public override void addDamnu(int num, string content)
+        {
+            //server直接在本地add
+            DanmuList.appendDanmu(num, content, Local.ref_addr+@"danmu\"+BitmapPlayer.address);
+        }
+
         public ClientServer()
         {
+            thread_check_record = new List<ThreadWithPort>();
+            conn_user_exit = new List<Connector>();
+            video_stream_fractions = new List<byte[]>(NUM_FRACTION);
+            isServer = 1;
+            client_ip_list_port = 9998;
+            video_client = new List<string>();
             clients = new List<List <String> >();
             playList = new List<List<string>>();
             ip_list = new List<String >();
             ip_port = new List<int>();
+            conn_ip_list = new List<Connector>();
 
-            server_ip = GetLocalIPAddress();
-            ip_list.Add(self_ip);
+
+            conn_audio_data = new List<Connector>();
+            conn_audio_header = new List<Connector>();
+            conn_video_data = new List<Connector>();
+            conn_video_header = new List<Connector>();
+            conn_danmu_client = new List<Connector>();
+            conn_danmu_server = new List<Connector>();
+
+            conn_server = new Connector("", -1, 9999);
             ip_port.Add(10001);
             Enabled = false;
 
-            self_ip = "";
+            self_ip = GetLocalIPAddress();
+            server_ip = GetLocalIPAddress();
+            ip_list.Add(self_ip);
 
-            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-            {
-                if (ip.AddressFamily.ToString() == "InterNetwork")
-                {
-                    self_ip= ip.ToString();
-                    break;
-                }
-            }  
+            thread_check = new List<bool>();
         }
 
 
-        public static String[] types_ = { "video_header", 
-                                         "audio_header",
-                                         "video_data",
-                                         "audio_data",
-                                         "danmu"};
-        public static List<String> types = new List<String>(types_);
+        public static List<String> types = new List<String>(Client.types);
 
         public override void run()
         {
@@ -49,107 +73,111 @@ namespace WpfApplication1
             a.Start();
         }
 
-        public override List<String> askVideoHeader(String name)
+
+        public int search_last(List<String> list, String item)
         {
-            video_header = new List<string>();
-            video_client = new List<string>();
-            video_has = 0;
-            video_no = 0;
-            for (int i = 0; i < ip_list.Count; i++)
+            int result=-1;
+            for (int i = list.Count - 1; i >= 0; i++)
             {
-                if (ip_list[i] != self_ip)
-                {
-                    Connector conn = find_conn(conn_video_header, ip_list[i]);
-                    Package pack = new Package("ask_video");
-                    pack.header.Add(name);
-                    conn.send(pack);
-                }
+                if (item == list[i]) { result = i; break; }
             }
-            while (true)
-            {
-                if (video_no == ip_list.Count - 1)
-                {
-                    return null;
-                }
-                else if (video_has + video_no == ip_list.Count - 1)
-                {
-                    return video_header;
-                }
-            }
-        }
-
-        public override BitmapStream askBitmapStream(int streamCount)
-        {
-            video = 0;
-            video_stream = new BitmapStream();
-            if (video_client.Count == 0) { return null; }
-
-            for (int i = 0; i < video_client.Count; i++)
-            {
-                Connector conn = find_conn(conn_video_data, video_client[i]);
-                Package pack = new Package("request_video");
-                pack.header.Add("" + streamCount);
-                conn.send(pack);
-            }
-            while (true)
-            {
-                //等待回复
-                //如果某个线程知道有回复了，就把video改成1，然后读data写到video_stream（buffer）里面
-                if (video == 1)
-                {
-                    return video_stream;
-                }
-            }
-        }
-
-
-        public void load_play_list(String path)
-        {
-            //read play list from a file in hard disk
+            return result;
         }
 
         public void emit_list(Package pack)
         {
+            int port_num;
             if (ip_list.IndexOf(pack.from) == -1)//newly come client
             {
-                int port_num = 10001;
+                 port_num= 10001;
+            }
+            else
+            {
+                port_num = ip_port[search_last(ip_list,pack.from)];
+            }
                 for (int j = 0; j < ip_list.Count; j++)
                 {
                     int b_port_num = ip_port[j];
                     for (int i = 0; i < types.Count; i++)
                      {
-                         List<String> a = new List<String>();
-                         a.Add(pack.from);
-                         a.Add(ip_list[j]);
-                         a.Add(port_num+"");
-                         a.Add(types[i]);
-                         clients.Add(a);
+                         if (types[i]=="video_data")
+                         {
+                             for (int k = 0; k < NUM_FRACTION; k++)
+                             {
 
-                         List<String> b = new List<String>();
-                         b.Add(ip_list[j]);
-                         b.Add(pack.from);
-                         b.Add(b_port_num+"");
-                         b.Add(types[i]);
-                         clients.Add(b);
+                                 List<String> a = new List<String>();
+                                 a.Add(pack.from);
+                                 a.Add(ip_list[j]);
+                                 a.Add(b_port_num + "");
+                                 a.Add(port_num + "");
+                                 a.Add(types[i]);
+                                 clients.Add(a);
 
-                         port_num++;
-                         b_port_num++;
+                                 List<String> b = new List<String>();
+                                 b.Add(ip_list[j]);
+                                 b.Add(pack.from);
+                                 b.Add(port_num + "");
+                                 b.Add(b_port_num + "");
+                                 b.Add(types[i]);
+                                 clients.Add(b);
+
+                                 port_num++;
+                                 b_port_num++;
+                             }
+                         }
+                         else
+                         {
+                             List<String> a = new List<String>();
+                             a.Add(pack.from);
+                             a.Add(ip_list[j]);
+                             a.Add(b_port_num + "");
+                             a.Add(port_num + "");
+                             a.Add(types[i]);
+                             clients.Add(a);
+
+                             List<String> b = new List<String>();
+                             b.Add(ip_list[j]);
+                             b.Add(pack.from);
+                             b.Add(port_num + "");
+                             b.Add(b_port_num + "");
+                             b.Add(types[i]);
+                             clients.Add(b);
+
+                             port_num++;
+                             b_port_num++;
+
+                         }
                      }
                     ip_port[j] = b_port_num;
                 }
-                ip_list.Add(pack.from);
                 ip_port.Add(port_num);
-            }
+
 
             for (int i = 0; i < ip_list.Count; i++)
             {
-                if (ip_list[i] == self_ip) { continue; }
+                if (ip_list[i] == self_ip || ip_list[i]==pack.from) { continue; }
                 Package pack_res = new Package("ip_list");
                 pack_res.connectList = clients;
-                Connector conn = new Connector(ip_list[i], 10000, 9999);
-                conn.send(pack_res);
-                conn.disconnect();
+
+                Connector conn = find_conn(conn_ip_list,ip_list[i]);
+                if (conn != null) { conn.send(pack_res); }
+
             }
+
+            Package change = new Package("ip_port_change");
+            change.header.Add("" + client_ip_list_port);
+            conn_server.send_from_listenner(change);
+            
+            while (conn_server.s.Connected) { }
+            conn_server.s.Close();
+            conn_server = new Connector("", 10000, 9999);
+
+            Connector conn1 = new Connector(pack.from, client_ip_list_port, 9999); 
+            Package pack_res1 = new Package("ip_list");
+            pack_res1.connectList = clients;
+            conn1.send(pack_res1);
+            conn_ip_list.Add(conn1);
+            client_ip_list_port--;
 
             update_client_list();
 
@@ -168,12 +196,13 @@ namespace WpfApplication1
             }
             //target video not find
         }
+
+
         public void listen()
         {
             while (true)
             {
-                Connector conn = new Connector("",10000,9999);
-                Package pack = conn.recv();
+                Package pack = conn_server.recv();
                 if (pack == null) { continue; }
                 switch (pack.type)
                 {
@@ -182,6 +211,7 @@ namespace WpfApplication1
                         emit_list(pack);
                         break;
                     default:
+                        conn_server.disconnect();
                         break;
                 }
             }

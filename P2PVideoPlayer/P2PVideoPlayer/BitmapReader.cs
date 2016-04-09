@@ -28,7 +28,7 @@ namespace WpfApplication1
         //需要改三个部件的大小
         public BitmapReader()
         {
-            bmpPerStream = 25;
+            bmpPerStream = 3;
             video_wmv = new VideoFileReader();
             //video_avi = new AVIReader();
             bitmap_stream = new List<BitmapStream>();
@@ -68,18 +68,19 @@ namespace WpfApplication1
         public List<String> loadFile(String name,String type)
         {
             flush();
-            if (Local.exist(name))
+            if (Local.exist( name))
             {
                 List<String> header = new List<string>();
                 switch (type)
                 {
                     case "wmv":
                         current_type = "wmv";
-                        address = name;
-                        video_wmv.Open(name);
+                        address = Local.ref_addr + name;
+                        video_wmv.Open(Local.ref_addr+name);
                         header.Add("" + video_wmv.FrameRate);
                         header.Add("" + video_wmv.Height);
                         header.Add("" + video_wmv.Width);
+                        bmpPerStream = video_wmv.FrameRate;
                         break;
                     default:
                         return null;

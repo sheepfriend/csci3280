@@ -12,7 +12,6 @@ namespace WpfApplication1
 {
     class Connector
     {
-        public static int MAX_LEN = 5000;
         public bool connected,listenning;
 
         public int port_send,port_listen;
@@ -47,7 +46,7 @@ namespace WpfApplication1
 
         public void connect()
         {
-
+            if (ip_send == "") { return; }
             IPAddress ip = IPAddress.Parse(ip_send);
 
             //IPAddress ip = IPAddress.Parse("192.168.110.30");
@@ -63,9 +62,14 @@ namespace WpfApplication1
             IPAddress ip = IPAddress.Parse(Client.self_ip);
             IPEndPoint ipe = new IPEndPoint(ip, port_listen);
 
-            s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            s.Bind(ipe);
-            s.Listen(0);
+            try
+            {
+                s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                s.Bind(ipe);
+                s.Listen(0);
+            }
+            catch {
+            }
 
             tmp_s = s.Accept();
 
@@ -78,12 +82,36 @@ namespace WpfApplication1
 
         public void send(Package pack)
         {
-            if (!connected) {
-                connect();
-            } 
-            if (!s.Connected) {
-                connect();
+            if(!connected)connect();
+            if (ip_send == "") { return; }
+            if (!s.Connected) connect();
+
+            pack.from = Client.self_ip;
+
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter bformatter = new BinaryFormatter();
+            bformatter.Serialize(stream, pack);
+            stream.Position = 0;
+            BinaryReader br = new BinaryReader(stream);
+            byte[] b = br.ReadBytes((int)stream.Length);
+            byte[] a = BitConverter.GetBytes(b.Length);
+            byte[] c = new byte[a.Length + b.Length];
+            System.Buffer.BlockCopy(a, 0, c, 0, a.Length);
+            System.Buffer.BlockCopy(b, 0, c, a.Length, b.Length);
+            try
+            {
+                s.Send(c, c.Length, 0);
             }
+            catch{
+
+            }
+
+            Console.Out.Write("Pacakge send: " + pack.to + "   type: " + pack.type+" port:"+port_send+" size: "+c.Length+"\n");
+        }
+
+        public void send_from_listenner(Package pack)
+        {
+            if (!listenning) listen();
 
             pack.from = Client.self_ip;
 
@@ -98,9 +126,9 @@ namespace WpfApplication1
             System.Buffer.BlockCopy(a, 0, c, 0, a.Length);
             System.Buffer.BlockCopy(b, 0, c, a.Length, b.Length);
 
-            s.Send(c, c.Length, 0);
+            tmp_s.Send(c, c.Length, 0);
 
-            Console.Out.Write("Pacakge send: " + pack.to + "   type: " + pack.type+" port:"+port_send+" \n\tremote:"+s.RemoteEndPoint.ToString()+"\tlocal:"+s.LocalEndPoint.ToString()+"\n");
+            Console.Out.Write("Pacakge send: " + pack.to + "   type: " + pack.type + " port:" + port_send + "\n\tremote:" + tmp_s.RemoteEndPoint.ToString() + "\tlocal:" + tmp_s.LocalEndPoint.ToString() + "\n");
         }
 
         public Package recv(int port)
@@ -108,8 +136,8 @@ namespace WpfApplication1
             port_listen = port;
             return recv();
         }
-
-        public Package recv_from_sender() {
+        public Package recv_from_sender()
+        {
             byte[] len = new byte[4];
             int length = 0;
             Console.Out.WriteLine("listening port {0}", port_listen);
@@ -117,36 +145,35 @@ namespace WpfApplication1
             MemoryStream stream = new MemoryStream();
             IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
-                s.Receive(len, 4, 0);
-                length = BitConverter.ToInt32(len, 0);
+            s.Receive(len, 4, 0);
+            length = BitConverter.ToInt32(len, 0);
 
-               while (true)
+            while (true)
+            {
+                byte[] buffer = new byte[10000];
+                int tmp_len = s.Receive(buffer);
+
+                stream.Write(buffer, 0, tmp_len);
+
+                if (stream.Length == length)
                 {
-                   int tmp_len = length>MAX_LEN?MAX_LEN:length;
-                   byte[] buffer = new byte[tmp_len];
-                   s.Receive(buffer,tmp_len,0);
-                   stream.Write(buffer, 0, buffer.Length);
-
-                   if(stream.Length == length){
-                       //都收完了
-                        BinaryFormatter bformatter = new BinaryFormatter();
-                        stream.Position = 0;
-                       Package pack = (Package)bformatter.Deserialize(stream);
-                       Console.Out.Write("Pacakge recv: " + pack.from + "   type: " + pack.type + "\n");
-                       return pack;
-                   }
+                    //都收完了
+                    BinaryFormatter bformatter = new BinaryFormatter();
+                    stream.Position = 0;
+                    Package pack = (Package)bformatter.Deserialize(stream);
+                    Console.Out.Write("Pacakge recv: " + pack.from + "   type: " + pack.type + "\n");
+                    return pack;
                 }
+            }
 
-            
+
         }
-
         public Package recv()
         {
             if (!listenning) listen();
             
             byte[] len = new byte[4];
             int length = 0;
-            Console.Out.WriteLine("listening port {0}", port_listen);
 
             MemoryStream stream = new MemoryStream();
             IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -160,6 +187,7 @@ namespace WpfApplication1
                 bool received = false;
                 while (!received)
                 {
+                    Console.Out.WriteLine("Server is running...");
                     s.Listen(0);
                     tmp_s = s.Accept();
                     tmp_s.Receive(len, 4, 0);
@@ -167,22 +195,23 @@ namespace WpfApplication1
                 }
             }
                 length = BitConverter.ToInt32(len, 0);
-                Console.Out.WriteLine("size of received package: {0}", length);
+                while (length == 0)
+                {
+                    length = BitConverter.ToInt32(len, 0);
+                }
                while (true)
                 {
-                   byte[] buffer = new byte[50000];
-                   int tmp_len=tmp_s.Receive(buffer);
+                    byte[] buffer = new byte[50000];
+                    int tmp_len = tmp_s.Receive(buffer);
 
-                   stream.Write(buffer, 0, tmp_len);
-
-                   //Console.Out.WriteLine("buffering stream size: {0}", stream.Length);
+                    stream.Write(buffer, 0, tmp_len);
 
                    if(stream.Length == length){
                        //都收完了
                         BinaryFormatter bformatter = new BinaryFormatter();
                         stream.Position = 0;
                        Package pack = (Package)bformatter.Deserialize(stream);
-                       Console.Out.Write("Pacakge recv: " + pack.from + "   type: " + pack.type + "\n");
+                       Console.Out.Write("Pacakge recv: " + pack.from + "   type: " + pack.type + "\n\tremote:"+tmp_s.RemoteEndPoint.ToString()+"\tlocal:"+tmp_s.LocalEndPoint.ToString()+"\n");
                        return pack;
                    }
                 }

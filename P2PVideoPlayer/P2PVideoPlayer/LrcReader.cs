@@ -21,15 +21,15 @@ using System.Runtime.InteropServices;
 
 public class LrcReader
 {
-    public List<Tuple<Double, String> > words;
-    public List<Tuple<String, String>> other_info;
+    public List<List<String> > words;
+    public List<List<String>> other_info;
     public String file_path;
 
 	public LrcReader()
 	{
         file_path="";
-        words = new List<Tuple<Double, String>>();
-        other_info = new List<Tuple<String, String>>();
+        words = new List<List<String>>();
+        other_info = new List<List<String>>();
 	}
 
     // given a path, load the lrc and put all things into words and other_info
@@ -56,7 +56,11 @@ public class LrcReader
 
                     content = s.Substring(s.LastIndexOf(']') + 1);
 
-                    words.Add(new Tuple<Double, String>(mm * 60 + ss, content));
+                    List<String> tmp = new List<String>();
+                    tmp.Add(mm * 60 + ss+"");
+                    tmp.Add(content);
+
+                    words.Add(tmp);
                     s = s.Substring(s.IndexOf(']') + 1);
 
                 } while (s.Contains('[')); //Read again if there is more than one [] on one line
@@ -67,7 +71,11 @@ public class LrcReader
                     mmstring = s.Substring(s.IndexOf('[') + 1, s.IndexOf(':') - s.IndexOf('[') - 1);
                     ssstring = s.Substring(s.IndexOf(':') + 1, s.IndexOf(']') - s.IndexOf(':') - 1);
 
-                    other_info.Add(new Tuple<String, String>(mmstring, ssstring));
+                    List<String> tmp = new List<String>();
+                    tmp.Add(mmstring);
+                    tmp.Add(ssstring);
+
+                    other_info.Add(tmp);
                 } while (s.Contains('['));
             }
         }
@@ -77,17 +85,17 @@ public class LrcReader
     public String get_current_text(double time){
         // currently not display contents in other_info
         String result = "";
-        Tuple<Double,String> tmp_tuple;
+        List<String> tmp_tuple;
         int index=0;
         if (words.Count == 0) {}
-        else if (((Tuple<Double, String>)words.Last()).Item1 <= time)
+        else if (Double.Parse(words[words.Count-1][0]) <= time)
         {
-            result = ((Tuple<Double, String>)words.Last()).Item2;
+            result = words[words.Count - 1][1];
         }
         else {
             do{
-                tmp_tuple=(Tuple<Double,String>)words.ElementAt(index);
-                result=tmp_tuple.Item2;
+                tmp_tuple = (List<String>)words[index];
+                result=tmp_tuple[1];
                 index += 1;
             }while(words.Count>=index);
         }
