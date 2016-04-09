@@ -44,6 +44,7 @@ namespace WpfApplication1
         public static int countFrame;
         public Client client;
         public static int finish;
+        public static int bitmapPerSec;
         public static int start;
         //需要改三个部件的大小
         public BitmapPlayer(ref PictureBox input, ref WindowsFormsHost form, ref Client client_)
@@ -116,7 +117,8 @@ namespace WpfApplication1
                     // [0] frameRate
                     // [1] Height
                     // [2] Width
-                    timer = new System.Timers.Timer(820 / Int32.Parse(header[0]));
+                    timer = new System.Timers.Timer(810 / Int32.Parse(header[0]));
+                    bitmapPerSec = Int32.Parse(header[0]);
                     timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                     timer.Enabled = true;
                 }
@@ -150,7 +152,8 @@ namespace WpfApplication1
                         // [0] frameRate
                         // [1] Height
                         // [2] Width
-                        timer = new System.Timers.Timer(820 / Int32.Parse(header[0]));
+                        timer = new System.Timers.Timer(810 / Int32.Parse(header[0]));
+                        bitmapPerSec = Int32.Parse(header[0]);
                         timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                         timer.Enabled = true;
 
@@ -163,7 +166,7 @@ namespace WpfApplication1
                 isPaused = 0;
 
                 //while (bitmap_stream.Count == 0) { }
-                timer = new System.Timers.Timer(820 / Int32.Parse(header[0]));
+                timer = new System.Timers.Timer(810 / Int32.Parse(header[0]));
                 timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                 timer.Enabled = true;
             }
@@ -232,7 +235,7 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (bitmap_stream.Count > 50)
+                while (bitmap_stream.Count > 2)
                 {
                     if (reader.finish == 1) { return; }
                 }

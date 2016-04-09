@@ -28,7 +28,7 @@ namespace WpfApplication1
         //需要改三个部件的大小
         public BitmapReader()
         {
-            bmpPerStream = 3;
+            bmpPerStream = 2;
             video_wmv = new VideoFileReader();
             //video_avi = new AVIReader();
             bitmap_stream = new List<BitmapStream>();
@@ -65,6 +65,7 @@ namespace WpfApplication1
 
         //先check有没有这个本地文件,没有返回null
         //设置reader并返回[frameRate, height, width]的header List
+        //读video的时候自动导出audio
         public List<String> loadFile(String name,String type)
         {
             flush();
@@ -85,6 +86,7 @@ namespace WpfApplication1
                     default:
                         return null;
                 }
+                AudioExtract.extract(name);
                 return header;
             }
             else

@@ -55,6 +55,9 @@
       <HintPath>C:\Users\yxing2\Downloads\lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="NAudio">
+      <HintPath>.\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -78,11 +81,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AudioExtract.cs" />
     <Compile Include="AudioStream.cs" />
     <Compile Include="Avi.cs" />
     <Compile Include="AviManager.cs" />
     <Compile Include="AviStream.cs" />
-    <Compile Include="aviStreamReader.cs" />
     <Compile Include="BitmapPlayer.cs" />
     <Compile Include="BitmapReader.cs" />
     <Compile Include="BitmapStream.cs" />

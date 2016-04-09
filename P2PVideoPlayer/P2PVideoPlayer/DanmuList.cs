@@ -12,7 +12,7 @@ namespace WpfApplication1
     [Serializable()]
     class DanmuList: ISerializable
     {
-        public static String path = Local.ref_addr+@"danmu\";
+        public static String path = Local.ref_addr+@"src/danmu/";
         public List<List<String>> danmu;
         public String name;
         public DanmuList()

@@ -13,7 +13,7 @@ namespace WpfApplication1
         public WavFormat format;
         private Native.WaveDelegate bufferProc = new Native.WaveDelegate(WaveOutBuffer.WaveOutProc);
         public WavStream audioStream;
-        public int BUF_SIZE = 16384;
+        public int BUF_SIZE = 705*16;
         public int STREAM_COUNT = 10;
         public int count_stream = 0;
         public WaveOutReader() {}
@@ -30,6 +30,7 @@ namespace WpfApplication1
             if (S.Length <= 0)
                 throw new Exception("Invalid WAV file");
             format = S.Format;
+            BUF_SIZE = format.nAvgBytesPerSec/8;
             audioStream = S;
             Native.waveOutOpen(out waveOut, device, ref format, null, 0, Native.CALLBACK_FUNCTION);
             count_stream = 0;
@@ -39,6 +40,7 @@ namespace WpfApplication1
         public void addRef(WavFormat format_)
         {
             format = format_;
+            BUF_SIZE = format.nAvgBytesPerSec/8;
             int a=Native.waveOutOpen(out waveOut, device, ref format, null, 0, Native.CALLBACK_FUNCTION);
         }
 

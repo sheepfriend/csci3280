@@ -53,10 +53,10 @@ namespace WpfApplication1
 
         public void setLocalInfo(String addr)
         {
-            address = addr+".wav";
-            if (Local.exist(@"audio\"+address)) { 
+            address = addr;
+            if (Local.exist(address)) { 
                 isLocal = true;
-                reader.loadFile(Local.ref_addr + @"audio\" + address);
+                reader.loadFile(Local.ref_addr  + address);
             }
             else { isLocal = false; }
         }
@@ -87,7 +87,7 @@ namespace WpfApplication1
                 {
                     //别人的
                     client.askAudio(address);
-                    reader.loadFile(Local.ref_addr + @"audio\" + address);
+                    reader.loadFile(Local.ref_addr + address);
                     isLocal = true;
                     play();
                     /*
@@ -143,14 +143,13 @@ namespace WpfApplication1
                     if (finish == 1) { return; }
                 }
                 currentBuffer = stream[countWaveOut].read();
-                Console.Out.WriteLine(stream[countWaveOut].position);
+                Console.Out.WriteLine(countWaveOut * BitmapPlayer.bitmapPerSec + " " + BitmapPlayer.countFrame);
+                while (BitmapPlayer.countFrame - 1 < countWaveOut * BitmapPlayer.bitmapPerSec) { }
                 if(currentBuffer != null){
                     //视频滞后等视频
                     //双方都是等待滞后的那个所以不用管超前的
-                    //while(BitmapPlayer.countBitmap-1<countWaveOut ){}
                     currentBuffer.waveOut = reader.waveOut;
                     currentBuffer.Play();
-                    Thread.Sleep(100);
                 }
                 else{
                     //播放完了

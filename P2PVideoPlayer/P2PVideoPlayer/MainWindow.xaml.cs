@@ -71,21 +71,31 @@ namespace WpfApplication1
 
                 }
 
-                if (player != null) { }
-                else { player = new BitmapPlayer(ref image_control, ref form_container, ref client); }
-
+                if (player == null) { player = new BitmapPlayer(ref image_control, ref form_container, ref client); }
+                if (audioPlayer == null)  { audioPlayer = new WaveOutPlayer(ref client); }
+                if (danmuPlayer == null)
+                {
+                    danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
+                }
                 //AviManager aviManager = new AviManager(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", true);
                 //AudioStream audioStream = aviManager.GetWaveStream();
                 //audioStream.ExportStream("./audio.wav");
                 //aviManager.Close();
 
-                player.setLocalInfo(selector.SelectedItem.ToString(), "wmv");
+                String filename = selector.SelectedItem.ToString();
+                String filepath = mediaInfo.name_to_list[filename].path;
+
+                player.setLocalInfo(filepath, "wmv");
+                player.play();
+                audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+
                 //player.setLocalInfo(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", "wmv");
 
                 //player.setLocalInfo(@"C:\Users\Public\Videos\Sample Videos\Wildlife.wmv", "wmv");            
-                //audioPlayer.setLocalInfo(selector.SelectedItem.ToString());
-                player.play();
-                //audioPlayer.play();
+                
+                
+                audioPlayer.play();
+                danmuPlayer.playDanmu();
                 //danmuPlayer.playDanmu();
 
             }
@@ -94,7 +104,7 @@ namespace WpfApplication1
         private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
             player.pause();
-            //audioPlayer.pause();
+            audioPlayer.pause();
             isPlaying = 1; // paused
         }
 
@@ -102,12 +112,14 @@ namespace WpfApplication1
         {
 
             player.stop();
-            //audioPlayer.stop();
+            audioPlayer.stop();
         }
 
         private void btn_pre_Click(object sender, RoutedEventArgs e)
         {
             player.stop();
+            audioPlayer.stop();
+            danmuPlayer.stop();
             if(selector.SelectedIndex-1 >= 0)
                 selector.SelectedIndex -= 1;
         }
@@ -115,6 +127,8 @@ namespace WpfApplication1
         private void btn_next_Click(object sender, RoutedEventArgs e)
         {
             player.stop();
+            audioPlayer.stop();
+            danmuPlayer.stop();
             if(selector.SelectedIndex + 1 < selector.Items.Count)
                 selector.SelectedIndex += 1;
         }
@@ -301,9 +315,9 @@ namespace WpfApplication1
             {
                 if (player.loadStream.IsAlive) { player.loadStream.Abort(); }
                 if (player.timer.Enabled) { player.timer.Dispose(); }
-               // if (danmuPlayer.play.IsAlive) { danmuPlayer.play.Abort(); }
-               //if (audioPlayer.load_waveoutstream.IsAlive) { audioPlayer.load_waveoutstream.Abort(); }
-               // if (audioPlayer.load_audio.IsAlive) { audioPlayer.load_audio.Abort(); }
+                if (danmuPlayer.play.IsAlive) { danmuPlayer.play.Abort(); }
+              if (audioPlayer.load_waveoutstream.IsAlive) { audioPlayer.load_waveoutstream.Abort(); }
+                if (audioPlayer.load_audio.IsAlive) { audioPlayer.load_audio.Abort(); }
             }
             Environment.Exit(0);
         }
