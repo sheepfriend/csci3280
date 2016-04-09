@@ -81,16 +81,17 @@ namespace WpfApplication1
 
         public static void appendDanmu(int num, String content,String filename)
         {
-            if (!File.Exists(path + filename))
+            String[] tmp = filename.Split('\\');
+            if (!File.Exists(path + tmp[tmp.Length-1]))
             {
-                using (StreamWriter sw = File.CreateText(path + filename))
+                using (StreamWriter sw = File.CreateText(path + tmp[tmp.Length - 1]))
                 {
                     sw.WriteLine("{0}\t{1}", num, content);
                 }
             }
             else
             {
-                using (StreamWriter sw = File.AppendText(path + filename))
+                using (StreamWriter sw = File.AppendText(path + tmp[tmp.Length - 1]))
                 {
                     sw.WriteLine("{0}\t{1}", num, content);
                 }

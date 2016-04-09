@@ -189,6 +189,11 @@ namespace WpfApplication1
 
         private void send_Click(object sender, RoutedEventArgs e)
          {
+
+             if (!BitmapPlayer.isLocal)
+             {
+                 danmuPlayer.addDanmu(message.Text);
+             }
              Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
              {
                  dmkCurt.Shoot(curtain,message.Text);

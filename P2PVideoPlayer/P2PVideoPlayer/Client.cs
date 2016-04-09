@@ -433,12 +433,13 @@ namespace WpfApplication1
 
         public void askAudio(String name)
         {
+            audio_client = null;
             audio_format = new WavFormat(0, 0, 0);
             //向所有有视频的人发送音频请求
 
             audio = 0;
             audio_writing = 0;
-
+            while (audio_client == null) { }
             foreach (String ip in audio_client)
             {
                 Connector conn = find_conn(conn_audio_header, ip);

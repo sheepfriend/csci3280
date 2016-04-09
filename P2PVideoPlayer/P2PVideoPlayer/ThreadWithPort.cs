@@ -350,7 +350,10 @@ namespace WpfApplication1
                      * data -> serialized danmulist
                      */
                     DanmuList danmuList = new DanmuList();
-                    danmuList.readFromFile(pack.header[0]);
+
+                    String[] tmp = pack.header[0].Split('\\');
+
+                    danmuList.readFromFile(tmp[tmp.Length-1]);
 
                     MemoryStream stream = new MemoryStream();
                     BinaryFormatter formatter = new BinaryFormatter();
@@ -436,11 +439,11 @@ namespace WpfApplication1
                     byte[] data = stream.ToArray();
                     */
 
-                    byte[] data = File.ReadAllBytes("src/audio/" + pack.header[0]);
+                    byte[] data = File.ReadAllBytes( pack.header[0]);
 
                     Package pack_resp = new Package("audio_format");
                     pack_resp.data = data;
-                    pack_resp.header.Add("src/audio/" + pack.header[0]);
+                    pack_resp.header.Add( pack.header[0]);
                     Connector conn_resp = Client.find_conn(Client.conn_audio_data, pack.from);
                     conn_resp.send(pack_resp);
                 }
