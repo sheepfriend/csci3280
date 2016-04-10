@@ -369,9 +369,9 @@ namespace WpfApplication1
             {
                 if (player.loadStream.IsAlive) { player.loadStream.Abort(); }
                 if (player.timer.Enabled) { player.timer.Dispose(); }
-                if (danmuPlayer.play.IsAlive) { danmuPlayer.play.Abort(); }
-              if (audioPlayer.load_waveoutstream.IsAlive) { audioPlayer.load_waveoutstream.Abort(); }
-                if (audioPlayer.load_audio.IsAlive) { audioPlayer.load_audio.Abort(); }
+                if (danmuPlayer != null && danmuPlayer.play != null && danmuPlayer.play.IsAlive) { danmuPlayer.play.Abort(); }
+                if (audioPlayer != null && audioPlayer.load_waveoutstream != null && audioPlayer.load_waveoutstream.IsAlive) { audioPlayer.load_waveoutstream.Abort(); }
+                if (audioPlayer != null && audioPlayer.load_audio != null && audioPlayer.load_audio.IsAlive) { audioPlayer.load_audio.Abort(); }
             }
             Environment.Exit(0);
         }
