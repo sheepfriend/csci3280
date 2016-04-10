@@ -438,8 +438,14 @@ namespace WpfApplication1
                     formatter.Serialize(stream, audio_reader.format);
                     byte[] data = stream.ToArray();
                     */
-
-                    byte[] data = File.ReadAllBytes( pack.header[0]);
+                    byte[] data = new byte[0]; 
+                    try
+                    {
+                         data = File.ReadAllBytes(pack.header[0]);
+                    }
+                    catch
+                    {   
+                    }
 
                     Package pack_resp = new Package("audio_format");
                     pack_resp.data = data;
@@ -477,8 +483,8 @@ namespace WpfApplication1
                     {
                         Client.audio_writing = 1;
                         //Client.audio_format = (WavFormat)formatter.Deserialize(stream);
+                        if (pack.data.Length == 0) { Client.audio = 1; }
                         File.WriteAllBytes(pack.header[0], pack.data);
-                        Client.audio = 1;
                     }
                     
                 }
