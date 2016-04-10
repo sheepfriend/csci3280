@@ -71,8 +71,6 @@ namespace WpfApplication1
                 load_waveoutstream = new Thread(loadWaveOutStream);
                 load_waveoutstream.Start();
 
-                load_audio = new Thread(loadAudio);
-
                 Client.audio = 1;
                 while (stream.Count < 1) { }
                 start = 1;
@@ -90,17 +88,11 @@ namespace WpfApplication1
 
         public void play()
         {
+
             if (isPaused == 0)
             {
-                load_audio.Start();
-            }
-            else
-            {
-                //暂停的
-                isPaused = 0;
                 load_audio = new Thread(loadAudio);
                 load_audio.Start();
-
             }
         }
 
@@ -119,6 +111,7 @@ namespace WpfApplication1
             countWaveOut = 0;
             countWaveOutP = 0;
             start = 0;
+            isPaused = 0;
             stream.Clear();
         }
 
@@ -126,10 +119,6 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (stream.Count-1 < countWaveOut)
-                {
-                    if (finish == 1) { return; }
-                }
                 currentBuffer = stream[countWaveOut].read();
                 Console.Out.WriteLine(countWaveOut * BitmapPlayer.bitmapPerSec + " " + BitmapPlayer.countFrame);
                 while (BitmapPlayer.countFrame - 1 < countWaveOut * BitmapPlayer.bitmapPerSec) { }

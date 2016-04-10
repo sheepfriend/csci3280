@@ -85,17 +85,26 @@ namespace WpfApplication1
                 String filename = selector.SelectedItem.ToString();
                 String filepath = mediaInfo.name_to_list[filename].path;
 
-                player.setLocalInfo(filepath, "wmv");
-                audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
-                player.play();
+                if (player.isPaused == 0)
+                {
+                    player.setLocalInfo(filepath, "wmv");
+                    audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+                    player.play();
+                    audioPlayer.play();
+                    danmuPlayer.playDanmu();
+                }
+
+
 
                 //player.setLocalInfo(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", "wmv");
 
                 //player.setLocalInfo(@"C:\Users\Public\Videos\Sample Videos\Wildlife.wmv", "wmv");            
+                if (player.isPaused == 1)
+                {
+                    player.play();
+
+                }
                 
-                
-                audioPlayer.play();
-                danmuPlayer.playDanmu();
                 //danmuPlayer.playDanmu();
 
             }
@@ -104,7 +113,7 @@ namespace WpfApplication1
         private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
             player.pause();
-            audioPlayer.pause();
+            //audioPlayer.pause();
             isPlaying = 1; // paused
         }
 
