@@ -38,7 +38,7 @@ namespace WpfApplication1
              * [1] use ffmpeg.exe to export the audio
              * [2] convert mp3 to wav
              */
-            String ffmpegPath = "C:\\Users\\yxing2\\Desktop\\ffmpeg.exe";
+            String ffmpegPath = "ffmpeg.exe";
 
             /*
              Here’s a short explanation on what every parameter does:
@@ -52,7 +52,7 @@ namespace WpfApplication1
             (the end if the string) “output file”
              */
 
-            String ffmpegArg = " -i " + src + " -vn -ar 44100 -ac 1 -ab 320k " + "-f mp3 ";
+            String ffmpegArg = " -i \"" + src + "\" -vn -ar 44100 -ac 1 -ab 320k " + "-f mp3 ";
             Process psi = new Process();
             psi.StartInfo.FileName = ffmpegPath;
             psi.StartInfo.Arguments = ffmpegArg + " src/audio/" + filename + ".mp3";
