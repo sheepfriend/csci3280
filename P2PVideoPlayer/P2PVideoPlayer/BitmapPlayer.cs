@@ -70,6 +70,7 @@ namespace WpfApplication1
         {
             address = addr;
             current_type = type;
+            finish = 0;
             if (Local.exist(addr)) { isLocal = true; }
             else { isLocal = false; }
             header = reader.loadFile(address, current_type);
@@ -121,6 +122,7 @@ namespace WpfApplication1
                 }
             }
         }
+
 
         /*
          * 播放视频主程序
@@ -177,14 +179,15 @@ namespace WpfApplication1
 
                 //播完了
                 if (bitmap != null) { }
-                else if (reader.finish == 1 && bitmap_stream.Count == 1)
+                else if (reader.finish == 1 && bitmap == null)
                 {
+                    BitmapPlayer.finish = 1;
                     Console.Out.WriteLine("over");
                     timer.Enabled = false;
                     timer.Dispose();
                     return;
                 }
-                else if (bitmap_stream.Count >= 2)
+                else
                 {
                     //只是bitmap_stream[0]读完了
                     //load到bitmap_stream[1]了

@@ -119,22 +119,30 @@ namespace WpfApplication1
         {
             while (true)
             {
+            try
+            {
+
                 currentBuffer = stream[countWaveOut].read();
                 Console.Out.WriteLine(countWaveOut * BitmapPlayer.bitmapPerSec + " " + BitmapPlayer.countFrame);
                 while (BitmapPlayer.countFrame - 1 < countWaveOut * BitmapPlayer.bitmapPerSec) { }
-                if(currentBuffer != null){
+                if (currentBuffer != null)
+                {
                     //视频滞后等视频
                     //双方都是等待滞后的那个所以不用管超前的
                     currentBuffer.waveOut = reader.waveOut;
                     currentBuffer.Play();
                 }
-                else{
+                else
+                {
                     //播放完了
-                    while(stream.Count==0){
+                    while (stream.Count == 0)
+                    {
                         if (finish == 1) { return; }
                     }
                     countWaveOut++;
                 }
+            }
+            catch { }
             }
         }
 

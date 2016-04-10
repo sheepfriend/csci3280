@@ -35,7 +35,7 @@ namespace WpfApplication1
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
         public int isPlaying = 0; // 0: no pause 1: pause
-
+        public Thread waitToFinish;
 
         BitmapPlayer player;
         Client client;
@@ -58,6 +58,30 @@ namespace WpfApplication1
 
         }
 
+
+
+        public void wait_to_finish()
+        {
+            while (true)
+            {
+                if (BitmapPlayer.finish == 1)
+                {
+                    player.stop();
+                    try
+                    {
+                        audioPlayer.stop();
+
+                    }
+                    catch { }
+                    try
+                    {
+                        danmuPlayer.stop();
+                    }
+                    catch { }
+                    return;
+                }
+            }
+        }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
@@ -85,13 +109,28 @@ namespace WpfApplication1
                 String filename = selector.SelectedItem.ToString();
                 String filepath = mediaInfo.name_to_list[filename].path;
 
+                waitToFinish = new Thread(wait_to_finish);
+                bool hasAudio = true;
+
                 if (player.isPaused == 0)
                 {
                     player.setLocalInfo(filepath, "wmv");
-                    audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+                    try
+                    {
+                        audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+                    }
+                    catch
+                    {
+                        Console.Out.WriteLine("Fail to load audio");
+                        hasAudio = false;
+                    }
                     player.play();
-                    audioPlayer.play();
+                    if (hasAudio)
+                    {
+                        audioPlayer.play();
+                    }
                     danmuPlayer.playDanmu();
+                    waitToFinish.Start();
                 }
 
 
@@ -122,6 +161,9 @@ namespace WpfApplication1
 
             player.stop();
             audioPlayer.stop();
+            if(waitToFinish.IsAlive){
+                waitToFinish.Abort();
+            }
         }
 
         private void btn_pre_Click(object sender, RoutedEventArgs e)

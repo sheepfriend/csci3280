@@ -100,20 +100,23 @@ namespace WpfApplication1
                 BitmapStream stream_tmp = new BitmapStream();
                 for (int i = 0; i < bmpPerStream; i++)
                 {
-                    try
-                    {
                         //现在不会判断它停。。。
-                        Bitmap bitmap_tmp = video_wmv.ReadVideoFrame();
-                        stream_tmp.addFrame(bitmap_tmp);
-                    }
-                    catch
+                    if (video_wmv.IsOpen == false)
                     {
-                        //buffer装不满了
-                        finish = 1;
-                        video_wmv.Close();
-                        streamCount++;
                         return stream_tmp;
                     }
+                        Bitmap bitmap_tmp = video_wmv.ReadVideoFrame();
+                        if (bitmap_tmp != null)
+                        {
+                            stream_tmp.addFrame(bitmap_tmp);
+                        }
+                        else
+                        {
+                            finish = 1;
+                            video_wmv.Close();
+                            streamCount++;
+                            return stream_tmp;
+                        }
                 }
                 streamCount++;
                 return stream_tmp;
