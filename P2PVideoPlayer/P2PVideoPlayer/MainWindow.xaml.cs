@@ -86,8 +86,8 @@ namespace WpfApplication1
                 String filepath = mediaInfo.name_to_list[filename].path;
 
                 player.setLocalInfo(filepath, "wmv");
-                player.play();
                 audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+                player.play();
 
                 //player.setLocalInfo(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", "wmv");
 
@@ -190,10 +190,7 @@ namespace WpfApplication1
         private void send_Click(object sender, RoutedEventArgs e)
          {
 
-             if (!BitmapPlayer.isLocal)
-             {
                  danmuPlayer.addDanmu(message.Text);
-             }
              Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
              {
                  dmkCurt.Shoot(curtain,message.Text);

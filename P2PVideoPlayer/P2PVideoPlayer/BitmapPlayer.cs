@@ -72,6 +72,54 @@ namespace WpfApplication1
             current_type = type;
             if (Local.exist(addr)) { isLocal = true; }
             else { isLocal = false; }
+            header = reader.loadFile(address, current_type);
+
+            if (header != null)
+            {
+                Console.Out.WriteLine("local video");
+                loadStream = new Thread(loadBitmapStream);
+                loadStream.Start();
+
+                isLocal = true;
+
+                //本地文件                    
+                //调整窗口大小
+                form_container.Height = Int32.Parse(header[1]);
+                form_container.Width = Int32.Parse(header[2]);
+                   
+
+                // window.Height = form_container.Height + 50;
+                // window.Width = form_container.Width + 50;
+
+                //给第一个留时间缓冲,等待缓存
+                start = 0;
+                while (bitmap_stream.Count < 1) { }
+                start = 1;
+            }
+            else
+            {
+                Console.Out.WriteLine("not local video");
+                isLocal = false;
+                header = client.askVideoHeader(address);
+                if (header != null)
+                {
+                    //设置同步
+                    //reader.bmpPerStream = Int32.Parse(header[0]);
+
+                    loadStream = new Thread(loadBitmapStreamP2P);
+                    loadStream.Start();
+
+                    //调整窗口大小
+                    form_container.Height = Int32.Parse(header[1]);
+                    form_container.Width = Int32.Parse(header[2]);
+
+                    //给第一个留时间缓冲
+                    start = 0;
+                    while (bitmap_stream.Count < 2) { }
+                    start = 1;
+
+                }
+            }
         }
 
         /*
@@ -92,27 +140,8 @@ namespace WpfApplication1
                  * 不是本地文件：header = null （后面没写完呢）
                  * 是本地文件：header里有数据（长宽和播放速度，或者有需要还可以往里扔）
                  */
-                header = reader.loadFile(address, current_type);
                 if (header != null)
                 {
-                    Console.Out.WriteLine("local video");
-                    loadStream = new Thread(loadBitmapStream);
-                    loadStream.Start();
-
-                    isLocal = true;
-
-                    //本地文件                    
-                    //调整窗口大小
-                    form_container.Height = Int32.Parse(header[1]);
-                    form_container.Width = Int32.Parse(header[2]);
-
-                    // window.Height = form_container.Height + 50;
-                    // window.Width = form_container.Width + 50;
-
-                    //给第一个留时间缓冲,等待缓存
-                    start = 0;
-                    while (bitmap_stream.Count < 1) { }
-                    start = 1;
                     //header (List<String>): 
                     // [0] frameRate
                     // [1] Height
@@ -121,43 +150,6 @@ namespace WpfApplication1
                     bitmapPerSec = Int32.Parse(header[0]);
                     timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                     timer.Enabled = true;
-                }
-                else
-                {
-                    Console.Out.WriteLine("not local video");
-                    isLocal = false;
-                    header = client.askVideoHeader(address);
-
-
-                    //header非空：有这个视频
-                    //这个function有延迟，要等所有人回复
-                    if (header != null)
-                    {
-                        //设置同步
-                        //reader.bmpPerStream = Int32.Parse(header[0]);
-
-                        loadStream = new Thread(loadBitmapStreamP2P);
-                        loadStream.Start();
-
-                        //调整窗口大小
-                        form_container.Height = Int32.Parse(header[1]);
-                        form_container.Width = Int32.Parse(header[2]);
-
-                        //给第一个留时间缓冲
-                        start = 0;
-                        while (bitmap_stream.Count < 2) { }
-                        start = 1;
-
-                        //header (List<String>): 
-                        // [0] frameRate
-                        // [1] Height
-                        // [2] Width
-                        timer = new System.Timers.Timer(810 / Int32.Parse(header[0]));
-                        bitmapPerSec = Int32.Parse(header[0]);
-                        timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
-                        timer.Enabled = true;
-
-                    }
                 }
             }
             else

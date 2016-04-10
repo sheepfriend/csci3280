@@ -67,19 +67,11 @@ namespace WpfApplication1
             Enabled = false;
             thread_check = new List<bool>();
 
-            self_ip = "";
+            self_ip = GetLocalIPAddress();
 
             conn_server = new Connector(server_ip, 9999, 10000);
             conn_server_listen = new Connector(self_ip, -1, 9999);
 
-            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-            {
-                if (ip.AddressFamily.ToString() == "InterNetwork")
-                {
-                    self_ip = ip.ToString();
-                    break;
-                }
-            }
         }
 
         public Connector conn_server;

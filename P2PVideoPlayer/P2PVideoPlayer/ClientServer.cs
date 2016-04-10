@@ -19,8 +19,9 @@ namespace WpfApplication1
         public override DanmuList askDanmuList(string name)
         {
             //server直接读本地就行
+            String[] tmp = name.Split('\\');
             DanmuList danmu = new DanmuList();
-            danmu.readFromFile(name);
+            danmu.readFromFile(tmp[tmp.Length-1]);
             danmuList = danmu;
             return danmu;
         }
@@ -28,7 +29,8 @@ namespace WpfApplication1
         public override void addDamnu(int num, string content)
         {
             //server直接在本地add
-            DanmuList.appendDanmu(num, content, Local.ref_addr+@"danmu\"+BitmapPlayer.address);
+            String[] tmp = BitmapPlayer.address.Split('\\');
+            DanmuList.appendDanmu(num, content, Local.ref_addr+@"src\danmu\"+tmp[tmp.Length-1]);
         }
 
         public ClientServer()

@@ -229,7 +229,7 @@ namespace WpfApplication1
         public static CompressedBitmapStream video_stream;
 
         public static List<byte[]> video_stream_fractions;
-        public static int NUM_FRACTION = 2;
+        public static int NUM_FRACTION = 1;
 
         public static List<String> video_header;
         public static List<String> video_client;
@@ -433,13 +433,12 @@ namespace WpfApplication1
 
         public void askAudio(String name)
         {
-            audio_client = null;
+            audio_client = video_client;
             audio_format = new WavFormat(0, 0, 0);
             //向所有有视频的人发送音频请求
 
             audio = 0;
             audio_writing = 0;
-            while (audio_client == null) { }
             foreach (String ip in audio_client)
             {
                 Connector conn = find_conn(conn_audio_header, ip);
@@ -481,12 +480,13 @@ namespace WpfApplication1
             }
             while (true)
             {
-                if (video_no == video_asked - isServer)
+                if (video_no == video_asked )
                 {
                     //没有人有这个视频
+                    audio_client = video_client;
                     return null;
                 }
-                else if (video_has + video_no == video_asked - isServer)
+                else if (video_has + video_no == video_asked )
                 {
                     //所有人都有回复了
                     //这时video_list里面已经有所有有这个视频的client的ip了

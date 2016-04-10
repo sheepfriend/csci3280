@@ -30,7 +30,7 @@ namespace WpfApplication1
             if (S.Length <= 0)
                 throw new Exception("Invalid WAV file");
             format = S.Format;
-            BUF_SIZE = format.nAvgBytesPerSec/8;
+            BUF_SIZE = (int)(format.nAvgBytesPerSec/10.2);
             audioStream = S;
             Native.waveOutOpen(out waveOut, device, ref format, null, 0, Native.CALLBACK_FUNCTION);
             count_stream = 0;

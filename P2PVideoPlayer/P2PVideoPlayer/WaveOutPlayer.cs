@@ -59,52 +59,40 @@ namespace WpfApplication1
                 reader.loadFile(Local.ref_addr  + address);
             }
             else { isLocal = false; }
+            //重新开始
+            countWaveOut = 0; 
+            countWaveOutP = 0;
+            start = 0;
+            stream = new List<WaveOutStream>();
+
+            if (isLocal)
+            {
+                //本地
+                load_waveoutstream = new Thread(loadWaveOutStream);
+                load_waveoutstream.Start();
+
+                load_audio = new Thread(loadAudio);
+
+                Client.audio = 1;
+                while (stream.Count < 1) { }
+                start = 1;
+            }
+            else
+            {
+                //别人的
+                client.askAudio(address);
+                reader.loadFile(Local.ref_addr + address);
+                isLocal = true;
+                setLocalInfo(addr);
+
+            }
         }
 
         public void play()
         {
             if (isPaused == 0)
             {
-                //重新开始
-                countWaveOut = 0;
-                countWaveOutP = 0;
-                start = 0;
-                stream = new List<WaveOutStream>();
-                if (isLocal)
-                {
-                    //本地
-                    load_waveoutstream = new Thread(loadWaveOutStream);
-                    load_waveoutstream.Start();
-
-                    load_audio = new Thread(loadAudio);
-
-                    while ( stream.Count < 1) { }
-                    start = 1;
-
-                    load_audio.Start();
-                }
-                else
-                {
-                    //别人的
-                    client.askAudio(address);
-                    reader.loadFile(Local.ref_addr + address);
-                    isLocal = true;
-                    play();
-                    /*
-                    reader.addRef(format);
-
-                    load_waveoutstream = new Thread(loadWaveOutStreamP2P);
-                    load_waveoutstream.Start();
-
-                    load_audio = new Thread(loadAudio);
-
-                    start = 0;
-                    while (stream.Count < 20) { }
-                    start = 1;
-
-                    load_audio.Start();
-                     */
-                }
+                load_audio.Start();
             }
             else
             {
