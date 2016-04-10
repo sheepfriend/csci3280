@@ -235,13 +235,20 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (bitmap_stream.Count > 2)
-                {
-                    if (reader.finish == 1) { return; }
-                }
+                while (bitmap_stream.Count > 2){}
                 Console.Out.WriteLine("loading buffer...");
                 BitmapStream stream_tmp = new BitmapStream();
                 stream_tmp = client.askBitmapStream(countBitmap);
+                for (int i = 0; i < stream_tmp.stream.Count; i++)
+                {
+                    if (stream_tmp.stream[i] == null)
+                    {
+                        reader.finish = 1;
+                        countBitmap++;
+                        bitmap_stream.Add(stream_tmp);
+                        return;
+                    }
+                }
                 countBitmap++;
                 bitmap_stream.Add(stream_tmp);
             }
