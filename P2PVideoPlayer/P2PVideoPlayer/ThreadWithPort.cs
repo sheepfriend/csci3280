@@ -485,6 +485,7 @@ namespace WpfApplication1
                         //Client.audio_format = (WavFormat)formatter.Deserialize(stream);
                         if (pack.data.Length == 0) { Client.audio = 1; }
                         File.WriteAllBytes(pack.header[0], pack.data);
+                        Client.audio = 1; 
                     }
                     
                 }
