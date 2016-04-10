@@ -46,12 +46,14 @@ namespace WpfApplication1
         public static int finish;
         public static int bitmapPerSec;
         public static int start;
+        public static WpfApplication1.MainWindow window;
         //需要改三个部件的大小
-        public BitmapPlayer(ref PictureBox input, ref WindowsFormsHost form, ref Client client_)
+        public BitmapPlayer(ref PictureBox input, ref WindowsFormsHost form, ref Client client_, ref WpfApplication1.MainWindow wind)
         {
             image_control = input;
             form_container = form;
             bmpPerStream = 1;
+            window = wind;
             Console.Out.WriteLine("init...?");
             reader = new BitmapReader();
             Console.Out.WriteLine("init...");
@@ -87,7 +89,8 @@ namespace WpfApplication1
                 //调整窗口大小
                 form_container.Height = Int32.Parse(header[1]);
                 form_container.Width = Int32.Parse(header[2]);
-                   
+                window.Height = 710>Int32.Parse(header[1])+300?710:Int32.Parse(header[1])+300;
+                window.Width = 820 > Int32.Parse(header[2]) + 300 ? 820 : Int32.Parse(header[2]) + 300;
 
                 // window.Height = form_container.Height + 50;
                 // window.Width = form_container.Width + 50;
@@ -113,6 +116,8 @@ namespace WpfApplication1
                     //调整窗口大小
                     form_container.Height = Int32.Parse(header[1]);
                     form_container.Width = Int32.Parse(header[2]);
+                    window.Height = 710 > Int32.Parse(header[1]) + 300 ? 710 : Int32.Parse(header[1]) + 300;
+                    window.Width = 820 > Int32.Parse(header[2]) + 300 ? 820 : Int32.Parse(header[2]) + 300;
 
                     //给第一个留时间缓冲
                     start = 0;

@@ -48,6 +48,7 @@ namespace WpfApplication1
 
         public MainWindow()
         {
+
             InitializeComponent();
             image_control = new System.Windows.Forms.PictureBox();
             form_container.Child = image_control;
@@ -95,7 +96,7 @@ namespace WpfApplication1
 
                 }
 
-                if (player == null) { player = new BitmapPlayer(ref image_control, ref form_container, ref client); }
+                if (player == null) { player = new BitmapPlayer(ref image_control, ref form_container, ref client,ref window); }
                 if (audioPlayer == null)  { audioPlayer = new WaveOutPlayer(ref client); }
                 if (danmuPlayer == null)
                 {
@@ -336,7 +337,7 @@ namespace WpfApplication1
             if (player == null)
             {
                 danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
-                player = new BitmapPlayer(ref image_control, ref form_container, ref client);
+                player = new BitmapPlayer(ref image_control, ref form_container, ref client,ref window);
                 audioPlayer = new WaveOutPlayer(ref client);
             }
         }
@@ -350,7 +351,7 @@ namespace WpfApplication1
             if (player == null)
             {
                 danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
-                player = new BitmapPlayer(ref image_control, ref form_container, ref client);
+                player = new BitmapPlayer(ref image_control, ref form_container, ref client, ref window);
                 audioPlayer = new WaveOutPlayer(ref client);
             }
         }
