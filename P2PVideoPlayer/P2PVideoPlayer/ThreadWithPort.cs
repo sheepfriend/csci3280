@@ -308,8 +308,9 @@ namespace WpfApplication1
                      * [0] Name
                      */
                     List<String> header = new List<String>(pack.header);
-
-                    if (Local.exist(header[0]))
+                    String[] tmp = header[0].Split('\\');
+                    String tmp_addr=Utils.search_addr_from_list(tmp[tmp.Length-1], Client.media);
+                    if (tmp_addr!="" && File.Exists(tmp_addr))
                     {
                         //该文件存在，载入到本线程的reader里面
                         //接受的时候不需要reader，只有传的时候需要，所以一个reader就够了
@@ -327,7 +328,7 @@ namespace WpfApplication1
                          * 
                          */
 
-                        header = reader.loadFile(header[0], "wmv");
+                        header = reader.loadFile(tmp_addr, "wmv");
 
 
                         for (int i = 0; i < header.Count; i++)
@@ -572,10 +573,11 @@ namespace WpfApplication1
                     formatter.Serialize(stream, audio_reader.format);
                     byte[] data = stream.ToArray();
                     */
-                    byte[] data = new byte[0]; 
+                    byte[] data = new byte[0];
+                    String[] tmp = pack.header[0].Split('\\');
                     try
                     {
-                         data = File.ReadAllBytes(pack.header[0]);
+                         data = File.ReadAllBytes(Local.ref_addr+"audio\\"+tmp[tmp.Length-1]);
                     }
                     catch
                     {   
@@ -583,7 +585,7 @@ namespace WpfApplication1
 
                     Package pack_resp = new Package("audio_format");
                     pack_resp.data = data;
-                    pack_resp.header.Add( pack.header[0]);
+                    pack_resp.header.Add(tmp[tmp.Length - 1]);
                     Connector conn_resp = Client.find_conn(Client.conn_audio_data, pack.from);
                     conn_resp.send(pack_resp);
                 }
@@ -618,7 +620,7 @@ namespace WpfApplication1
                         Client.audio_writing = 1;
                         //Client.audio_format = (WavFormat)formatter.Deserialize(stream);
                         if (pack.data.Length == 0) { Client.audio = 1; }
-                        File.WriteAllBytes(pack.header[0], pack.data);
+                        File.WriteAllBytes(Local.ref_addr+"audio\\"+pack.header[0], pack.data);
                         Client.audio = 1; 
                     }
                     

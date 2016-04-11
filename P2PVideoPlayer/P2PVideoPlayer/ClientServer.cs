@@ -30,7 +30,7 @@ namespace WpfApplication1
         {
             //server直接在本地add
             String[] tmp = BitmapPlayer.address.Split('\\');
-            DanmuList.appendDanmu(num, content, Local.ref_addr+@"src\danmu\"+tmp[tmp.Length-1]);
+            DanmuList.appendDanmu(num, content, Local.ref_addr+@"danmu\"+tmp[tmp.Length-1]);
         }
 
         public ClientServer(ref media_info mi)

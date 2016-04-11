@@ -69,15 +69,15 @@ namespace WpfApplication1
         public List<String> loadFile(String name,String type)
         {
             flush();
-            if (Local.exist( name))
+            if (System.IO.File.Exists(name))
             {
                 List<String> header = new List<string>();
                 switch (type)
                 {
                     case "wmv":
                         current_type = "wmv";
-                        address = Local.ref_addr + name;
-                        video_wmv.Open(Local.ref_addr+name);
+                        address =  name;
+                        video_wmv.Open(name);
                         header.Add("" + video_wmv.FrameRate);
                         header.Add("" + video_wmv.Height);
                         header.Add("" + video_wmv.Width);

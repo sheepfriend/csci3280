@@ -123,7 +123,6 @@ namespace WpfApplication1
             {
 
                 currentBuffer = stream[countWaveOut].read();
-                Console.Out.WriteLine(countWaveOut * BitmapPlayer.bitmapPerSec + " " + BitmapPlayer.countFrame);
                 while (BitmapPlayer.countFrame - 1 < countWaveOut * BitmapPlayer.bitmapPerSec) { }
                 if (currentBuffer != null)
                 {
