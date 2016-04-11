@@ -400,6 +400,7 @@ namespace WpfApplication1
                 {
                     result_name.Add(_.fileName);
                 }
+                Utils.general_add(result_name, selector);
             }
             else
             {
@@ -415,7 +416,7 @@ namespace WpfApplication1
                     //返回结果：list<某个client的搜索结果>
                     //之后怎么搞？
 
-
+                    
                 }
 
             }
