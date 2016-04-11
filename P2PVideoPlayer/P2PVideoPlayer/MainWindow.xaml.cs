@@ -419,7 +419,11 @@ namespace WpfApplication1
                     {
                         foreach (var video in list)
                         {
-                            result_name.Add(video.fileName);
+                            if (!result_name.Contains(video.fileName))
+                            {
+                                mediaInfo.name_to_list.Add(video.fileName, video);
+                                result_name.Add(video.fileName);
+                            }
                         }
                     }
                     Utils.general_add(result_name, selector);
