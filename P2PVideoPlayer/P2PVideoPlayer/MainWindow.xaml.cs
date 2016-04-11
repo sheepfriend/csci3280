@@ -21,8 +21,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Drawing;
-using System.Threading;
-
+using Microsoft.VisualBasic;
 
 
 namespace WpfApplication1
@@ -36,105 +35,152 @@ namespace WpfApplication1
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
         public int isPlaying = 0; // 0: no pause 1: pause
-        private int totalClip = 0;
-        private int endOneClip = 0;
+        public Thread waitToFinish;
+
+        BitmapPlayer player;
+        Client client;
+        DanmuPlayer danmuPlayer;
+        WaveOutPlayer audioPlayer;
+
+        public System.Windows.Forms.PictureBox image_control;
+        //public Grid curtain;
+
 
         public MainWindow()
         {
+
             InitializeComponent();
+            image_control = new System.Windows.Forms.PictureBox();
+            form_container.Child = image_control;
+            image_control.SendToBack();
+            
             dmkCurt = new DanmakuCurtain();
-            media.LoadedBehavior = MediaState.Manual;
+            Console.Out.WriteLine("starting");
+
         }
 
-        private void Media_Ended(object sender, RoutedEventArgs e)
+
+
+        public void wait_to_finish()
         {
-            this.endOneClip = 1;
+            while (true)
+            {
+                if (BitmapPlayer.finish == 1)
+                {
+                    player.stop();
+                    try
+                    {
+                        audioPlayer.stop();
+
+                    }
+                    catch { }
+                    try
+                    {
+                        danmuPlayer.stop();
+                    }
+                    catch { }
+                    return;
+                }
+            }
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
             if (selector.SelectedItem != null)
             {
-                if (isPlaying == 0)
+                if (image_control != null) { }
+                else
                 {
-                    media.LoadedBehavior = MediaState.Manual;
-
-                    media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
-                    media.ScrubbingEnabled = true;
-
-                    string temp1 = "./videoClips/";
-                    string temp3 = ".avi";
-                    string temp2;
-                    string clipName;
-                    //for (int i = 0; i < 3; i++)
-                    //{
-                    //    temp2 = i.ToString();
-                    //    clipName = temp1 + temp2 + temp3;
-                    //    media.Source = new Uri(clipName, UriKind.RelativeOrAbsolute);
-                    //    media.Play();
-                    //    while (true)
-                    //    {
-                    //        if (this.endOneClip == 1)
-                    //            break;
-                    //    }
-                    //    this.endOneClip = 0;
-                    //}
-
-                    ////the following code is still under testing..
-                    //media.Source = new Uri("./videoClips/" + "0" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-                    //Console.WriteLine("haha111\n");
-                    //while (true)
-                    //{
-                    //    if (this.endOneClip == 1)
-                    //        break;
-                    //}
-                    //this.endOneClip = 0;
-                    ////System.Threading.Thread.Sleep(1000); //1 second
-                    //media.Source = new Uri("./videoClips/" + "1" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-                    //Console.WriteLine("haha2222\n");
-                    ////System.Threading.Thread.Sleep(1000); //1 second
-                    //while (true)
-                    //{
-                    //    if (this.endOneClip == 1)
-                    //        break;
-                    //}
-                    //this.endOneClip = 0;
-                    //media.Source = new Uri("./videoClips/" + "100" + ".avi", UriKind.RelativeOrAbsolute);
-                    //media.Play();
-
+                    image_control = new System.Windows.Forms.PictureBox();
+                    form_container.Child = image_control;
 
                 }
-                else if (isPlaying == 1)
+
+                if (player == null) { player = new BitmapPlayer(ref image_control, ref form_container, ref client,ref window); }
+                if (audioPlayer == null)  { audioPlayer = new WaveOutPlayer(ref client); }
+                if (danmuPlayer == null)
                 {
-                    media.Play();
+                    danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
                 }
+                //AviManager aviManager = new AviManager(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", true);
+                //AudioStream audioStream = aviManager.GetWaveStream();
+                //audioStream.ExportStream("./audio.wav");
+                //aviManager.Close();
+
+                String filename = selector.SelectedItem.ToString();
+                String filepath = mediaInfo.name_to_list[filename].path;
+
+                waitToFinish = new Thread(wait_to_finish);
+                bool hasAudio = true;
+
+                if (player.isPaused == 0)
+                {
+                    player.setLocalInfo(filepath, "wmv");
+                    try
+                    {
+                        audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+                    }
+                    catch
+                    {
+                        Console.Out.WriteLine("Fail to load audio");
+                        hasAudio = false;
+                    }
+                    player.play();
+                    if (hasAudio)
+                    {
+                        audioPlayer.play();
+                    }
+                    danmuPlayer.playDanmu();
+                    waitToFinish.Start();
+                }
+
+
+
+                //player.setLocalInfo(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", "wmv");
+
+                //player.setLocalInfo(@"C:\Users\Public\Videos\Sample Videos\Wildlife.wmv", "wmv");            
+                if (player.isPaused == 1)
+                {
+                    player.play();
+
+                }
+                
+                //danmuPlayer.playDanmu();
+
             }
         }
 
         private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
-            media.Pause();
+            player.pause();
+            //audioPlayer.pause();
             isPlaying = 1; // paused
         }
 
         private void btn_stop_Click(object sender, RoutedEventArgs e)
         {
-            
-            media.Stop();
+
+            player.stop();
+            audioPlayer.stop();
+            if(waitToFinish.IsAlive){
+                waitToFinish.Abort();
+            }
         }
 
         private void btn_pre_Click(object sender, RoutedEventArgs e)
         {
-            media.Stop();
+            player.stop();
+            audioPlayer.stop();
+            danmuPlayer.stop();
             if(selector.SelectedIndex-1 >= 0)
                 selector.SelectedIndex -= 1;
         }
 
         private void btn_next_Click(object sender, RoutedEventArgs e)
         {
-            media.Stop();
+            player.stop();
+            audioPlayer.stop();
+            danmuPlayer.stop();
             if(selector.SelectedIndex + 1 < selector.Items.Count)
                 selector.SelectedIndex += 1;
         }
@@ -195,6 +241,8 @@ namespace WpfApplication1
 
         private void send_Click(object sender, RoutedEventArgs e)
          {
+
+                 danmuPlayer.addDanmu(message.Text);
              Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
              {
                  dmkCurt.Shoot(curtain,message.Text);
@@ -226,13 +274,13 @@ namespace WpfApplication1
 
         }
         
-
+        //add new play source
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selector.SelectedItem == null) return;
             mediaInfo.select_play(selector.SelectedItem.ToString());
-            media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
-            media.ScrubbingEnabled = true;
+            //media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
+            //media.ScrubbingEnabled = true;
 
             ////cut the avi file into small clips
             //AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
@@ -270,7 +318,7 @@ namespace WpfApplication1
             switch ( here.Header.ToString())
             {
                 case "Delete":
-                    media.Close();
+                    player.stop();
                     mediaInfo.delete();
                     selector.Items.Remove(selector.SelectedItem);
 
@@ -281,5 +329,52 @@ namespace WpfApplication1
             }
             
         }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            client = new ClientServer();
+            client.run();
+            if (player == null)
+            {
+                danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
+                player = new BitmapPlayer(ref image_control, ref form_container, ref client,ref window);
+                audioPlayer = new WaveOutPlayer(ref client);
+            }
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            //title = InputBox("What is the title of the music?",fileName+": Title","N/A");
+            string ser_ip = Interaction.InputBox("Input Server IP Address:","IP Address:","N/A");
+            client = new ClientOnly(ser_ip);
+            client.run();
+            if (player == null)
+            {
+                danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
+                player = new BitmapPlayer(ref image_control, ref form_container, ref client, ref window);
+                audioPlayer = new WaveOutPlayer(ref client);
+            }
+        }
+
+        private void onClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //向所有人发送这个人已经退出的消息（如果设置了是server还是client的话，本地直接退出）
+            if (client != null)
+            {
+                Client.leave();
+            }
+
+            //视屏神马的有播放
+            if (player != null)
+            {
+                if (player.loadStream.IsAlive) { player.loadStream.Abort(); }
+                if (player.timer.Enabled) { player.timer.Dispose(); }
+                if (danmuPlayer != null && danmuPlayer.play != null && danmuPlayer.play.IsAlive) { danmuPlayer.play.Abort(); }
+                if (audioPlayer != null && audioPlayer.load_waveoutstream != null && audioPlayer.load_waveoutstream.IsAlive) { audioPlayer.load_waveoutstream.Abort(); }
+                if (audioPlayer != null && audioPlayer.load_audio != null && audioPlayer.load_audio.IsAlive) { audioPlayer.load_audio.Abort(); }
+            }
+            Environment.Exit(0);
+        }
+
     }
 }
