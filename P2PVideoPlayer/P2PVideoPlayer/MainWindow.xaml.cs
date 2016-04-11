@@ -115,9 +115,10 @@ namespace WpfApplication1
                 if (player.isPaused == 0)
                 {
                     player.setLocalInfo(filepath, "wmv");
+                    if (BitmapPlayer.header == null) { return; }
                     try
                     {
-                        audioPlayer.setLocalInfo("src/audio/" + filename + ".wav");
+                        audioPlayer.setLocalInfo("audio\\" + filename + ".wav");
                     }
                     catch
                     {
@@ -184,7 +185,6 @@ namespace WpfApplication1
                 selector.SelectedIndex += 1;
         }
 
-        
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
              if (mediaInfo == null)
@@ -207,8 +207,13 @@ namespace WpfApplication1
                 }
             }
 
-            Utils.general_add(mediaInfo.print(),selector);
-
+            
+            List<String> plat_list = mediaInfo.print();
+            selector.Items.Clear();
+            for (int i = 0; i < plat_list.Count; i++)
+            {
+                selector.Items.Add(plat_list[i]);
+            }
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -221,8 +226,12 @@ namespace WpfApplication1
             {
                 path = file.FileName;
                 mediaInfo = new media_info(path);
-                HashSet<String> plat_list = mediaInfo.print();
-                Utils.general_add(plat_list, selector);
+                List<String> plat_list = mediaInfo.print();
+                selector.Items.Clear();
+                for (int i = 0; i < plat_list.Count; i++)
+                {
+                    selector.Items.Add(plat_list[i]);
+                }
                 selector.SelectedIndex = -1;
                
                 ((Button)sender).Visibility = Visibility.Hidden;
@@ -233,7 +242,7 @@ namespace WpfApplication1
         private void send_Click(object sender, RoutedEventArgs e)
          {
 
-             danmuPlayer.addDanmu(message.Text);
+                 danmuPlayer.addDanmu(message.Text);
              Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
              {
                  dmkCurt.Shoot(curtain,message.Text);
@@ -384,27 +393,15 @@ namespace WpfApplication1
         {
             String key = SearchBox.Text;
             List<video_info> result = Utils.search_list(key, mediaInfo);
-            HashSet<String> result_name = new HashSet<string>();
-            //List<String> plat_list = mediaInfo.print();
-            //selector.Items.Clear();
-            //for (int i = 0; i < plat_list.Count; i++)
-            //{
-            //    selector.Items.Add(plat_list[i]);
-            //}
-            //List<String> result_name = new List<string>(result.Count + 5); 
             if (result.Count > 0)
             {
                 //本地就有
-                //之后怎么搞？ --> 加入结果队列咯=。=
-                foreach( var _ in result )
-                {
-                    result_name.Add(_.fileName);
-                }
-                Utils.general_add(result_name, selector);
+                //之后怎么搞？
+
             }
-            //本地没有，向别人请求
             else
             {
+                //本地没有，向别人请求
                 if (client == null)
                 {
                     //没有和别人连接
@@ -415,26 +412,9 @@ namespace WpfApplication1
                     List<List<video_info>> result_from_others = client.search_key(key);
                     //返回结果：list<某个client的搜索结果>
                     //之后怎么搞？
-                    foreach (var list in result_from_others)
-                    {
-                        foreach (var video in list)
-                        {
-                            if (!result_name.Contains(video.fileName))
-                            {
-                                mediaInfo.name_to_list.Add(video.fileName, video);
-                                result_name.Add(video.fileName);
-                            }
-                        }
-                    }
-                    Utils.general_add(result_name, selector);
+
                 }
-
             }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            Utils.general_add(mediaInfo.print(), selector);
         }
 
     }
