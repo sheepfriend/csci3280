@@ -48,8 +48,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
-        <Button x:Name="Back" Content="Back" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Right" Margin="0,20,13,0" VerticalAlignment="Top" Width="50" Grid.Column="2"  Height="20" Foreground="White" FontSize="14"/>
-
+        <Button x:Name="Back" Content="Back" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Right" Margin="0,20,13,0" VerticalAlignment="Top" Width="50" Grid.Column="2"  Height="20" Foreground="White" FontSize="14" Click = "Back_Click"/>
 
         <Button  Height="43" HorizontalAlignment="Left" Margin="222,20,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>

@@ -402,9 +402,9 @@ namespace WpfApplication1
                 }
                 Utils.general_add(result_name, selector);
             }
+            //本地没有，向别人请求
             else
             {
-                //本地没有，向别人请求
                 if (client == null)
                 {
                     //没有和别人连接
@@ -430,6 +430,11 @@ namespace WpfApplication1
                 }
 
             }
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.general_add(mediaInfo.print(), selector);
         }
 
     }
