@@ -36,7 +36,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
             <Image Width="40" Height="20" Source="Resources/add.png" />
         </Button>
         <Button Name="button"  Grid.Row="1" Grid.Column="1" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="61" Margin="4,58,0,0" Height="52" Click="Load_Click" Grid.ColumnSpan="2"/>
-        <Label  Height="29" Grid.Row="0" HorizontalAlignment="Left" Margin="607,16,0,0" Name="label1" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="3">
+        <Label  Height="29" Grid.Row="0" HorizontalAlignment="Left" Margin="5.524,15.396,0,0" Name="label1" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2" Grid.Column="1">
             <Image Width="150" Height="30" Source="Resources/playlist.png" />
         </Label>
         <Grid Height="399" HorizontalAlignment="Left" Margin="4,87,-4,0" Name="curtain" VerticalAlignment="Top" Width="200" Grid.Column="1" Grid.ColumnSpan="2"  />
@@ -103,19 +103,19 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
         <!--<TextBox x:Name="SearchBox" HorizontalAlignment="Left" Height="28" Margin="481,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="129" KeyDown="SearchBox_KeyDown" Background="#4C464646" Foreground="#FFC3C3C3"/>-->
         <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Height="37" Margin="0,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"  Background="#4C464646" Foreground="#FFC3C3C3" Grid.Column="1" Grid.ColumnSpan="2"/>
         <!--<Button x:Name="Search" HorizontalAlignment="Left" Margin="623,36,0,0" VerticalAlignment="Top" Width="80" Click="Search_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" >-->
-        <Button x:Name="Search" HorizontalAlignment="Left" Margin="43.627,21,0,0" VerticalAlignment="Top" Width="80"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" Grid.Column="2" >
+        <Button x:Name="Search" HorizontalAlignment="Left" Margin="47.476,21,0,0" VerticalAlignment="Top" Width="80"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" Grid.Column="2" >
             <Image Width="68" Height="20" Source="Resources/search.png" RenderTransformOrigin="0.838,-0.108" />
         </Button>
 
-        <WrapPanel HorizontalAlignment="Center" Height="65" VerticalAlignment="Top" Width="612" Background="#99000000">
-            <!--<Button x:Name="LyricsBtn" HorizontalAlignment="Center" Margin="20,15,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="{DynamicResource Lyrics_off}" />-->
-            <!--
+        <!--<WrapPanel HorizontalAlignment="Center" Height="65" VerticalAlignment="Top" Width="612" Background="#99000000">
+            <Button x:Name="LyricsBtn" HorizontalAlignment="Center" Margin="20,15,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="{DynamicResource Lyrics_off}" />
+        
             <Button x:Name="speedButton" HorizontalAlignment="Center" Margin="450,-30,0,0" VerticalAlignment="Center" Width="120" Click="speedButton_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Content="{DynamicResource Chipmunk_off}" />
             <Button x:Name="ArtworkBtn" HorizontalAlignment="Center" Margin="150,-32,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True" Click="LyricsDisableBtn_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="{DynamicResource Artwork_on}" />
             <Button x:Name="InfoOnBtn" HorizontalAlignment="Center" Margin="300,-32,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="Information" Foreground="White" FontSize="18" Click="InfoOnBtn_Click" Visibility="Hidden" />
             <Button x:Name="InfoOffBtn" HorizontalAlignment="Center" Margin="300,-32,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="Information" Foreground="#FF979797" FontSize="18" Click="InfoOnBtn_Click" />
-            -->
-        </WrapPanel>
+           
+        </WrapPanel>-->
         <Button x:Name="button2" Content="Server" Grid.Column="2" HorizontalAlignment="Left" Margin="90.627,58,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="button2_Click"/>
         <Button x:Name="button3" Content="Client&#xD;&#xA;" Grid.Column="2" HorizontalAlignment="Left" Margin="90.627,90,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="20" Click="button3_Click"/>
         <WindowsFormsHost HorizontalAlignment="Left" Height="429" Margin="10,87,0,0" VerticalAlignment="Top" Width="592" Name="form_container"/>
