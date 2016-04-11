@@ -29,7 +29,7 @@ namespace WpfApplication1
         }
 
         /// <summary>
-        /// return the filename
+        /// return the truth value
         /// search music title and singer name and album
         /// </summary>
         /// <param name="key">the string user type in search window</param>
@@ -64,12 +64,18 @@ namespace WpfApplication1
         {
             mediaInfo.name_to_list.Add(item.fileName, item);
             mybox.Items.Clear();
-            List<String> plat_list = mediaInfo.print();
-            for (int i = 0; i < plat_list.Count; i++)
-            {
-                mybox.Items.Add(plat_list[i]);
-            }
+            HashSet<String> play_list = mediaInfo.print();
+            general_add(play_list, mybox);
 
+        }
+
+        public static void general_add(HashSet<String> play_list, ListBox selector)
+        {
+            selector.Items.Clear();
+            foreach (String fn in play_list)
+            {
+                selector.Items.Add(fn);
+            }
         }
 
     }

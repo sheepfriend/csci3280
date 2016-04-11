@@ -71,8 +71,8 @@ namespace WpfApplication1
         }
 
         //return a string of info
-         public List<String> print() {
-            List<String> result = new List<String>();
+         public HashSet<String> print() {
+            HashSet<String> result = new HashSet<String>();
             
             foreach(video_info item in name_to_list.Values) { 
                 result.Add(item.fileName);

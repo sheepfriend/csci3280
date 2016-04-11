@@ -184,6 +184,7 @@ namespace WpfApplication1
                 selector.SelectedIndex += 1;
         }
 
+        
         private void btn_add_Click(object sender, RoutedEventArgs e)
         {
              if (mediaInfo == null)
@@ -206,13 +207,8 @@ namespace WpfApplication1
                 }
             }
 
-            
-            List<String> plat_list = mediaInfo.print();
-            selector.Items.Clear();
-            for (int i = 0; i < plat_list.Count; i++)
-            {
-                selector.Items.Add(plat_list[i]);
-            }
+            Utils.general_add(mediaInfo.print(),selector);
+
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -225,12 +221,8 @@ namespace WpfApplication1
             {
                 path = file.FileName;
                 mediaInfo = new media_info(path);
-                List<String> plat_list = mediaInfo.print();
-                selector.Items.Clear();
-                for (int i = 0; i < plat_list.Count; i++)
-                {
-                    selector.Items.Add(plat_list[i]);
-                }
+                HashSet<String> plat_list = mediaInfo.print();
+                Utils.general_add(plat_list, selector);
                 selector.SelectedIndex = -1;
                
                 ((Button)sender).Visibility = Visibility.Hidden;
@@ -241,7 +233,7 @@ namespace WpfApplication1
         private void send_Click(object sender, RoutedEventArgs e)
          {
 
-                 danmuPlayer.addDanmu(message.Text);
+             danmuPlayer.addDanmu(message.Text);
              Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
              {
                  dmkCurt.Shoot(curtain,message.Text);
@@ -392,11 +384,22 @@ namespace WpfApplication1
         {
             String key = SearchBox.Text;
             List<video_info> result = Utils.search_list(key, mediaInfo);
+            HashSet<String> result_name = new HashSet<string>();
+            //List<String> plat_list = mediaInfo.print();
+            //selector.Items.Clear();
+            //for (int i = 0; i < plat_list.Count; i++)
+            //{
+            //    selector.Items.Add(plat_list[i]);
+            //}
+            //List<String> result_name = new List<string>(result.Count + 5); 
             if (result.Count > 0)
             {
                 //本地就有
-                //之后怎么搞？
-
+                //之后怎么搞？ --> 加入结果队列咯=。=
+                foreach( var _ in result )
+                {
+                    result_name.Add(_.fileName);
+                }
             }
             else
             {
@@ -411,8 +414,10 @@ namespace WpfApplication1
                     List<List<video_info>> result_from_others = client.search_key(key);
                     //返回结果：list<某个client的搜索结果>
                     //之后怎么搞？
-                    Console.Out.Write("123");
+
+
                 }
+
             }
         }
 

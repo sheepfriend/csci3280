@@ -31,11 +31,11 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
 
 
 
-        <Button x:Name="button1"  Grid.Row="1" Grid.Column="1" Content="&#xD;&#xA;Create&#xD;&#xA;List&#xD;&#xA;" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="65" Height="53" Click="button1_Click_1" Grid.ColumnSpan="2"/>
+        <Button x:Name="button1"  Grid.Row="1" Grid.Column="1" Content="Create &#xD;&#xA;List" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="65" Height="53" Click="button1_Click_1" Grid.ColumnSpan="2"/>
         <Button  Height="28" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="71.627,10,0,0" Name="btn_add" VerticalAlignment="Top" Width="48"  Click="btn_add_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
             <Image Width="40" Height="20" Source="Resources/add.png" />
         </Button>
-        <Button Name="button"  Grid.Row="1" Grid.Column="1" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="61" Margin="4,58,0,0" Height="52" Click="Load_Click" Grid.ColumnSpan="2"/>
+        <Button Name="button"  Grid.Row="1" Grid.Column="1" Content="Load&#xD;&#xA;List" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="0,58,0,0" Height="52" Click="Load_Click" Grid.ColumnSpan="2"/>
         <Label  Height="29" Grid.Row="0" HorizontalAlignment="Left" Margin="5.524,15.396,0,0" Name="label1" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2" Grid.Column="1">
             <Image Width="150" Height="30" Source="Resources/playlist.png" />
         </Label>
