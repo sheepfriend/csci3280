@@ -72,7 +72,7 @@ namespace WpfApplication1
         }
 
 
-        public static List<String> types = new List<String>(Client.types);
+        public static new List<String> types = new List<String>(Client.types);
 
         public override void run()
         {

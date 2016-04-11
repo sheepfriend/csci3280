@@ -42,7 +42,7 @@ namespace WpfApplication1
         public String address;
         public bool isLocal;
         public static int start;
-        public WavFormat format;
+        //public WavFormat format;
 
         public Native.WaveDelegate bufferProc = new Native.WaveDelegate(WaveOutBuffer.WaveOutProc);
 
