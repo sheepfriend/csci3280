@@ -207,7 +207,6 @@ namespace WpfApplication1
                 }
             }
 
-            
             List<String> plat_list = mediaInfo.print();
             selector.Items.Clear();
             for (int i = 0; i < plat_list.Count; i++)

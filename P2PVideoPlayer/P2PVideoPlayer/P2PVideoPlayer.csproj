@@ -106,6 +106,7 @@
     <Compile Include="Package.cs" />
     <Compile Include="TextBlock.cs" />
     <Compile Include="ThreadWithPort.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="VideoStream.cs" />
     <Compile Include="video_info.cs" />
     <Compile Include="WaveOutBuffer.cs" />
