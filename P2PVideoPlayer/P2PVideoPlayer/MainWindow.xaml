@@ -51,32 +51,31 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
         <Button x:Name="Back" Content="Back" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Right" Margin="0,20,13,0" VerticalAlignment="Top" Width="50" Grid.Column="2"  Height="20" Foreground="White" FontSize="14"/>
 
 
-        <Button  Height="43" HorizontalAlignment="Left" Margin="222,20,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Row="1">
-
+        <Button  Height="43" HorizontalAlignment="Left" Margin="222,20,0,0" Name="btn_pre" VerticalAlignment="Top" Width="38" Click="btn_pre_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Image Height="16" Width="30" Source="Resources/previous.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button  Height="43" HorizontalAlignment="Left" Margin="398,20,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Row="1">
+        <Button  Height="43" HorizontalAlignment="Left" Margin="398,20,0,0" Name="btn_next" VerticalAlignment="Top" Width="38" Click="btn_next_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Image Height="16" Width="30" Source="Resources/next.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button Height="43" HorizontalAlignment="Left" Margin="310,20,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Row="1">
+        <Button Height="43" HorizontalAlignment="Left" Margin="310,20,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/play.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button Height="43" HorizontalAlignment="Left" Margin="266,20,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Row="1">
+        <Button Height="43" HorizontalAlignment="Left" Margin="266,20,0,0" Name="btn_pause" VerticalAlignment="Top" Width="38" Click="btn_pause_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/pause.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button  Height="43" HorizontalAlignment="Left" Margin="354,20,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Row="1">
+        <Button  Height="43" HorizontalAlignment="Left" Margin="354,20,0,0" Name="btn_stop" VerticalAlignment="Top" Width="38" Click="btn_stop_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/stop.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
@@ -85,21 +84,22 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
 
 
         <TextBox Name="message" Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Left" Height="30" Margin="27,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="429" Background="#4C464646" Foreground="#FFC3C3C3"/>
-        <Button Name="send"   Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="467,97,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-            <StackPanel>
+        <Button Name="send" Content="Send"   Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="467,97,0,0" VerticalAlignment="Top" Width="34" Height="30" Click="send_Click" BorderThickness="0" >
+            <!--<StackPanel>
                 <Image Height="29" Width="30" Source="Resources/send.png"/>
-                <!--<TextBlock>Disconnect from Server</TextBlock>-->
-            </StackPanel>
+                <TextBlock>Send</TextBlock>
+            </StackPanel>-->
         </Button>
 
         <!--<Slider x:Name="progressSlider" HorizontalAlignment="Center" Margin="36,0,298,59" VerticalAlignment="Bottom" Width="425" PreviewMouseLeftButtonUp="progressSlider_PreviewMouseLeftButtonUp" PreviewMouseLeftButtonDown="progressSlider_PreviewMouseLeftButtonDown" ValueChanged="progressSlider_ValueChanged"/>-->
-        <Label x:Name="TotalTimeLabel"  Grid.Row="1" Grid.Column="0" Content="00:00" HorizontalAlignment="Center" Margin="462,0,106,62" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Foreground="White" ForceCursor="True" Width="44" Height="25"/>
+        <!--<Label x:Name="TotalTimeLabel"  Grid.Row="1" Grid.Column="0" Content="00:00" HorizontalAlignment="Center" Margin="462,0,106,62" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Foreground="White" ForceCursor="True" Width="44" Height="25"/>
         <Label x:Name="CurrentTimeLabel"  Grid.Row="1" Grid.Column="0" Content="00:00" HorizontalAlignment="Center" Margin="28,0,542,61" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Foreground="White" ForceCursor="True" Width="42" Height="25"/>
         <Slider x:Name="progressSlider" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="90,0,158,64" VerticalAlignment="Bottom" Width="364" Height="18"/>
+        -->
         <!--<Slider x:Name="volumeSlider" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="79,359,617,0" Width="100" Maximum="100" ValueChanged="AdjustVolume" Value="100" RenderTransformOrigin="0.37,5.298"/>-->
-        <Label Content="Volume" Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Center" Margin="16,35,529,0" VerticalAlignment="Top" Foreground="White" HorizontalContentAlignment="Right" Height="25" Width="67"/>
+        <!--<Label Content="Volume" Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Center" Margin="16,35,529,0" VerticalAlignment="Top" Foreground="White" HorizontalContentAlignment="Right" Height="25" Width="67"/>
         <Slider x:Name="volumeSlider"  Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="88,36,424,0" Width="100" Maximum="100"  Value="100" RenderTransformOrigin="0.37,5.298" Height="18"/>
-
+        -->
         <!--<TextBox x:Name="SearchBox" HorizontalAlignment="Left" Height="28" Margin="481,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="129" KeyDown="SearchBox_KeyDown" Background="#4C464646" Foreground="#FFC3C3C3"/>-->
         <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Height="37" Margin="0,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"  Background="#4C464646" Foreground="#FFC3C3C3" Grid.Column="1" Grid.ColumnSpan="2"/>
         <!--<Button x:Name="Search" HorizontalAlignment="Left" Margin="623,36,0,0" VerticalAlignment="Top" Width="80" Click="Search_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" >-->
@@ -108,7 +108,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
         </Button>
 
         <WrapPanel HorizontalAlignment="Center" Height="65" VerticalAlignment="Top" Width="612" Background="#99000000">
-            <Button x:Name="LyricsBtn" HorizontalAlignment="Center" Margin="20,15,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="{DynamicResource Lyrics_off}" />
+            <!--<Button x:Name="LyricsBtn" HorizontalAlignment="Center" Margin="20,15,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="{DynamicResource Lyrics_off}" />-->
             <!--
             <Button x:Name="speedButton" HorizontalAlignment="Center" Margin="450,-30,0,0" VerticalAlignment="Center" Width="120" Click="speedButton_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Content="{DynamicResource Chipmunk_off}" />
             <Button x:Name="ArtworkBtn" HorizontalAlignment="Center" Margin="150,-32,0,0" VerticalAlignment="Top" Width="100" IsHitTestVisible="True" Click="LyricsDisableBtn_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="30" Content="{DynamicResource Artwork_on}" />
@@ -118,7 +118,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
         </WrapPanel>
         <Button x:Name="button2" Content="Server" Grid.Column="2" HorizontalAlignment="Left" Margin="90.627,58,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="button2_Click"/>
         <Button x:Name="button3" Content="Client&#xD;&#xA;" Grid.Column="2" HorizontalAlignment="Left" Margin="90.627,90,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="20" Click="button3_Click"/>
-        <WindowsFormsHost HorizontalAlignment="Left" Height="506" Margin="10,10,0,0" VerticalAlignment="Top" Width="592" Name="form_container"/>
+        <WindowsFormsHost HorizontalAlignment="Left" Height="429" Margin="10,87,0,0" VerticalAlignment="Top" Width="592" Name="form_container"/>
 
 
     </Grid>
