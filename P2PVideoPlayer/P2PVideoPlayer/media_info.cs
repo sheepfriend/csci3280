@@ -35,18 +35,24 @@ namespace WpfApplication1
       
 
         //add a new vedio into the list
-        //may need deduplication?
+  
         public void add(String path) {
+            video_info tmp = null;
+            char[] separatingChars1 = { '\\', '/' };
+            string[] Names = path.Split(separatingChars1, StringSplitOptions.RemoveEmptyEntries);
+            string fileName = Names[Names.Length - 1];
             //deduplication goes first
-            foreach(video_info myvideo in name_to_list.Values)
+            foreach (video_info myvideo in name_to_list.Values)
             {
-                if(myvideo.path == path)
+                if(myvideo.fileName == fileName)
                 {
-                    MessageBox.Show("Duplication detected.", "Error");
-                    return;
+                    tmp = myvideo;
+                    break;
                 }
             }
-            video_info tmp = new video_info();
+            //may be a real new one
+            if(tmp == null)
+                tmp = new video_info();
             tmp.readFromAddr(path);
             name_to_list.Add(tmp.fileName, tmp);
             

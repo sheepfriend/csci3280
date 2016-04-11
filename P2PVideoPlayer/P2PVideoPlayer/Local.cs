@@ -7,7 +7,7 @@ namespace WpfApplication1
 {
     class Local
     {
-        public static String ref_addr = "";
+        public static String ref_addr = System.IO.Directory.GetCurrentDirectory();
         public static bool exist(String file)
         {
             return System.IO.File.Exists(ref_addr+ file);
