@@ -31,7 +31,9 @@ namespace WpfApplication1
                                          "danmu_client",
                                          "user_exit",
                                          "pmm_ask",
-                                         "pmm_resp"
+                                         "pmm_resp",
+                                         "search",
+                                         "search_resp"
                                        };
 
 
@@ -45,6 +47,8 @@ namespace WpfApplication1
         public static List<Connector> conn_user_exit;
         public static List<Connector> conn_pmm_ask;
         public static List<Connector> conn_pmm_resp;
+        public static List<Connector> conn_search;
+        public static List<Connector> conn_search_resp;
 
         public static List<String> pmm_client;
         public static int pmm_has,pmm_no;
@@ -53,6 +57,34 @@ namespace WpfApplication1
         public static int pmm_writing, pmm_finish;
         public static List<int> pmm_haha;
         public static int count;
+        public static List<List<video_info>> search_result;
+        public static int search_asked;
+        public static int search_reply;
+
+        public static media_info media;
+
+        public List<List<video_info>> search_key(String key)
+        {
+            search_result = new List<List<video_info>>();
+            search_reply = 0;
+            search_asked = 0;
+            for (int i = 0; i < ip_list.Count; i++)
+            {
+                if (ip_list[i] != self_ip && ip_list[i] != "")
+                {
+                    video_asked++;
+                    Connector conn = find_conn(conn_search_resp, ip_list[i]);
+                    Package pack = new Package("search");
+                    pack.header.Add(key);
+                    conn.send(pack);
+                    search_asked++;
+                }
+            }
+
+            while (search_asked > search_reply) { }
+
+            return search_result;
+        }
 
         public void askPMM(String filename)
         {
@@ -501,6 +533,12 @@ namespace WpfApplication1
                             break;
                         case "pmm_resp":
                             conn_pmm_resp.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        case "search":
+                            conn_search.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        case "search_resp":
+                            conn_search_resp.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
                             break;
                         default:
                             break;

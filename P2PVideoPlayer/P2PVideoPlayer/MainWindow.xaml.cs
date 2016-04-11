@@ -60,7 +60,6 @@ namespace WpfApplication1
         }
 
 
-
         public void wait_to_finish()
         {
             while (true)
@@ -332,7 +331,7 @@ namespace WpfApplication1
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            client = new ClientServer();
+            client = new ClientServer(ref mediaInfo);
             client.run();
             if (player == null)
             {
@@ -346,7 +345,7 @@ namespace WpfApplication1
         {
             //title = InputBox("What is the title of the music?",fileName+": Title","N/A");
             string ser_ip = Interaction.InputBox("Input Server IP Address:","IP Address:","N/A");
-            client = new ClientOnly(ser_ip);
+            client = new ClientOnly(ser_ip, ref mediaInfo);
             client.run();
             if (player == null)
             {
@@ -386,6 +385,34 @@ namespace WpfApplication1
             {
                 String filename = Interaction.InputBox("Input ppm file name (include .ppm)", "filename:", "N/A");
                 client.askPMM(filename);
+            }
+        }
+
+        private void search_Click(object sender, RoutedEventArgs e)
+        {
+            String key = SearchBox.Text;
+            List<video_info> result = Utils.search_list(key, mediaInfo);
+            if (result.Count > 0)
+            {
+                //本地就有
+                //之后怎么搞？
+
+            }
+            else
+            {
+                //本地没有，向别人请求
+                if (client == null)
+                {
+                    //没有和别人连接
+                    MessageBox.Show("Please connect to server first!");
+                }
+                else
+                {
+                    List<List<video_info>> result_from_others = client.search_key(key);
+                    //返回结果：list<某个client的搜索结果>
+                    //之后怎么搞？
+                    Console.Out.Write("123");
+                }
             }
         }
 

@@ -33,8 +33,13 @@ namespace WpfApplication1
             DanmuList.appendDanmu(num, content, Local.ref_addr+@"src\danmu\"+tmp[tmp.Length-1]);
         }
 
-        public ClientServer()
+        public ClientServer(ref media_info mi)
         {
+            media = mi;
+            conn_search = new List<Connector>();
+            conn_search_resp = new List<Connector>();
+            conn_pmm_ask = new List<Connector>();
+            conn_pmm_resp = new List<Connector>();
             thread_check_record = new List<ThreadWithPort>();
             conn_user_exit = new List<Connector>();
             video_stream_fractions = new List<byte[]>(NUM_FRACTION);

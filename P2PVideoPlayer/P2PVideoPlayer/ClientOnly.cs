@@ -45,8 +45,13 @@ namespace WpfApplication1
 
         public static String addr;
 
-        public ClientOnly(string input_ip)
+        public ClientOnly(string input_ip,ref media_info mi)
         {
+            media = mi;
+            conn_search = new List<Connector>();
+            conn_search_resp = new List<Connector>();
+            conn_pmm_ask = new List<Connector>();
+            conn_pmm_resp = new List<Connector>();
             conn_user_exit = new List<Connector>();
             conn_danmu_client = new List<Connector>();
             conn_danmu_server = new List<Connector>();

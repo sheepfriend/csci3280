@@ -4,12 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using  Microsoft.VisualBasic;
+using Microsoft.VisualBasic;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 
 namespace WpfApplication1
 {
-    class video_info
+    [Serializable()]
+    class video_info : ISerializable
     {
         public String fileName {get; set; }
         public String title { get; set; }
@@ -26,7 +30,26 @@ namespace WpfApplication1
             album = "N/A";
             path = "N/A";
         }
-                    
+        
+        public video_info(SerializationInfo info, StreamingContext ctxt)
+        {
+            fileName = (String)info.GetValue("fileName", typeof(String));
+            title = (String)info.GetValue("title", typeof(String));
+            author = (String)info.GetValue("author", typeof(String));
+            album = (String)info.GetValue("album", typeof(String));
+            path = (String)info.GetValue("path", typeof(String));
+            id = (String)info.GetValue("id", typeof(String));
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            info.AddValue("fileName", fileName);
+            info.AddValue("title",title);
+            info.AddValue("author",author);
+            info.AddValue("album",album);
+            info.AddValue("path",path);
+            info.AddValue("id",id);
+        }
          
         //load a line of input
         //Filename:'1.wav' 'title' 'author' 'album'
@@ -66,9 +89,9 @@ namespace WpfApplication1
             string[] name = text.Split(separatingChars1, System.StringSplitOptions.RemoveEmptyEntries);
             fileName = name[name.Length - 1];
             //ask for title, author, album
-            title = Interaction.InputBox("What is the title of the music?",fileName+": Title","N/A");
-            author = Interaction.InputBox("Who is the author of the music?", fileName + ": Author", "N/A");
-            album = Interaction.InputBox("What is the album of the music?", fileName + ": Album", "N/A");
+            //title = InputBox("What is the title of the music?",fileName+": Title","N/A");
+            //author = InputBox("Who is the author of the music?", fileName + ": Author", "N/A");
+            //album = InputBox("What is the album of the music?", fileName + ": Album", "N/A");
             path = text;
             XmlNodeList l = doc.SelectNodes("/Karaoke/video", media_info.man);
             XmlNode last = l[l.Count - 1];

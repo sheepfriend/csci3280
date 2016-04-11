@@ -114,11 +114,56 @@ namespace WpfApplication1
                 case "pmm_resp":
                     a = new Thread(listen_pmm_resp);
                     break;
+                case "search":
+                    a = new Thread(listen_search);
+                    break;
+                case "search_resp":
+                    a = new Thread(listen_search_resp);
+                    break;
                 default:
                     a = new Thread(def);
                     break;
             }
             a.Start();
+        }
+
+        public void listen_search() {
+            while (true)
+            {
+                Package pack = conn.recv();
+                if (pack == null) { continue; }
+                if (pack.type == "search_result")
+                {
+                    MemoryStream stream = new MemoryStream(pack.data);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    stream.Position = 0;
+                    Client.search_result.Add((List<video_info>)formatter.Deserialize(stream));
+                    Client.search_reply++;
+                }
+            }
+        }
+
+        public void listen_search_resp()
+        {
+            while (true)
+            {
+                Package pack = conn.recv();
+                if (pack == null) { continue; }
+                if (pack.type == "search")
+                {
+                    List<video_info> result = Utils.search_list(pack.header[0],Client.media);
+                    MemoryStream stream = new MemoryStream();
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, result);
+                    byte[] data = stream.ToArray();
+
+                    Package pack_resp=new Package("search_result");
+                    Connector conn_resp=Client.find_conn(Client.conn_search,pack.from);
+                    pack_resp.data=data;
+                    conn_resp.send(pack_resp);
+                }
+            }
+
         }
 
         public void listen_pmm_ask()

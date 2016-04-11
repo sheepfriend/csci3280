@@ -103,8 +103,8 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
         <!--<TextBox x:Name="SearchBox" HorizontalAlignment="Left" Height="28" Margin="481,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="129" KeyDown="SearchBox_KeyDown" Background="#4C464646" Foreground="#FFC3C3C3"/>-->
         <TextBox x:Name="SearchBox" HorizontalAlignment="Left" Height="37" Margin="0,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"  Background="#4C464646" Foreground="#FFC3C3C3" Grid.Column="1" Grid.ColumnSpan="2"/>
         <!--<Button x:Name="Search" HorizontalAlignment="Left" Margin="623,36,0,0" VerticalAlignment="Top" Width="80" Click="Search_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" >-->
-        <Button x:Name="Search" HorizontalAlignment="Left" Margin="47.476,21,0,0" VerticalAlignment="Top" Width="80"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" Grid.Column="2" >
-            <Image Width="68" Height="20" Source="Resources/search.png" RenderTransformOrigin="0.838,-0.108" />
+        <Button x:Name="Search" Click="search_Click" HorizontalAlignment="Left" Margin="47.476,21,0,0" VerticalAlignment="Top" Width="80"  BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Height="20" Grid.Column="2" >
+            <Image Width="58" Height="49" Source="Resources/search.png" RenderTransformOrigin="0.838,-0.108" />
         </Button>
 
         <!--<WrapPanel HorizontalAlignment="Center" Height="65" VerticalAlignment="Top" Width="612" Background="#99000000">

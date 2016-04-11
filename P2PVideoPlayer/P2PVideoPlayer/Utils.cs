@@ -9,6 +9,24 @@ namespace WpfApplication1
 {
     static class Utils
     {
+        public static List<video_info> search_list(string key, media_info list)
+        {
+            List<video_info> result = new List<video_info>();
+
+            //while result 
+            if (list == null || list.name_to_list==null)
+            {
+                return result;
+            }
+            foreach (video_info tmp in list.name_to_list.Values)
+            {
+                if (search(key, tmp))
+                {
+                    result.Add(tmp);
+                }
+            }
+            return result;
+        }
 
         /// <summary>
         /// return the filename
@@ -28,7 +46,7 @@ namespace WpfApplication1
             {
                 Regex regex = new Regex(mykey, RegexOptions.IgnoreCase);
 
-                result = result || regex.IsMatch(item.album) || regex.IsMatch(item.author) || regex.IsMatch(item.title);
+                result = result || regex.IsMatch(item.album) || regex.IsMatch(item.author) || regex.IsMatch(item.title) || regex.IsMatch(item.fileName);
                 //return true when result becomes true
                 if (result)
                     return result;
