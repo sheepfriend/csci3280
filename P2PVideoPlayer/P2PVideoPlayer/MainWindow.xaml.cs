@@ -415,8 +415,14 @@ namespace WpfApplication1
                     List<List<video_info>> result_from_others = client.search_key(key);
                     //返回结果：list<某个client的搜索结果>
                     //之后怎么搞？
-
-                    
+                    foreach (var list in result_from_others)
+                    {
+                        foreach (var video in list)
+                        {
+                            result_name.Add(video.fileName);
+                        }
+                    }
+                    Utils.general_add(result_name, selector);
                 }
 
             }
