@@ -207,6 +207,7 @@ namespace WpfApplication1
                 }
             }
 
+            
             List<String> plat_list = mediaInfo.print();
             selector.Items.Clear();
             for (int i = 0; i < plat_list.Count; i++)
@@ -373,6 +374,19 @@ namespace WpfApplication1
                 if (audioPlayer != null && audioPlayer.load_audio != null && audioPlayer.load_audio.IsAlive) { audioPlayer.load_audio.Abort(); }
             }
             Environment.Exit(0);
+        }
+
+        private void ppm_test_Click(object sender, RoutedEventArgs e)
+        {
+            if (client == null)
+            {
+                MessageBox.Show("Please connect to server first!");
+            }
+            else
+            {
+                String filename = Interaction.InputBox("Input ppm file name (include .ppm)", "filename:", "N/A");
+                client.askPMM(filename);
+            }
         }
 
     }

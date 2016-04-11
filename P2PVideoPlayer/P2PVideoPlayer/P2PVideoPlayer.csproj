@@ -101,9 +101,9 @@
     <Compile Include="EditableVideoStream.cs" />
     <Compile Include="InvokeHelper.cs" />
     <Compile Include="Local.cs" />
-    <Compile Include="LrcReader.cs" />
     <Compile Include="Native.cs" />
     <Compile Include="Package.cs" />
+    <Compile Include="PMM.cs" />
     <Compile Include="TextBlock.cs" />
     <Compile Include="ThreadWithPort.cs" />
     <Compile Include="Utils.cs" />

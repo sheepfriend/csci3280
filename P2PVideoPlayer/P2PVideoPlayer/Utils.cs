@@ -28,7 +28,7 @@ namespace WpfApplication1
             {
                 Regex regex = new Regex(mykey, RegexOptions.IgnoreCase);
 
-                result = result||regex.IsMatch(item.album) || regex.IsMatch(item.author) || regex.IsMatch(item.title);
+                result = result || regex.IsMatch(item.album) || regex.IsMatch(item.author) || regex.IsMatch(item.title);
                 //return true when result becomes true
                 if (result)
                     return result;

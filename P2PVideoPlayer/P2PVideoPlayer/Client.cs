@@ -21,6 +21,115 @@ namespace WpfApplication1
         /* 每台机器固定的ip嘛。。。*/
         /* 每台机器固定的ip嘛。。。*/
         //get the local ip
+
+
+        public static String[] types = { "video_header", 
+                                         "audio_header",
+                                         "video_data",
+                                         "audio_data",
+                                         "danmu_server",
+                                         "danmu_client",
+                                         "user_exit",
+                                         "pmm_ask",
+                                         "pmm_resp"
+                                       };
+
+
+
+        public static List<Connector> conn_video_data;
+        public static List<Connector> conn_audio_data;
+        public static List<Connector> conn_video_header;
+        public static List<Connector> conn_audio_header;
+        public static List<Connector> conn_danmu_server;
+        public static List<Connector> conn_danmu_client;
+        public static List<Connector> conn_user_exit;
+        public static List<Connector> conn_pmm_ask;
+        public static List<Connector> conn_pmm_resp;
+
+        public static List<String> pmm_client;
+        public static int pmm_has,pmm_no;
+        public static List<byte[]> pmm_data;
+        public static List<String> pmm_header;
+        public static int pmm_writing, pmm_finish;
+        public static List<int> pmm_haha;
+        public static int count;
+
+        public void askPMM(String filename)
+        {
+            pmm_no=0;
+            pmm_has=0;
+            pmm_finish=0;
+            pmm_writing=0;
+            pmm_data = new List<byte[]>();
+            pmm_haha = new List<int>();
+            pmm_client = new List<string>();
+            count = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                pmm_data.Add(new byte[0]);
+                pmm_haha.Add(0);
+            }
+            int pmm_asked=0;
+            for (int i = 0; i < ip_list.Count; i++)
+            {
+                if (ip_list[i] != self_ip && ip_list[i] != "")
+                {
+                    video_asked++;
+                    Connector conn = find_conn(conn_pmm_resp, ip_list[i]);
+                    Package pack = new Package("ask_pmm");
+                    pack.header.Add(filename);
+                    conn.send(pack);
+                    pmm_asked++;
+                }
+            }
+
+            while (pmm_has + pmm_no < pmm_asked) { }
+
+            if (pmm_no == pmm_asked) { return; }
+            PMM pmm = new PMM(Int32.Parse(pmm_header[0]), Int32.Parse(pmm_header[1]), pmm_header[2]);
+
+            while (count < 10)
+            {
+                Connector conn = find_conn(conn_pmm_resp, pmm_client[count % pmm_client.Count]);
+                Package pack = new Package("request_pmm");
+                pack.header.Add("" + count);
+                conn.send(pack);
+                while (pmm_haha[count]==0) { }
+                count++;
+            }
+
+            while (true)
+            {
+                int tag = 0;
+                for (int i = 0; i < 10; i++)
+                {
+                    if (pmm_haha[i] == 0)
+                    {
+                        tag = 1;
+                        continue;
+                    }
+                }
+                //finish receiving all data
+                if (tag == 0)
+                {
+                    int length = 0;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        length += pmm_data[i].Length;
+                    }
+                    pmm.data = new byte[length];
+                    int position=0;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Buffer.BlockCopy(pmm_data[i], 0, pmm.data, position, pmm_data[i].Length);
+                        position += pmm_data[i].Length;
+                    }
+                    pmm.writeToFile(filename);
+                    return;
+                }
+            }
+        }
+
         public static string GetLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -194,17 +303,6 @@ namespace WpfApplication1
         public static int audio_has, audio_no, audio_end, audio_asked, audio, audio_writing;
 
 
-
-        public static String[] types = { "video_header", 
-                                         "audio_header",
-                                         "video_data",
-                                         "audio_data",
-                                         "danmu_server",
-                                         "danmu_client",
-                                         "user_exit"
-                                       };
-
-
         /* 一般弹幕就这俩了
          * askDanmuList: client：向server请求一个文件的弹幕
          *               server：读本地的弹幕文件
@@ -294,15 +392,6 @@ namespace WpfApplication1
 
         public bool Enabled;
         /* Enabled默认false，当client第一次更新连接表的时候会变成true */
-
-
-        public static List<Connector> conn_video_data;
-        public static List<Connector> conn_audio_data;
-        public static List<Connector> conn_video_header;
-        public static List<Connector> conn_audio_header;
-        public static List<Connector> conn_danmu_server;
-        public static List<Connector> conn_danmu_client;
-        public static List<Connector> conn_user_exit;
 
 
         /*
@@ -407,6 +496,12 @@ namespace WpfApplication1
                         case "user_exit":
                             conn_user_exit.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
                             break;
+                        case "pmm_ask":
+                            conn_pmm_ask.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
+                        case "pmm_resp":
+                            conn_pmm_resp.Add(new Connector(clients[i][1], Int32.Parse(clients[i][2]), Int32.Parse(clients[i][3])));
+                            break;
                         default:
                             break;
                     }
@@ -414,6 +509,7 @@ namespace WpfApplication1
                     if (new_conn == Client.types.Length + NUM_FRACTION - 1)
                     {
                         new_conn = 0;
+                        if (ip_list.IndexOf(clients[i][1])==-1)
                         ip_list.Add(clients[i][1]);
                     }
                 }

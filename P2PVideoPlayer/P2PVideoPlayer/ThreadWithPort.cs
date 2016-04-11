@@ -44,6 +44,9 @@ namespace WpfApplication1
 
         public WaveOutStream audio_resp;
 
+        public PMM pmm;
+        public List<byte[]> pmm_data;
+
         public ThreadWithPort(String ip, int num1, int num2, String str)
         {
             reader = new BitmapReader();
@@ -105,6 +108,12 @@ namespace WpfApplication1
                 case "user_exit":
                     a = new Thread(listen_exit);
                     break;
+                case "pmm_ask":
+                    a = new Thread(listen_pmm_ask);
+                    break;
+                case "pmm_resp":
+                    a = new Thread(listen_pmm_resp);
+                    break;
                 default:
                     a = new Thread(def);
                     break;
@@ -112,6 +121,86 @@ namespace WpfApplication1
             a.Start();
         }
 
+        public void listen_pmm_ask()
+        {
+            while (true)
+            {
+                Package pack = conn.recv();
+                if (pack == null) { continue;}
+                if (pack.type == "resp_pmm")
+                {
+                    int num = Int32.Parse(pack.header[0]);
+                    Client.pmm_data[num] = pack.data;
+                    Client.pmm_haha[num] = 1;
+                }
+                else if (pack.type == "has_pmm")
+                {
+                    Client.pmm_has += 1;
+                    Client.pmm_client.Add(pack.from);
+                    if (Client.pmm_writing == 0)
+                    {
+                        Client.pmm_writing = 1;
+                        Client.pmm_header = pack.header;
+                        Client.pmm_finish = 1;
+                    }
+                }
+                else if (pack.type == "no_pmm")
+                {
+                    Client.pmm_no += 1;
+                }
+            }
+        }
+
+        public void listen_pmm_resp()
+        {
+            while (true)
+            {
+
+                Package pack = conn.recv();
+                if (pack == null) { continue; }
+                if (pack.type == "ask_pmm")
+                {
+                    if (Local.exist(pack.header[0]))
+                    {
+                        pmm = PMM.loadFile(pack.header[0]);
+                        Package pack_resp = new Package("has_pmm");
+                        Connector conn_resp = Client.find_conn(Client.conn_pmm_ask, pack.from);
+                        pack_resp.header.Add("" + pmm.width);
+                        pack_resp.header.Add("" + pmm.height);
+                        pack_resp.header.Add(pmm.method);
+
+                        pmm_data = new List<byte[]>();
+                        int position = 0;
+                        int len = pmm.data.Length / 10;
+
+                        for (int i = 0; i < 9; i++)
+                        {
+                            pmm_data.Add(new byte[len]);
+                            Buffer.BlockCopy(pmm.data, position, pmm_data[i], 0, len);
+                            position += len;
+                        }
+                        pmm_data.Add(new byte[pmm.data.Length - position]);
+                        Buffer.BlockCopy(pmm.data, position, pmm_data[9], 0, pmm.data.Length - position);
+
+                        conn_resp.send(pack_resp);
+                    }
+                    else
+                    {
+                        Package pack_resp = new Package("no_pmm");
+                        Connector conn_resp = Client.find_conn(Client.conn_pmm_ask, pack.from);
+                        conn_resp.send(pack_resp);
+                    }
+                }
+                else if (pack.type == "request_pmm")
+                {
+                    Package pack_resp = new Package("resp_pmm");
+                    Connector conn_resp = Client.find_conn(Client.conn_pmm_ask, pack.from);
+                    pack_resp.header.Add(pack.header[0]);
+                    pack_resp.data = pmm_data[Int32.Parse(pack.header[0])];
+                    conn_resp.send(pack_resp);
+                }
+            }
+        }
 
         public void listen_exit()
         {
