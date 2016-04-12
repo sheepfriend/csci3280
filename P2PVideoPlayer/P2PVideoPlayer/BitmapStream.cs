@@ -37,7 +37,7 @@ namespace WpfApplication1
             if (position < stream.Count)
             {
                 position++;
-                return stream[position-1];
+                return stream[position-1];  
             }
             else
             {

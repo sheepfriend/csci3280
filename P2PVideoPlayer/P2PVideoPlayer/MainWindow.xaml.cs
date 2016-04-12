@@ -104,7 +104,6 @@ namespace WpfApplication1
                 
                 bool not_same = (mediaInfo.currentPlay==null)||(mediaInfo.currentPlay.fileName != selector.SelectedItem.ToString());
                 
-                Console.WriteLine(not_same);
                 if(not_same && waitToFinish!= null && waitToFinish.IsAlive)
                 {
                     stop();
@@ -113,6 +112,7 @@ namespace WpfApplication1
                 //if not playing, or choose another file.
                 if (!isPlaying || not_same)
                 {
+
                     //change currentplay only when play it.
                     mediaInfo.select_play(selector.SelectedItem.ToString());
                     String filename = selector.SelectedItem.ToString();
@@ -134,6 +134,7 @@ namespace WpfApplication1
                         hasAudio = false;
                     }
                     player.play();
+                    isPlaying = true;
                     if (hasAudio)
                     {
                         audioPlayer.play();

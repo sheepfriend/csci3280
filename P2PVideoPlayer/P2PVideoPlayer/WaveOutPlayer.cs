@@ -100,7 +100,8 @@ namespace WpfApplication1
         {
             if (isPaused == 1) { return; }
             isPaused = 1;
-            load_audio.Abort();
+            if(load_audio!=null)
+                load_audio.Abort();
         }
 
         public void stop()

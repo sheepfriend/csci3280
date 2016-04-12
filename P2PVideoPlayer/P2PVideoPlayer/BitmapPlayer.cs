@@ -21,11 +21,12 @@ using AForge;
 using AForge.Video.FFMPEG;
 using AForge.Video.VFW;
 
+
 namespace WpfApplication1
 {
-
     class BitmapPlayer
     {
+        const int buffer_num = 4;
         public PictureBox image_control;
         public WindowsFormsHost form_container;
 
@@ -173,8 +174,7 @@ namespace WpfApplication1
             //List<BitmapStream>
             //while (bitmap_stream.Count < 2) { Thread.Sleep(3000); }
             bitmap = bitmap_stream[0].read();
-            Console.WriteLine("read!");
-
+            
             //播完了
             if (bitmap != null) { }
             else if (reader.finish == 1 && bitmap == null)
@@ -207,7 +207,8 @@ namespace WpfApplication1
             //两个BitmapStream的时候这个function就卡住了
             while (true)
             {
-                while (bitmap_stream.Count >= 2)
+                //load 4 buffers
+                while (bitmap_stream.Count >= buffer_num)
                 {
                     Thread.Sleep(200);
                     if (reader.finish == 1) { return; }
