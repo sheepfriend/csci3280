@@ -89,7 +89,7 @@ namespace WpfApplication1
                 //调整窗口大小
                 form_container.Height = Int32.Parse(header[1]);
                 form_container.Width = Int32.Parse(header[2]);
-                window.Height = 710>Int32.Parse(header[1])+300?710:Int32.Parse(header[1])+300;
+                window.Height = 710 > Int32.Parse(header[1]) + 300 ? 710 : Int32.Parse(header[1]) + 300;
                 window.Width = 820 > Int32.Parse(header[2]) + 300 ? 820 : Int32.Parse(header[2]) + 300;
 
                 // window.Height = form_container.Height + 50;
@@ -97,7 +97,7 @@ namespace WpfApplication1
 
                 //给第一个留时间缓冲,等待缓存
                 start = 0;
-                while (bitmap_stream.Count < 2) { }
+                while (bitmap_stream.Count < 2) { Thread.Sleep(300); }
                 start = 1;
             }
             else
@@ -106,7 +106,7 @@ namespace WpfApplication1
                 isLocal = false;
                 header = client.askVideoHeader(address);
 
-                if (header != null && header.Count>0)
+                if (header != null && header.Count > 0)
                 {
                     //设置同步
                     //reader.bmpPerStream = Int32.Parse(header[0]);
@@ -139,34 +139,21 @@ namespace WpfApplication1
          */
         public void loadVideo()
         {
-
-            if (isPaused == 0)
+            //重新开始
+            /*
+             * reader读取载入的文件 名 
+             * 不是本地文件：header = null （后面没写完呢）
+             * 是本地文件：header里有数据（长宽和播放速度，或者有需要还可以往里扔）
+             */
+            isPaused = 0;
+            if (header != null)
             {
-                //重新开始
-                /*
-                 * reader读取载入的文件 名 
-                 * 不是本地文件：header = null （后面没写完呢）
-                 * 是本地文件：header里有数据（长宽和播放速度，或者有需要还可以往里扔）
-                 */
-                if (header != null)
-                {
-                    //header (List<String>): 
-                    // [0] frameRate
-                    // [1] Height
-                    // [2] Width
-                    timer = new System.Timers.Timer(810 / Int32.Parse(header[0]));
-                    bitmapPerSec = Int32.Parse(header[0]);
-                    timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
-                    timer.Enabled = true;
-                }
-            }
-            else
-            {
-                //暂停继续
-                isPaused = 0;
-
-                //while (bitmap_stream.Count == 0) { }
+                //header (List<String>): 
+                // [0] frameRate
+                // [1] Height
+                // [2] Width
                 timer = new System.Timers.Timer(810 / Int32.Parse(header[0]));
+                bitmapPerSec = Int32.Parse(header[0]);
                 timer.Elapsed += new System.Timers.ElapsedEventHandler(playNextBitmap);
                 timer.Enabled = true;
             }
@@ -174,42 +161,44 @@ namespace WpfApplication1
         }
 
 
+
+
         public void playNextBitmap(object source, System.Timers.ElapsedEventArgs e)
         {
-            try
-            {
-                //bitmap_stream is a list
-                //contains streams of bitmap
-                //List<BitmapStream>
-                bitmap = bitmap_stream[0].read();
 
-                //播完了
-                if (bitmap != null) { }
-                else if (reader.finish == 1 && bitmap == null)
-                {
-                    BitmapPlayer.finish = 1;
-                    Console.Out.WriteLine("over");
-                    timer.Enabled = false;
-                    timer.Dispose();
-                    return;
-                }
-                else
-                {
-                    //只是bitmap_stream[0]读完了
-                    //load到bitmap_stream[1]了
-                    //把bitmap_stream[0]扔了
-                    //bitmap_stream[1]自动变成了第一个
-                    Console.Out.WriteLine("first stream over");
-                    bitmap_stream.RemoveAt(0);
-                    bitmap = bitmap_stream[0].read();
-                }
-                InvokeHelper.Set(image_control, "Image", bitmap);
-                countFrame++;
-            }
-            catch
+            //try
+            //{
+            //bitmap_stream is a list
+            //contains streams of bitmap
+            //List<BitmapStream>
+            //while (bitmap_stream.Count < 2) { Thread.Sleep(3000); }
+            bitmap = bitmap_stream[0].read();
+            Console.WriteLine("read!");
+
+            //播完了
+            if (bitmap != null) { }
+            else if (reader.finish == 1 && bitmap == null)
             {
-                //timer.Dispose();
+                BitmapPlayer.finish = 1;
+                Console.Out.WriteLine("over");
+                timer.Enabled = false;
+                timer.Dispose();
+                return;
             }
+            else
+            {
+                //只是bitmap_stream[0]读完了
+                //load到bitmap_stream[1]了
+                //把bitmap_stream[0]扔了
+                //bitmap_stream[1]自动变成了第一个
+                Console.Out.WriteLine("first stream over");
+                bitmap_stream.RemoveAt(0);
+                bitmap = bitmap_stream[0].read();
+            }
+            InvokeHelper.Set(image_control, "Image", bitmap);
+            countFrame++;
+            
+            
         }
 
         public void loadBitmapStream()
@@ -218,8 +207,9 @@ namespace WpfApplication1
             //两个BitmapStream的时候这个function就卡住了
             while (true)
             {
-                while (bitmap_stream.Count > 2)
+                while (bitmap_stream.Count >= 2)
                 {
+                    Thread.Sleep(200);
                     if (reader.finish == 1) { return; }
                 }
                 Console.Out.WriteLine("loading buffer...");
@@ -236,7 +226,7 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (bitmap_stream.Count > 2){}
+                while (bitmap_stream.Count > 2) { }
                 Console.Out.WriteLine("loading buffer...");
                 BitmapStream stream_tmp = new BitmapStream();
                 stream_tmp = client.askBitmapStream(countBitmap);
@@ -273,6 +263,7 @@ namespace WpfApplication1
         {
             timer.Dispose();
             isPaused = 1;
+           
         }
 
         public void play()
