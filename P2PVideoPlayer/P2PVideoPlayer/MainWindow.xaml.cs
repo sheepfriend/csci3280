@@ -125,6 +125,7 @@ namespace WpfApplication1
                     }
                     try
                     {
+                        audioPlayer.setLocalInfo(@"audio\" + filename + ".wav");
                     }
                     catch
                     {
@@ -303,13 +304,14 @@ namespace WpfApplication1
             switch ( here.Header.ToString())
             {
                 case "Delete":
-                    player.stop();
-                    mediaInfo.delete();
+                    if(player != null)
+                        player.stop();
+                    mediaInfo.delete(selector.SelectedItem.ToString());
                     selector.Items.Remove(selector.SelectedItem);
 
                     break;
                 case "Property":
-                    MessageBox.Show(mediaInfo.currentPlay.print());
+                    MessageBox.Show(mediaInfo.name_to_list[selector.SelectedItem.ToString()].print());
                     break;
             }
             

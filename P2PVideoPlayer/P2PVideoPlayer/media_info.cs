@@ -86,9 +86,10 @@ namespace WpfApplication1
             return result;
         }
 
-        public void delete()
+        public void delete(string filename)
         {
-            video_info to_delete_vid = currentPlay;
+
+            video_info to_delete_vid = name_to_list[filename];
             //remove from document
             XmlNode to_delete = doc.SelectSingleNode(String.Format("/Karaoke/video[@id='{0}']",to_delete_vid.id), man);
             to_delete.ParentNode.RemoveChild(to_delete);
