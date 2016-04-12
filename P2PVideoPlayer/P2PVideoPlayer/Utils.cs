@@ -9,6 +9,22 @@ namespace WpfApplication1
 {
     static class Utils
     {
+        public static String search_addr_from_list(string key, media_info list)
+        {
+            if (list == null || list.name_to_list == null)
+            {
+                return "";
+            }
+            foreach (video_info tmp in list.name_to_list.Values)
+            {
+                if (tmp.fileName == key)
+                {
+                    return tmp.path;
+                }
+            }
+            return "";
+        }
+
         public static List<video_info> search_list(string key, media_info list)
         {
             List<video_info> result = new List<video_info>();
