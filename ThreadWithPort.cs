@@ -207,7 +207,7 @@ namespace WpfApplication1
                 {
                     if (Local.exist(pack.header[0]))
                     {
-                        pmm = PMM.loadFile(pack.header[0]);
+                        pmm = PMM.loadFile(Local.ref_addr+pack.header[0]);
                         Package pack_resp = new Package("has_pmm");
                         Connector conn_resp = Client.find_conn(Client.conn_pmm_ask, pack.from);
                         pack_resp.header.Add("" + pmm.width);
