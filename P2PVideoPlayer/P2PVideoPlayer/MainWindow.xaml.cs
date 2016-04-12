@@ -161,6 +161,7 @@ namespace WpfApplication1
         {
             player.pause();
             audioPlayer.pause();
+            
             //isPlaying = false; // paused
         }
 

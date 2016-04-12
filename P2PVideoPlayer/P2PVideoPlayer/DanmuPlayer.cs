@@ -38,7 +38,7 @@ namespace WpfApplication1
             loadDanmu();
             play = new Thread(playing);
             //等待bitmapplayer载入完成
-            while (BitmapPlayer.start == 0) { }
+            while (BitmapPlayer.start == 0) { Thread.Sleep(200); }
             play.Start();
         }
 
