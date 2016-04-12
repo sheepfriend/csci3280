@@ -79,6 +79,7 @@ namespace WpfApplication1
             else
             {
                 //别人的
+
                 client.askAudio(address);
                 reader.loadFile(Local.ref_addr + address);
                 isLocal = true;

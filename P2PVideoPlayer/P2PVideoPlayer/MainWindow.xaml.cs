@@ -125,7 +125,6 @@ namespace WpfApplication1
                     }
                     try
                     {
-                        audioPlayer.setLocalInfo("audio\\" + filename + ".wav");
                     }
                     catch
                     {
