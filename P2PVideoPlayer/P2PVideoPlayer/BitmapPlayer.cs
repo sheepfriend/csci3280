@@ -172,7 +172,7 @@ namespace WpfApplication1
             //bitmap_stream is a list
             //contains streams of bitmap
             //List<BitmapStream>
-            //while (bitmap_stream.Count < 2) { Thread.Sleep(3000); }
+            while (bitmap_stream.Count <= 0 ) { Thread.Sleep(300); }
             bitmap = bitmap_stream[0].read();
             
             //播完了

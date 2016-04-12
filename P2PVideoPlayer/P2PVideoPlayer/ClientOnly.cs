@@ -43,8 +43,7 @@ namespace WpfApplication1
             conn.send(pack);
         }
 
-        public static String addr;
-
+        
         public ClientOnly(string input_ip,ref media_info mi)
         {
             media = mi;
@@ -66,7 +65,6 @@ namespace WpfApplication1
 
             server_ip = input_ip;
 
-            addr = @"H:\csci3280-master\client\P2PVideoPlayer\";
             //receive 新的list之后才true
             ip_list = new List<string>();
             Enabled = false;
