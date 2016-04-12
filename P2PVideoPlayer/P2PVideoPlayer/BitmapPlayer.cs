@@ -123,7 +123,7 @@ namespace WpfApplication1
 
                     //给第一个留时间缓冲
                     start = 0;
-                    while (bitmap_stream.Count < 2) { }
+                    while (bitmap_stream.Count < 2) { Thread.Sleep(200); }
                     start = 1;
 
                 }
@@ -227,7 +227,10 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (bitmap_stream.Count > 2) { }
+                while (bitmap_stream.Count >= buffer_num)
+                {
+                    Thread.Sleep(200);
+                }
                 Console.Out.WriteLine("loading buffer...");
                 BitmapStream stream_tmp = new BitmapStream();
                 stream_tmp = client.askBitmapStream(countBitmap);

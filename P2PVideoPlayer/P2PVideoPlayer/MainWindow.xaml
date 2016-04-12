@@ -67,7 +67,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->
             </StackPanel>
         </Button>
-        <Button Height="43" HorizontalAlignment="Left" Margin="310,20,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
+        <Button  Height="43" HorizontalAlignment="Left" Margin="310,20,0,0" Name="btn_play" VerticalAlignment="Top" Width="38" Click="btn_play_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Image Height="38" Width="38" Source="Resources/play.png"/>
                 <!--<TextBlock>Disconnect from Server</TextBlock>-->

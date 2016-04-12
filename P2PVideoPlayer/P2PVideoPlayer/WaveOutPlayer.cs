@@ -13,7 +13,7 @@ namespace WpfApplication1
     class WaveOutPlayer
     {
 
-         public WaveOutPlayer(ref Client client_)
+        public WaveOutPlayer(ref Client client_)
         {
             reader = new WaveOutReader();
             client = client_;
@@ -27,7 +27,7 @@ namespace WpfApplication1
             isPaused = 0;
         }
 
-        public List<WaveOutStream> stream; 
+        public List<WaveOutStream> stream;
         public WaveOutBuffer currentBuffer;
         public bool finished;
         public byte zero;
@@ -54,13 +54,14 @@ namespace WpfApplication1
         public void setLocalInfo(String addr)
         {
             address = addr;
-            if (Local.exist(address)) { 
+            if (Local.exist(address))
+            {
                 isLocal = true;
-                reader.loadFile(Local.ref_addr  + address);
+                reader.loadFile(Local.ref_addr + address);
             }
             else { isLocal = false; }
             //重新开始
-            countWaveOut = 0; 
+            countWaveOut = 0;
             countWaveOutP = 0;
             start = 0;
             stream = new List<WaveOutStream>();
@@ -100,8 +101,7 @@ namespace WpfApplication1
         {
             if (isPaused == 1) { return; }
             isPaused = 1;
-            if(load_audio!=null)
-                load_audio.Abort();
+            
         }
 
         public void stop()
@@ -120,29 +120,30 @@ namespace WpfApplication1
         {
             while (true)
             {
-            try
-            {
+                while (isPaused == 1) Thread.Sleep(200);
+                try
+                {
 
-                currentBuffer = stream[countWaveOut].read();
-                while (BitmapPlayer.countFrame - 1 < countWaveOut * BitmapPlayer.bitmapPerSec) { }
-                if (currentBuffer != null)
-                {
-                    //视频滞后等视频
-                    //双方都是等待滞后的那个所以不用管超前的
-                    currentBuffer.waveOut = reader.waveOut;
-                    currentBuffer.Play();
-                }
-                else
-                {
-                    //播放完了
-                    while (stream.Count == 0)
+                    currentBuffer = stream[countWaveOut].read();
+                    while (BitmapPlayer.countFrame - 1 < countWaveOut * BitmapPlayer.bitmapPerSec) { }
+                    if (currentBuffer != null)
                     {
-                        if (finish == 1) { return; }
+                        //视频滞后等视频
+                        //双方都是等待滞后的那个所以不用管超前的
+                        currentBuffer.waveOut = reader.waveOut;
+                        currentBuffer.Play();
                     }
-                    countWaveOut++;
+                    else
+                    {
+                        //播放完了
+                        while (stream.Count == 0)
+                        {
+                            if (finish == 1) { return; }
+                        }
+                        countWaveOut++;
+                    }
                 }
-            }
-            catch { }
+                catch { }
             }
         }
 

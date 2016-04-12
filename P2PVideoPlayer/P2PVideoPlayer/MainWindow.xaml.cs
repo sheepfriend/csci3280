@@ -107,7 +107,6 @@ namespace WpfApplication1
                 if(not_same && waitToFinish!= null && waitToFinish.IsAlive)
                 {
                     stop();
-                    waitToFinish.Abort();
                 }
                 //if not playing, or choose another file.
                 if (!isPlaying || not_same)
@@ -149,7 +148,7 @@ namespace WpfApplication1
                     player.play();
                     if(hasAudio)
                     {
-                        audioPlayer.play();
+                        audioPlayer.isPaused = 0;
                     }
                     danmuPlayer.playDanmu();
                 }
@@ -169,9 +168,11 @@ namespace WpfApplication1
         private void stop()
         {
             try {
+
                 player.stop();
                 audioPlayer.stop();
                 danmuPlayer.stop();
+                waitToFinish.Abort();
             }catch{}
 
             isPlaying = false;
@@ -179,28 +180,32 @@ namespace WpfApplication1
         private void btn_stop_Click(object sender, RoutedEventArgs e)
         {
             stop();
-            if (waitToFinish.IsAlive)
-            {
-                waitToFinish.Abort();
-            }
+           
         }
 
         private void btn_pre_Click(object sender, RoutedEventArgs e)
         {
-            player.stop();
-            audioPlayer.stop();
-            danmuPlayer.stop();
-            if(selector.SelectedIndex-1 >= 0)
+            try {
+                stop();
+            }catch{}
+            if (selector.SelectedIndex - 1 >= 0)
+            {
                 selector.SelectedIndex -= 1;
+                btn_play_Click(send, e);
+            }
         }
 
         private void btn_next_Click(object sender, RoutedEventArgs e)
         {
-            player.stop();
-            audioPlayer.stop();
-            danmuPlayer.stop();
-            if(selector.SelectedIndex + 1 < selector.Items.Count)
+            try
+            {
+                stop();
+            }catch { }
+            if (selector.SelectedIndex + 1 < selector.Items.Count)
+            {
                 selector.SelectedIndex += 1;
+                btn_play_Click(send, e);
+            }
         }
 
         
