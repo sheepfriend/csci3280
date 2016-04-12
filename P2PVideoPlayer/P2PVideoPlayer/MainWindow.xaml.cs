@@ -118,19 +118,25 @@ namespace WpfApplication1
                     String filepath = mediaInfo.name_to_list[filename].path;
                     
                     waitToFinish = new Thread(wait_to_finish);
+                    
                     player.setLocalInfo(filepath, "wmv");
                     if (BitmapPlayer.header == null || BitmapPlayer.header.Count == 0)
                     {
                         return;
                     }
-                    try
-                    {
-                        audioPlayer.setLocalInfo(@"audio\" + filename + ".wav");
-                    }
-                    catch
-                    {
-                        Console.Out.WriteLine("Fail to load audio");
-                        hasAudio = false;
+                    if (!(System.IO.File.Exists(filepath) && !System.IO.File.Exists(@"audio\" + filename + ".wav")))
+                    { 
+                        try
+                        {
+
+                            audioPlayer.setLocalInfo(@"audio\" + filename + ".wav");
+                        }
+
+                        catch
+                        {
+                            Console.Out.WriteLine("Fail to load audio");
+                            hasAudio = false;
+                        }
                     }
                     player.play();
                     isPlaying = true;
