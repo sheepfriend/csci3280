@@ -97,7 +97,7 @@ namespace WpfApplication1
 
                 //给第一个留时间缓冲,等待缓存
                 start = 0;
-                while (bitmap_stream.Count < 3) { }
+                while (bitmap_stream.Count < 2) { }
                 start = 1;
             }
             else
@@ -122,7 +122,7 @@ namespace WpfApplication1
 
                     //给第一个留时间缓冲
                     start = 0;
-                    while (bitmap_stream.Count < 3) { }
+                    while (bitmap_stream.Count < 2) { }
                     start = 1;
 
                 }
@@ -218,7 +218,7 @@ namespace WpfApplication1
             //两个BitmapStream的时候这个function就卡住了
             while (true)
             {
-                while (bitmap_stream.Count > 3)
+                while (bitmap_stream.Count > 2)
                 {
                     if (reader.finish == 1) { return; }
                 }
@@ -236,7 +236,7 @@ namespace WpfApplication1
         {
             while (true)
             {
-                while (bitmap_stream.Count > 3){}
+                while (bitmap_stream.Count > 2){}
                 Console.Out.WriteLine("loading buffer...");
                 BitmapStream stream_tmp = new BitmapStream();
                 stream_tmp = client.askBitmapStream(countBitmap);
