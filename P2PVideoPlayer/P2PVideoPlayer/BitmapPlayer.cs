@@ -105,7 +105,8 @@ namespace WpfApplication1
                 Console.Out.WriteLine("not local video");
                 isLocal = false;
                 header = client.askVideoHeader(address);
-                if (header != null)
+
+                if (header != null && header.Count>0)
                 {
                     //设置同步
                     //reader.bmpPerStream = Int32.Parse(header[0]);

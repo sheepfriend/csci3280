@@ -24,7 +24,6 @@ namespace WpfApplication1
             }
             return "";
         }
-
         public static List<video_info> search_list(string key, media_info list)
         {
             List<video_info> result = new List<video_info>();

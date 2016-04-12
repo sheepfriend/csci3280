@@ -156,7 +156,7 @@ namespace WpfApplication1
                         Buffer.BlockCopy(pmm_data[i], 0, pmm.data, position, pmm_data[i].Length);
                         position += pmm_data[i].Length;
                     }
-                    pmm.writeToFile(Local.ref_addr+filename);
+                    pmm.writeToFile(Local.ref_addr + filename);
                     return;
                 }
             }

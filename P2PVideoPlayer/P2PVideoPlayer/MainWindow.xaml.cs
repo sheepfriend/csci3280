@@ -124,6 +124,10 @@ namespace WpfApplication1
                 if (player.isPaused == 0)
                 {
                     player.setLocalInfo(filepath, "wmv");
+                    if (BitmapPlayer.header == null || BitmapPlayer.header.Count == 0)
+                    {
+                        return;
+                    }
                     try
                     {
                         audioPlayer.setLocalInfo("audio\\" + filename + ".wav");
