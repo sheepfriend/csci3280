@@ -100,7 +100,8 @@ namespace WpfApplication1
                 {
                     image_control = new System.Windows.Forms.PictureBox();
                     form_container.Child = image_control;
-
+                    
+                    image_control.SendToBack();
                 }
 
                 if (player == null) { player = new BitmapPlayer(ref image_control, ref form_container, ref client,ref window); }
