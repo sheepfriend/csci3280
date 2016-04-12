@@ -34,13 +34,13 @@ namespace WpfApplication1
     {
         private media_info mediaInfo;
         public DanmakuCurtain dmkCurt;
-        public int isPlaying = 0; // 0: no pause 1: pause
-        public Thread waitToFinish;
+        public bool isPlaying = false; 
+        public Thread waitToFinish ;
 
         BitmapPlayer player;
-        Client client;
-        DanmuPlayer danmuPlayer;
-        WaveOutPlayer audioPlayer;
+        Client client ;
+        DanmuPlayer danmuPlayer ;
+        WaveOutPlayer audioPlayer ;
 
         public System.Windows.Forms.PictureBox image_control;
         //public Grid curtain;
@@ -72,20 +72,10 @@ namespace WpfApplication1
         {
             while (true)
             {
+                Thread.Sleep(1000);
                 if (BitmapPlayer.finish == 1)
                 {
-                    player.stop();
-                    try
-                    {
-                        audioPlayer.stop();
-
-                    }
-                    catch { }
-                    try
-                    {
-                        danmuPlayer.stop();
-                    }
-                    catch { }
+                    stop();
                     return;
                 }
             }
@@ -95,8 +85,7 @@ namespace WpfApplication1
         {
             if (selector.SelectedItem != null)
             {
-                if (image_control != null) { }
-                else
+                if(image_control == null)
                 {
                     image_control = new System.Windows.Forms.PictureBox();
                     form_container.Child = image_control;
@@ -110,19 +99,26 @@ namespace WpfApplication1
                 {
                     danmuPlayer = new DanmuPlayer(ref dmkCurt, ref client, ref curtain);
                 }
-                //AviManager aviManager = new AviManager(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", true);
-                //AudioStream audioStream = aviManager.GetWaveStream();
-                //audioStream.ExportStream("./audio.wav");
-                //aviManager.Close();
 
-                String filename = selector.SelectedItem.ToString();
-                String filepath = mediaInfo.name_to_list[filename].path;
-
-                waitToFinish = new Thread(wait_to_finish);
                 bool hasAudio = true;
-
-                if (player.isPaused == 0)
+                
+                bool not_same = (mediaInfo.currentPlay==null)||(mediaInfo.currentPlay.fileName != selector.SelectedItem.ToString());
+                
+                Console.WriteLine(not_same);
+                if(not_same && waitToFinish!= null && waitToFinish.IsAlive)
                 {
+                    stop();
+                    waitToFinish.Abort();
+                }
+                //if not playing, or choose another file.
+                if (!isPlaying || not_same)
+                {
+                    //change currentplay only when play it.
+                    mediaInfo.select_play(selector.SelectedItem.ToString());
+                    String filename = selector.SelectedItem.ToString();
+                    String filepath = mediaInfo.name_to_list[filename].path;
+                    
+                    waitToFinish = new Thread(wait_to_finish);
                     player.setLocalInfo(filepath, "wmv");
                     if (BitmapPlayer.header == null || BitmapPlayer.header.Count == 0)
                     {
@@ -143,21 +139,20 @@ namespace WpfApplication1
                         audioPlayer.play();
                     }
                     danmuPlayer.playDanmu();
+                    
                     waitToFinish.Start();
                 }
 
-
-
-                //player.setLocalInfo(@"C:\Users\yxing2\Downloads\SHE_uncompressed.avi", "wmv");
-
-                //player.setLocalInfo(@"C:\Users\Public\Videos\Sample Videos\Wildlife.wmv", "wmv");            
                 if (player.isPaused == 1)
                 {
                     player.play();
-
+                    if(hasAudio)
+                    {
+                        audioPlayer.play();
+                    }
+                    danmuPlayer.playDanmu();
                 }
                 
-                //danmuPlayer.playDanmu();
 
             }
         }
@@ -165,16 +160,25 @@ namespace WpfApplication1
         private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
             player.pause();
-            //audioPlayer.pause();
-            isPlaying = 1; // paused
+            audioPlayer.pause();
+            //isPlaying = false; // paused
         }
 
+        private void stop()
+        {
+            try {
+                player.stop();
+                audioPlayer.stop();
+                danmuPlayer.stop();
+            }catch{}
+
+            isPlaying = false;
+        }
         private void btn_stop_Click(object sender, RoutedEventArgs e)
         {
-
-            player.stop();
-            audioPlayer.stop();
-            if(waitToFinish.IsAlive){
+            stop();
+            if (waitToFinish.IsAlive)
+            {
                 waitToFinish.Abort();
             }
         }
@@ -282,36 +286,7 @@ namespace WpfApplication1
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selector.SelectedItem == null) return;
-            mediaInfo.select_play(selector.SelectedItem.ToString());
-            //media.Source = new Uri(mediaInfo.currentPlay.path, UriKind.RelativeOrAbsolute);
-            //media.ScrubbingEnabled = true;
-
-            ////cut the avi file into small clips
-            //AVIStreamReader test = new AVIStreamReader(mediaInfo.currentPlay.path);
-            //string temp1 = "./videoClips/";
-            //string temp3 = ".avi";
-            //string temp2;
-            //string clipName;
-            //int reachEnd = 0;
-            //totalClip = 0;
-            //for (int i = 0; reachEnd != 1; i++)
-            //{
-            //    temp2 = i.ToString();
-            //    clipName = temp1 + temp2 + temp3;
-            //    reachEnd = test.readStream(clipName);
-            //    totalClip++;
-            //}
-            
-
-            ////the following code can safely extract audio file
-            ////Avi文件读取
-            //AviManager aviManager = new AviManager(mediaInfo.currentPlay.path, true);
-            ////获取和保存音频流到文件
-            //AudioStream audioStream = aviManager.GetWaveStream();
-            //audioStream.ExportStream("./audio.wav");
-            //aviManager.Close();
-
-            //isPlaying = 1;
+       
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
