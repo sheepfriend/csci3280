@@ -78,7 +78,7 @@ namespace WpfApplication1
 
         public void addDanmu(String content)
         {
-            if (BitmapPlayer.isLocal) { return; }
+            //if (BitmapPlayer.isLocal) { return; }
             client.addDamnu(BitmapPlayer.countFrame, content);
         }
 
