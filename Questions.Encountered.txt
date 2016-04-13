@@ -1,0 +1,19 @@
+I. 
+
+After Split the video frames and audio, how to play separately?
+
+Possible solutions:
+    1. Write the frame buffer into an new avi file, and then use System.Windows.Controls.mediaElement to load and 
+play frames. Then load the audio invisibly.
+
+            Possible problems:
+            a. Synchronization?
+            b. Waste of resource?
+    2. http://stackoverflow.com/questions/7117589/using-mediaelement-to-play-video-from-stream
+        Use API to create virtual file.
+
+
+    3. Change the app framework to SilverSlight. 
+            Problems: Painful.
+            
+            
