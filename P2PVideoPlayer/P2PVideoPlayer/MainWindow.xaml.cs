@@ -124,7 +124,7 @@ namespace WpfApplication1
                     {
                         return;
                     }
-                    if (Local.exists(@"audio\" + filename + ".wav")))
+                    if (Local.exist(@"audio\" + filename + ".wav"))
                     { 
                         try
                         {
