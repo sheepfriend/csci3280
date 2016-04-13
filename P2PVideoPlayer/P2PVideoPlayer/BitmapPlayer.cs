@@ -177,7 +177,7 @@ namespace WpfApplication1
             
             //播完了
             if (bitmap != null) { }
-            else if (reader.finish == 1 && bitmap == null)
+            else if (reader.finish == 1)
             {
                 BitmapPlayer.finish = 1;
                 Console.Out.WriteLine("over");

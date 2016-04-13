@@ -135,7 +135,6 @@ namespace WpfApplication1
 
                             audioPlayer.setLocalInfo(@"audio\" + filename + ".wav");
                         }
-
                         catch
                         {
                             Console.Out.WriteLine("Fail to load audio");
