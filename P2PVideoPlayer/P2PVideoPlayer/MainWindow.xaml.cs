@@ -104,6 +104,7 @@ namespace WpfApplication1
                 
                 bool not_same = (mediaInfo.currentPlay==null)||(mediaInfo.currentPlay.fileName != selector.SelectedItem.ToString());
                 
+                //
                 if(not_same && waitToFinish!= null && waitToFinish.IsAlive)
                 {
                     stop();
@@ -298,13 +299,7 @@ namespace WpfApplication1
 
         }
         
-        //add new play source
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (selector.SelectedItem == null) return;
-       
-        }
-
+        
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem here = (MenuItem)sender;
@@ -442,5 +437,9 @@ namespace WpfApplication1
             Utils.general_add(mediaInfo.print(), selector);
         }
 
+        private void selector_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            btn_play_Click(sender, e);
+        }
     }
 }

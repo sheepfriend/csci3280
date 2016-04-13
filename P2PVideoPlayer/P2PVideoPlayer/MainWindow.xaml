@@ -45,7 +45,7 @@ Title="P2P Player"  Height="710" Width="820" MinHeight="700" MinWidth="800"  Clo
                 <RowDefinition Height="200*"/>
             </Grid.RowDefinitions>
         </Grid>
-        <ListBox x:Name="selector" SelectionChanged="ListBox_SelectionChanged"  Background="#7F3A3C46" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FFD7D7D7" Grid.Column="1" Margin="0,102,0,0" Grid.ColumnSpan="2">
+        <ListBox x:Name="selector" MouseDoubleClick="selector_MouseDoubleClick"  Background="#7F3A3C46" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FFD7D7D7" Grid.Column="1" Margin="0,102,0,0" Grid.ColumnSpan="2">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete" Click="MenuItem_Click"/>
