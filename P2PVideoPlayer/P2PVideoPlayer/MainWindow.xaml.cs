@@ -124,7 +124,7 @@ namespace WpfApplication1
                     {
                         return;
                     }
-                    if (!(System.IO.File.Exists(filepath) && !System.IO.File.Exists(@"audio\" + filename + ".wav")))
+                    if (Local.exists(@"audio\" + filename + ".wav")))
                     { 
                         try
                         {
