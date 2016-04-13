@@ -172,8 +172,7 @@ namespace WpfApplication1
         //bitmap_stream is a list
         //contains streams of bitmap
         //List<BitmapStream>
-        start:
-            while (bitmap_stream.Count <= 0) { Thread.Sleep(300); }
+            while (bitmap_stream.Count < 2) { Thread.Sleep(300); }
 
             bitmap = bitmap_stream[0].read();
 
@@ -194,8 +193,8 @@ namespace WpfApplication1
                 //把bitmap_stream[0]扔了
                 //bitmap_stream[1]自动变成了第一个
                 Console.Out.WriteLine("first stream over");
+                while (bitmap_stream.Count < 2) { Thread.Sleep(300); }
                 bitmap_stream.RemoveAt(0);
-                goto start;
             }
             InvokeHelper.Set(image_control, "Image", bitmap);
             countFrame++;
