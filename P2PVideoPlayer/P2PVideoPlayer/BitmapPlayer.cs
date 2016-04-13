@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -167,15 +167,14 @@ namespace WpfApplication1
         public void playNextBitmap(object source, System.Timers.ElapsedEventArgs e)
         {
 
-        //try
-        //{
-        //bitmap_stream is a list
-        //contains streams of bitmap
-        //List<BitmapStream>
-            while (bitmap_stream.Count < 2) { Thread.Sleep(300); }
-
+            //try
+            //{
+            //bitmap_stream is a list
+            //contains streams of bitmap
+            //List<BitmapStream>
+            while (bitmap_stream.Count < 2) { Thread.Sleep(1000); }
             bitmap = bitmap_stream[0].read();
-
+            
             //播完了
             if (bitmap != null) { }
             else if (reader.finish == 1 && bitmap == null)
@@ -193,13 +192,14 @@ namespace WpfApplication1
                 //把bitmap_stream[0]扔了
                 //bitmap_stream[1]自动变成了第一个
                 Console.Out.WriteLine("first stream over");
-                while (bitmap_stream.Count < 2) { Thread.Sleep(300); }
+                while (bitmap_stream.Count < 2) { Thread.Sleep(1000); }
                 bitmap_stream.RemoveAt(0);
+                bitmap = bitmap_stream[0].read();
             }
             InvokeHelper.Set(image_control, "Image", bitmap);
             countFrame++;
-
-
+            
+            
         }
 
         public void loadBitmapStream()
@@ -268,7 +268,7 @@ namespace WpfApplication1
         {
             timer.Dispose();
             isPaused = 1;
-
+           
         }
 
         public void play()
