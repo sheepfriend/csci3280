@@ -124,6 +124,10 @@ namespace WpfApplication1
                     {
                         return;
                     }
+                    if (BitmapPlayer.isLocal == false)
+                    {
+                        client.askAudio(filename+".wav");
+                    }
                     if (Local.exist(@"audio\" + filename + ".wav"))
                     { 
                         try
